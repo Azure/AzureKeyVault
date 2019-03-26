@@ -8,6 +8,7 @@ public=list(
         certificate_permissions="Get")
     {
         principal <- private$find_principal(principal)
+        tenant <- self$properties$tenantId
 
         props <- list(accessPolicies=list(
             vault_access_policy(principal, tenant, key_permissions, secret_permissions, certificate_permissions)
@@ -27,16 +28,17 @@ public=list(
             stop("No access policy for principal '", principal, "'", call.=FALSE)
 
         pol <- pols[[which(i)]]
-        pol$permissions <- lapply(pol$permissions, unlist)
-        pol
+        vault_access_policy(pol$objectId, pol$tenantId,
+            pol$permissions$keys, pol$permissions$secrets, pol$permissions$certificates)
     },
 
     remove_principal=function(principal)
     {
         principal <- private$find_principal(principal)
+        tenant <- self$properties$tenantId
 
         props <- list(accessPolicies=list(
-            vault_access_policy(principal, tenant, NULL, NULL, NULL)
+            vault_access_policy(principal, tenant, list(), list(), list())
         ))
         self$do_operation("accessPolicies/remove",
             body=list(properties=props), encode="json", http_verb="PUT")
@@ -44,11 +46,18 @@ public=list(
 
     list_principals=function()
     {
-        self$properties$accessPolicies
+        lapply(self$properties$accessPolicies, function(pol)
+            vault_access_policy(pol$objectId, pol$tenantId,
+                pol$permissions$keys, pol$permissions$secrets, pol$permissions$certificates)
+        )
     },
         
-    get_vault_endpoint=function()
-    {}
+    get_vault_endpoint=function(app=self$token$client$client_id, password=self$token$client$client_secret, ...)
+    {
+        url <- self$properties$vaultUri
+        token <- get_azure_token(url, self$token$tenant, app=app, password=password, ...)
+        get_vault_login(token=token)
+    }
 ),
 
 private=list(
