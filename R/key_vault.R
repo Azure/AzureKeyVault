@@ -5,16 +5,14 @@ KeyVault <- R6::R6Class("key_vault", public=list(
 
     initialize=function(token)
     {
+        self$token <- token
+
         if(is_azure_token(token) || inherits(token, "Token2.0"))
             token <- token$credentials$access_token
         else if(!is.character(token))
-            stop("Must supply a valid token object")
+            stop("Must supply a valid token object", call.=FALSE)
 
-        payload <- decode_jwt(token)$payload
-        tenant <- payload$tid
-        user <- payload$oid
-        self$uri <- payload$uri
-        self$token <- token
+        self$uri <- decode_jwt(token)$payload$uri
     },
 
     create_key=function()
