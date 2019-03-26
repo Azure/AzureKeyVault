@@ -1,3 +1,4 @@
+#' @export
 KeyVault <- R6::R6Class("key_vault", public=list(
     
     token=NULL,

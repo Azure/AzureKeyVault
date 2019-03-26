@@ -1,3 +1,4 @@
+#' @export
 az_vault=R6::R6Class("az_vault", inherit=AzureRMR::az_resource,
 
 public=list(
@@ -60,7 +61,7 @@ public=list(
     {
         url <- self$properties$vaultUri
         token <- get_azure_token(url, self$token$tenant, app=app, password=password, ...)
-        get_vault_login(token=token)
+        KeyVault$new(token=token)
     }
 ))
 
