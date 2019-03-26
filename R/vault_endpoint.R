@@ -1,5 +1,5 @@
 #' @export
-KeyVault <- R6::R6Class("key_vault", public=list(
+vault_endpoint <- R6::R6Class("vault_endpoint", public=list(
     
     token=NULL,
     uri=NULL,

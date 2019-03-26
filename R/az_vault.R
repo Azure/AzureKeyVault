@@ -9,7 +9,9 @@ public=list(
         tenant <- self$properties$tenantId
 
         props <- list(accessPolicies=list(
-            vault_access_policy(principal, tenant, key_permissions, secret_permissions, certificate_permissions)
+            # need to unclass to satisfy toJSON
+            unclass(vault_access_policy(
+                principal, tenant, key_permissions, secret_permissions, certificate_permissions))
         ))
 
         self$do_operation("accessPolicies/add",
@@ -24,7 +26,7 @@ public=list(
         principal <- find_principal(principal)
 
         pols <- self$properties$accessPolicies
-        i <- sapply(pols, function(obj) obj$principalId == principal)
+        i <- sapply(pols, function(obj) obj$objectId == principal)
         if(!any(i))
             stop("No access policy for principal '", principal, "'", call.=FALSE)
 
@@ -35,12 +37,8 @@ public=list(
 
     remove_principal=function(principal)
     {
-        principal <- find_principal(principal)
-        tenant <- self$properties$tenantId
-
-        props <- list(accessPolicies=list(
-            vault_access_policy(principal, tenant, list(), list(), list())
-        ))
+        pol <- self$get_principal(principal)
+        props <- list(accessPolicies=list(unclass(pol)))
 
         self$do_operation("accessPolicies/remove",
             body=list(properties=props), encode="json", http_verb="PUT")
@@ -61,7 +59,7 @@ public=list(
     {
         url <- self$properties$vaultUri
         token <- get_azure_token(url, self$token$tenant, app=app, password=password, ...)
-        KeyVault$new(token=token)
+        vault_endpoint$new(token=token)
     }
 ))
 
@@ -74,7 +72,7 @@ find_principal=function(principal)
         principal$get_service_principal()$properties$id
     else if(!is_guid(principal))
         stop("Must supply a valid principal ID or object", call.=FALSE)
-    else principal
+    else AzureAuth::normalize_guid(principal)
 }
 
 
@@ -100,15 +98,14 @@ vault_access_policy <- function(principal, tenant, key_permissions, secret_permi
 
 print.vault_access_policy <- function(x, ...)
 {
-    cat("Key vault access policy\n")
-    cat("  Tenant:", x$tenantId, "\n")
-    cat("  Principal:", x$objectId, "\n")
-    cat("  Key permissions:\n    ")
-    cat(x$permissions$keys, sep=", ")
-    cat("\n  Secret permissions:\n    ")
-    cat(x$permissions$secrets, sep=", ")
-    cat("\n  Certificate permissions:\n    ")
-    cat(x$permissions$certificates, sep=", ")
+    cat("Tenant:", x$tenantId, "\n")
+    cat("Principal:", x$objectId, "\n")
+    cat("Key permissions:\n")
+    cat(strwrap(paste(x$permissions$keys, collapse=", "), indent=4, exdent=4), sep="\n")
+    cat("Secret permissions:\n")
+    cat(strwrap(paste(x$permissions$secrets, collapse=", "), indent=4, exdent=4), sep="\n")
+    cat("Certificate permissions:\n")
+    cat(strwrap(paste(x$permissions$certificates, collapse=", "), indent=4, exdent=4), sep="\n")
     cat("\n")
     invisible(x)
 }
