@@ -12,7 +12,7 @@ KeyVault <- R6::R6Class("key_vault", public=list(
         else if(!is.character(token))
             stop("Must supply a valid token object", call.=FALSE)
 
-        self$uri <- decode_jwt(token)$payload$uri
+        self$uri <- decode_jwt(token)$payload$aud
     },
 
     create_key=function()
