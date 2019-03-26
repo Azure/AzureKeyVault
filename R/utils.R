@@ -1,4 +1,14 @@
-process_headers <- function(token, host, ...)
+call_vault_url <- function(token, url, ...,
+                           http_verb=c("GET", "DELETE", "PUT", "POST", "HEAD", "PATCH"),
+                           http_status_handler=c("stop", "warn", "message", "pass"))
+{
+    headers <- process_headers(token, ...)
+    res <- httr::VERB(match.arg(http_verb), url, headers, ...)
+    process_response(res, match.arg(http_status_handler))
+}
+
+
+process_headers <- function(token, ...)
 {
     # if token has expired, renew it
     if(is_azure_token(token) && !token$validate())
@@ -8,7 +18,7 @@ process_headers <- function(token, host, ...)
     }
 
     creds <- token$credentials
-    headers <- c(Host=host, Authorization=paste(creds$token_type, creds$access_token))
+    headers <- c(Authorization=paste(creds$token_type, creds$access_token))
 
     # default content-type is json, set this if encoding not specified
     dots <- list(...)
@@ -63,3 +73,5 @@ construct_path <- function(...)
 {
     sub("/$", "", file.path(..., fsep="/"))
 }
+
+

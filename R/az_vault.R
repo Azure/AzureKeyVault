@@ -56,7 +56,7 @@ public=list(
     },
         
     get_vault_endpoint=function(tenant=self$token$tenant, app=self$token$client$client_id,
-        password=self$token$client$client_secret, ...)
+                                password=self$token$client$client_secret, ...)
     {
         url <- self$properties$vaultUri
         vault_endpoint$new(url=url, tenant=tenant, app=app, password=password, ...)

@@ -33,13 +33,14 @@ vault_endpoint <- R6::R6Class("vault_endpoint", public=list(
 
     list_keys=function()
     {
-        self$call_endpoint("keys")
+        lst <- self$call_endpoint("keys")
+        private$get_paged_list(lst)
     },
 
     create_secret=function()
     {},
 
-    get_secret=function()
+    get_secret=function(name, version, which=NULL)
     {},
 
     delete_secret=function()
@@ -47,7 +48,8 @@ vault_endpoint <- R6::R6Class("vault_endpoint", public=list(
 
     list_secrets=function()
     {
-        self$call_endpoint("secrets")
+        lst <- self$call_endpoint("secrets")
+        private$get_paged_list(lst)
     },
 
     create_certificate=function()
@@ -61,20 +63,31 @@ vault_endpoint <- R6::R6Class("vault_endpoint", public=list(
 
     list_certificates=function()
     {
-        self$call_endpoint("certificates")
+        lst <- self$call_endpoint("certificates")
+        private$get_paged_list(lst)
     },
 
     call_endpoint=function(op="", ..., options=list(),
-                              api_version=getOption("azure_keyvault_api_version"),
-                              http_verb=c("GET", "DELETE", "PUT", "POST", "HEAD", "PATCH"),
-                              http_status_handler=c("stop", "warn", "message", "pass"))
+                           api_version=getOption("azure_keyvault_api_version"))
     {
         url <- self$url
         url$path <- op
         url$query <- utils::modifyList(list(`api-version`=api_version), options)
 
-        headers <- process_headers(self$token, self$url$hostname, ...)
-        res <- httr::VERB(match.arg(http_verb), url, headers, ...)
-        process_response(res, match.arg(http_status_handler))
+        call_vault_url(self$token, url, ...)
+    }
+),
+
+private=list(
+
+    get_paged_list=function(lst, next_link_name="nextLink", value_name="value")
+    {
+        res <- lst[[value_name]]
+        while(!is_empty(lst[[next_link_name]]))
+        {
+            lst <- call_vault_url(self$token, lst[[next_link_name]])
+            res <- c(res, lst[[value_name]])
+        }
+        res
     }
 ))
