@@ -1,0 +1,29 @@
+Package: AzureKeyVault
+Title: Key and Secret Management in 'Azure'
+Version: 2.0.1
+Authors@R: c(
+    person("Hong", "Ooi", , "hongooi@microsoft.com", role = c("aut", "cre")),
+    person("Microsoft", role="cph")
+    )
+Description: Manage keys, certificates and secrets in Microsoft's 'Key Vault' service: <https://azure.microsoft.com/services/key-vault>.
+License: MIT + file LICENSE
+URL: https://github.com/cloudyr/AzureKeyVault
+BugReports: https://github.com/cloudyr/AzureKeyVault/issues
+VignetteBuilder: knitr
+Depends: 
+    R (>= 3.3),
+Imports: 
+    utils,
+    parallel,
+    R6,
+    httr,
+    mime,
+    openssl
+    AzureRMR,
+    AzureAuth (>= 1.0.1)
+Suggests:
+    knitr,
+    jsonlite,
+    testthat
+Roxygen: list(markdown=TRUE)
+RoxygenNote: 6.1.1
