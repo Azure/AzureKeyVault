@@ -7,7 +7,7 @@ vault_endpoint <- R6::R6Class("vault_endpoint", public=list(
 
     initialize=function(url, token)
     {
-        self$url <- url
+        self$url <- httr::parse_url(url)
         self$token <- token
 
         if(is_azure_token(token) || inherits(token, "Token2.0"))
@@ -52,11 +52,19 @@ vault_endpoint <- R6::R6Class("vault_endpoint", public=list(
     {},
 
     list_certificates=function()
-    {}
-),
+    {},
 
-private=list(
+    call_endpoint <- function(op="", ..., options=list(),
+                              api_version=getOption("azure_keyvault_api_version"),
+                              http_verb=c("GET", "DELETE", "PUT", "POST", "HEAD", "PATCH"),
+                              http_status_handler=c("stop", "warn", "message", "pass"))
+    {
+        url <- self$url
+        url$path <- op
+        url$options <- utils::modifyList(list(`api-version`=api_version), options)
 
-    vault_op=function()
-    {}
+        headers <- process_headers(self$token, ...)
+        res <- httr::VERB(match.arg(http_verb), url, headers, ...)
+        process_response(res, match.arg(http_status_handler))
+    }
 ))
