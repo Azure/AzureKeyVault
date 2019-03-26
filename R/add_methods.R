@@ -36,13 +36,4 @@ add_methods <- function()
     {
         self$get_vault(name)$delete(confirm=confirm, wait=wait)
     })
-
-
-    AzureRMR::az_subscription$set("public", "purge_vault", overwrite=TRUE,
-    function(name, location)
-    {
-        api_version=self$get_provider_api_version("Microsoft.KeyVault", "vaults")
-        op <- construct_path("providers/Microsoft.KeyVault/locations", location, "deletedVaults", name, "purge")
-        sub_op(op, api_version=api_version)
-    })
 }

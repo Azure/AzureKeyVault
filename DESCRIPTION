@@ -20,6 +20,7 @@ Imports:
     mime,
     openssl
     AzureRMR,
+    AzureGraph,
     AzureAuth (>= 1.0.1)
 Suggests:
     knitr,
