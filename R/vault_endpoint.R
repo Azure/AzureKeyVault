@@ -2,10 +2,12 @@
 vault_endpoint <- R6::R6Class("vault_endpoint", public=list(
     
     token=NULL,
-    uri=NULL,
+    tenant=NULL,
+    url=NULL,
 
-    initialize=function(token)
+    initialize=function(url, token)
     {
+        self$url <- url
         self$token <- token
 
         if(is_azure_token(token) || inherits(token, "Token2.0"))
@@ -13,7 +15,7 @@ vault_endpoint <- R6::R6Class("vault_endpoint", public=list(
         else if(!is.character(token))
             stop("Must supply a valid token object", call.=FALSE)
 
-        self$uri <- AzureAuth::decode_jwt(token)$payload$aud
+        self$tenant <- AzureAuth::decode_jwt(token)$payload$tid
     },
 
     create_key=function()
