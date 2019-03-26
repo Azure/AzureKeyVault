@@ -18,7 +18,7 @@ Imports:
     R6,
     httr,
     mime,
-    openssl
+    openssl,
     AzureRMR,
     AzureGraph,
     AzureAuth (>= 1.0.1)

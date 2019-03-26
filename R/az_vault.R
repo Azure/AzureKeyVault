@@ -23,7 +23,7 @@ public=list(
         principal <- find_principal(principal)
 
         pols <- self$properties$accessPolicies
-        i <- sapply(pols, function(obj) obj%principalId == principal)
+        i <- sapply(pols, function(obj) obj$principalId == principal)
         if(!any(i))
             stop("No access policy for principal '", principal, "'", call.=FALSE)
 
