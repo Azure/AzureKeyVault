@@ -1,4 +1,4 @@
-process_headers <- function(token, ...)
+process_headers <- function(token, host, ...)
 {
     # if token has expired, renew it
     if(is_azure_token(token) && !token$validate())
@@ -8,7 +8,6 @@ process_headers <- function(token, ...)
     }
 
     creds <- token$credentials
-    host <- httr::parse_url(creds$resource)$host
     headers <- c(Host=host, Authorization=paste(creds$token_type, creds$access_token))
 
     # default content-type is json, set this if encoding not specified
