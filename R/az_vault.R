@@ -2,10 +2,7 @@ az_vault=R6::R6Class("az_vault", inherit=AzureRMR::az_resource,
 
 public=list(
 
-    add_principal=function(principal,
-        key_permissions="Get",
-        secret_permissions="Get",
-        certificate_permissions="Get")
+    add_principal=function(principal, key_permissions="Get", secret_permissions="Get", certificate_permissions="Get")
     {
         principal <- private$find_principal(principal)
         tenant <- self$properties$tenantId
@@ -16,6 +13,9 @@ public=list(
 
         self$do_operation("accessPolicies/add",
             body=list(properties=props), encode="json", http_verb="PUT")
+
+        self$sync_fields()
+        invisible(self)
     },
 
     get_principal=function(principal)
@@ -40,8 +40,12 @@ public=list(
         props <- list(accessPolicies=list(
             vault_access_policy(principal, tenant, list(), list(), list())
         ))
+
         self$do_operation("accessPolicies/remove",
             body=list(properties=props), encode="json", http_verb="PUT")
+
+        self$sync_fields()
+        invisible(self)
     },
 
     list_principals=function()
