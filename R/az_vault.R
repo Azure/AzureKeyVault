@@ -4,7 +4,7 @@ public=list(
 
     add_principal=function(principal, key_permissions="Get", secret_permissions="Get", certificate_permissions="Get")
     {
-        principal <- private$find_principal(principal)
+        principal <- find_principal(principal)
         tenant <- self$properties$tenantId
 
         props <- list(accessPolicies=list(
@@ -20,7 +20,7 @@ public=list(
 
     get_principal=function(principal)
     {
-        principal <- private$find_principal(principal)
+        principal <- find_principal(principal)
 
         pols <- self$properties$accessPolicies
         i <- sapply(pols, function(obj) obj%principalId == principal)
@@ -34,7 +34,7 @@ public=list(
 
     remove_principal=function(principal)
     {
-        principal <- private$find_principal(principal)
+        principal <- find_principal(principal)
         tenant <- self$properties$tenantId
 
         props <- list(accessPolicies=list(
@@ -62,21 +62,19 @@ public=list(
         token <- get_azure_token(url, self$token$tenant, app=app, password=password, ...)
         get_vault_login(token=token)
     }
-),
-
-private=list(
-
-    find_principal=function(principal)
-    {
-        if(is_user(principal) || is_service_principal(principal))
-            principal$properties$id
-        else if(is_app(principal))
-            principal$get_service_principal()$properties$id
-        else if(!is_guid(principal))
-            stop("Must supply a valid principal ID or object", call.=FALSE)
-        else principal
-    }
 ))
+
+
+find_principal=function(principal)
+{
+    if(is_user(principal) || is_service_principal(principal))
+        principal$properties$id
+    else if(is_app(principal))
+        principal$get_service_principal()$properties$id
+    else if(!is_guid(principal))
+        stop("Must supply a valid principal ID or object", call.=FALSE)
+    else principal
+}
 
 
 vault_access_policy <- function(principal, tenant, key_permissions, secret_permissions, certificate_permissions)
