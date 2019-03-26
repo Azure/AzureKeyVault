@@ -13,7 +13,7 @@ vault_endpoint <- R6::R6Class("vault_endpoint", public=list(
         else if(!is.character(token))
             stop("Must supply a valid token object", call.=FALSE)
 
-        self$uri <- decode_jwt(token)$payload$aud
+        self$uri <- AzureAuth::decode_jwt(token)$payload$aud
     },
 
     create_key=function()

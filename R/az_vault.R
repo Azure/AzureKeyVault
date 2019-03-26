@@ -58,7 +58,7 @@ public=list(
     get_vault_endpoint=function(app=self$token$client$client_id, password=self$token$client$client_secret, ...)
     {
         url <- self$properties$vaultUri
-        token <- get_azure_token(url, self$token$tenant, app=app, password=password, ...)
+        token <- get_azure_token("https://vault.azure.net/", self$token$tenant, app=app, password=password, ...)
         vault_endpoint$new(token=token)
     }
 ))
