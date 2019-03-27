@@ -48,7 +48,7 @@ public=list(
     versions_of=function(name)
     {
         op <- construct_path(name, "versions")
-        lst <- self$call_endpoint(op)
+        lst <- self$do_operation(op)
         get_paged_list(self$token, lst)
     },
 
