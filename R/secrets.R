@@ -14,19 +14,10 @@ public=list(
     set=function(name, value, content_type=NULL, enabled=NULL, expiry_date=NULL, activation_date=NULL,
                  recovery_level=NULL, ...)
     {
-        convert_date <- function(date)
-        {
-            if(is_empty(date))
-                NULL
-            else if(is.POSIXct(date))
-                as.numeric(date)
-            else as.numeric(as.POSIXct(date))
-        }
-
         attribs <- list(
             enabled=enabled,
-            nbf=convert_date(activation_date),
-            exp=convert_date(expiry_date),
+            nbf=make_vault_date(activation_date),
+            exp=make_vault_date(expiry_date),
             recoveryLevel=recovery_level
         )
         attribs <- attribs[!sapply(attribs, is_empty)]
