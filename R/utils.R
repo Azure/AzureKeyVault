@@ -68,10 +68,10 @@ error_message <- function(cont)
 }
 
 
-# handle different behaviour of file_path on Windows/Linux wrt trailing /
 construct_path <- function(...)
 {
-    sub("/$", "", file.path(..., fsep="/"))
+    args <- lapply(list(...), function(x) if(is_empty(x)) "" else as.character(x))
+    sub("/+$", "", do.call(file.path, args))
 }
 
 

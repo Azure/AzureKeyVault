@@ -23,20 +23,15 @@ public=list(
             else as.numeric(as.POSIXct(date))
         }
 
-        body <- list(
-            value=value,
-            contentType=content_type,
-            attributes=list(
-                enabled=enabled,
-                nbf=convert_date(activation_date),
-                exp=convert_date(expiry_date),
-                recoveryLevel=recovery_level
-            )
+        attribs <- list(
+            enabled=enabled,
+            nbf=convert_date(activation_date),
+            exp=convert_date(expiry_date),
+            recoveryLevel=recovery_level
         )
+        attribs <- attribs[!sapply(attribs, is_empty)]
 
-        tags <- list(...)
-        if(!is_empty(tags))
-            body$tags <- tags
+        body <- list(value=value, contentType=content_type, attributes=attribs, tags=list(...))
 
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
     },
