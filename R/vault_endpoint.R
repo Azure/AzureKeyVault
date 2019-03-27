@@ -21,7 +21,7 @@ vault_endpoint <- R6::R6Class("vault_endpoint", public=list(
 
         self$token <- token
 
-        #self$keys <- vault_keys$new(self$token, self$url)
+        self$keys <- vault_keys$new(self$token, self$url)
         self$secrets <- vault_secrets$new(self$token, self$url)
         #self$certificates <- vault_certificates$new(self$token, self$url)
         #self$storage_accounts <- vault_storage_accounts$new(self$token, self$url)
