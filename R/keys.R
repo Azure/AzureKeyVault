@@ -1,4 +1,4 @@
-vault_secrets <- R6::R6Class("vault_secrets", 
+vault_keys <- R6::R6Class("vault_keys", 
 
 public=list(
 
@@ -11,9 +11,11 @@ public=list(
         self$url <- url
     },
 
-    set=function(name, value, content_type=NULL, enabled=NULL, expiry_date=NULL, activation_date=NULL,
-                 recovery_level=NULL, ...)
+    create=function(name, type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL,
+                    enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL, ...)
     {
+        type <- match.arg(type)
+
         attribs <- list(
             enabled=enabled,
             nbf=make_vault_date(activation_date),
@@ -22,12 +24,17 @@ public=list(
         )
         attribs <- attribs[!sapply(attribs, is_empty)]
 
-        body <- list(value=value, contentType=content_type, attributes=attribs, tags=list(...))
+        body <- list(value=value, kty=type, attributes=attribs, tags=list(...))
+
+        if(type %in% c("RSA", "RSA-HSM"))
+            body$key_size=rsa_key_size
+        else if(type %in% c("EC", "EC-HSM"))
+            body$crv <- ec_curve
 
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
     },
 
-    show=function(name, version=NULL)
+    get=function(name, version=NULL)
     {
         op <- construct_path(name, version)
         self$do_operation(op)
@@ -63,11 +70,26 @@ public=list(
         self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
     },
 
+    import=function(name, value, hardware=FALSE,
+                    enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL, ...)
+    {
+        attribs <- list(
+            enabled=enabled,
+            nbf=make_vault_date(activation_date),
+            exp=make_vault_date(expiry_date),
+            recoveryLevel=recovery_level
+        )
+        attribs <- attribs[!sapply(attribs, is_empty)]
+
+        body <- list(key=value, key=type, hsm=hardware, attributes=attribs, tags=list(...))
+        self$do_operation(name, body=body, encode="json", http_verb="PUT")
+    },
+
     do_operation=function(op="", ..., options=list(),
                           api_version=getOption("azure_keyvault_api_version"))
     {
         url <- self$url
-        url$path <- construct_path("secrets", op)
+        url$path <- construct_path("keys", op)
         url$query <- utils::modifyList(list(`api-version`=api_version), options)
 
         call_vault_url(self$token, url, ...)
