@@ -75,3 +75,29 @@ construct_path <- function(...)
 }
 
 
+get_paged_list <- function(token, lst, next_link_name="nextLink", value_name="value")
+{
+    res <- lst[[value_name]]
+    while(!is_empty(lst[[next_link_name]]))
+    {
+        lst <- call_vault_url(token, lst[[next_link_name]])
+        res <- c(res, lst[[value_name]])
+    }
+    res
+}
+
+
+# TRUE if delete confirmed, FALSE otherwise
+delete_confirmed <- function(confirm, name, type)
+{
+    if(!interactive())
+        return(TRUE)
+    
+    if(!confirm)
+        return(TRUE)
+    
+    msg <- sprintf("Do you really want to delete the %s '%s'? (y/N) ", type, name)
+    yn <- readline(msg)
+    return(tolower(substr(yn, 1, 1)) == "y")
+}
+

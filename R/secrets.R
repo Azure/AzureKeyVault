@@ -1,0 +1,89 @@
+vault_secrets <- R6::R6Class("vault_secrets", 
+
+public=list(
+
+    token=NULL,
+    url=NULL,
+
+    initialize=function(token, url)
+    {
+        self$token <- token
+        self$url <- url
+    },
+
+    set=function(name, value, content_type=NULL, enabled=NULL, expiry_date=NULL, activation_date=NULL,
+                 recovery_level=NULL, ...)
+    {
+        convert_date <- function(date)
+        {
+            if(is_empty(date))
+                NULL
+            else if(is.POSIXct(date))
+                as.numeric(date)
+            else as.numeric(as.POSIXct(date))
+        }
+
+        body <- list(
+            value=value,
+            contentType=content_type,
+            attributes=list(
+                enabled=enabled,
+                nbf=convert_date(activation_date),
+                exp=convert_date(expiry_date),
+                recoveryLevel=recovery_level
+            )
+        )
+
+        tags <- list(...)
+        if(!is_empty(tags))
+            body$tags <- tags
+
+        self$do_operation(name, body=body, encode="json", http_verb="PUT")
+    },
+
+    show=function(name, version=NULL)
+    {
+        op <- construct_path(name, version)
+        self$do_operation(op)
+    },
+
+    delete=function(name, confirm=TRUE)
+    {
+        if(delete_confirmed(confirm, name, "secret"))
+            self$do_operation(name, http_verb="DELETE")
+    },
+
+    list_all=function()
+    {
+        lst <- self$do_operation()
+        get_paged_list(self$token, lst)
+    },
+
+    versions_of=function(name)
+    {
+        op <- construct_path(name, "versions")
+        lst <- self$call_endpoint(op)
+        get_paged_list(self$token, lst)
+    },
+
+    backup=function(name)
+    {
+        self$do_operation("backup", http_verb="POST")
+    },
+
+    restore=function(name, backup)
+    {
+        stopifnot(is.character(backup))
+        self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
+    },
+
+    do_operation=function(op="", ..., options=list(),
+                          api_version=getOption("azure_keyvault_api_version"))
+    {
+        url <- self$url
+        url$path <- construct_path("secrets", op)
+        url$query <- utils::modifyList(list(`api-version`=api_version), options)
+
+        call_vault_url(self$token, url, ...)
+    }
+))

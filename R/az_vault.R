@@ -76,6 +76,7 @@ find_principal=function(principal)
 }
 
 
+#' @export
 vault_access_policy <- function(principal, tenant, key_permissions, secret_permissions, certificate_permissions)
 {
     key_permissions <- unlist(key_permissions)
@@ -96,6 +97,7 @@ vault_access_policy <- function(principal, tenant, key_permissions, secret_permi
 }
 
 
+#' @export
 print.vault_access_policy <- function(x, ...)
 {
     cat("Tenant:", x$tenantId, "\n")
