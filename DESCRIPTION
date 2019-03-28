@@ -14,11 +14,8 @@ Depends:
     R (>= 3.3),
 Imports: 
     utils,
-    parallel,
     R6,
     httr,
-    mime,
-    openssl,
     AzureRMR,
     AzureGraph,
     AzureAuth (>= 1.0.1)
