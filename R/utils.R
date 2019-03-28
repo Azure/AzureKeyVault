@@ -64,7 +64,7 @@ error_message <- function(cont)
     } 
     else ""
 
-    paste0(strwrap(msg), collapse="\n")
+    gsub("\r", "", paste0(strwrap(msg), collapse="\n"))
 }
 
 

@@ -12,7 +12,7 @@ public=list(
     },
 
     create=function(name, type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL, key_ops=NULL,
-                    exportable=NULL, reuse_key=NULL, id=NULL, issuer=NULL, secret=NULL, x509=NULL, actions=list(),
+                    exportable=TRUE, reuse_key=FALSE, issuer=list(), secret=list(), x509=list(), actions=list(),
                     enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL, ...)
     {
         attribs <- list(
@@ -23,7 +23,7 @@ public=list(
         )
         attribs <- attribs[!sapply(attribs, is_empty)]
 
-        keyprops <- list(kty <- match.arg(type))
+        keyprops <- list(kty=match.arg(type))
         if(keyprops$kty %in% c("RSA", "RSA-HSM"))
             keyprops$key_size=rsa_key_size
         else if(keyprops$kty %in% c("EC", "EC-HSM"))
@@ -31,7 +31,6 @@ public=list(
 
         policy <- list(
             key_props=keyprops,
-            id=id,
             issuer=issuer,
             lifetime_actions=actions,
             secret_props=secret,
