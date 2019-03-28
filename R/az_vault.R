@@ -3,11 +3,11 @@ az_vault=R6::R6Class("az_vault", inherit=AzureRMR::az_resource,
 
 public=list(
 
-    add_principal=function(principal, key_permissions="Get", secret_permissions="Get", certificate_permissions="Get")
+    add_principal=function(principal, key_permissions="all", secret_permissions="all", certificate_permissions="all")
     {
         principal <- find_principal(principal)
         tenant <- self$properties$tenantId
-
+    
         props <- list(accessPolicies=list(
             # need to unclass to satisfy toJSON
             unclass(vault_access_policy(
@@ -79,9 +79,9 @@ find_principal=function(principal)
 #' @export
 vault_access_policy <- function(principal, tenant, key_permissions, secret_permissions, certificate_permissions)
 {
-    key_permissions <- unlist(key_permissions)
-    secret_permissions <- unlist(secret_permissions)
-    certificate_permissions <- unlist(certificate_permissions)
+    key_permissions <- verify_permissions(unlist(key_permissions), "key")
+    secret_permissions <- verify_permissions(unlist(secret_permissions), "secret")
+    certificate_permissions <- verify_permissions(unlist(certificate_permissions), "certificate")
 
     obj <- list(
         tenantId=tenant,
@@ -110,5 +110,31 @@ print.vault_access_policy <- function(x, ...)
     cat(strwrap(paste(x$permissions$certificates, collapse=", "), indent=4, exdent=4), sep="\n")
     cat("\n")
     invisible(x)
+}
+
+
+verify_permissions <- function(perms, type=c("key", "secret", "certificate"))
+{
+    key_perms <- c("get", "list", "update", "create", "import", "delete", "recover", "backup", "restore",
+                   "decrypt", "encrypt", "unwrapkey", "wrapkey", "verify", "sign", "purge")
+
+    secret_perms <- c("get", "list", "set", "delete", "recover", "backup", "restore", "purge")
+
+    certificate_perms <- c("get", "list", "update", "create", "import", "delete", "recover", "backup", "restore",
+                           "managecontacts", "manageissuers", "getissuers", "listissuers", "setissuers",
+                           "deleteissuers", "purge")
+
+    all_perms <- switch(match.arg(type),
+        key=key_perms,
+        secret=secret_perms,
+        certificate=certificate_perms)
+
+    perms <- tolower(perms)
+    if(length(perms) == 1 && perms == "all")
+        return(all_perms)
+    else if(!all(perms %in% all_perms))
+        stop("Invalid permissions")
+
+    perms
 }
 
