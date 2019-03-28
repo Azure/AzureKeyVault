@@ -34,7 +34,7 @@ public=list(
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
     },
 
-    get=function(name, version=NULL)
+    show=function(name, version=NULL)
     {
         op <- construct_path(name, version)
         self$do_operation(op)
