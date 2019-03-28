@@ -11,7 +11,7 @@ public=list(
         self$url <- url
     },
 
-    create=function(name, type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL,
+    create=function(name, type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL, key_ops=NULL,
                     enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL, ...)
     {
         type <- match.arg(type)
@@ -24,14 +24,15 @@ public=list(
         )
         attribs <- attribs[!sapply(attribs, is_empty)]
 
-        body <- list(value=value, kty=type, attributes=attribs, tags=list(...))
+        body <- list(kty=type, attributes=attribs, key_ops=key_ops, tags=list(...))
 
         if(type %in% c("RSA", "RSA-HSM"))
             body$key_size=rsa_key_size
         else if(type %in% c("EC", "EC-HSM"))
             body$crv <- ec_curve
 
-        self$do_operation(name, body=body, encode="json", http_verb="PUT")
+        op <- construct_path(name, "create")
+        self$do_operation(op, body=body, encode="json", http_verb="POST")
     },
 
     show=function(name, version=NULL)
