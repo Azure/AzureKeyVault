@@ -38,7 +38,7 @@ public=list(
             x509_props=x509
         )
 
-        body <- list(policy=policy, kty=type, attributes=attribs, tags=list(...))
+        body <- list(policy=policy, attributes=attribs, tags=list(...))
 
         op <- construct_path(name, "create")
         self$do_operation(op, body=body, encode="json", http_verb="POST")
