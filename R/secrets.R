@@ -41,15 +41,17 @@ public=list(
 
     list_all=function()
     {
-        lst <- self$do_operation()
-        get_vault_paged_list(lst, self$token)
+        lst <- get_vault_paged_list(self$do_operation(), self$token)
+        names(lst) <- sapply(lst, function(x) basename(x$id))
+        lst
     },
 
     versions_of=function(name)
     {
         op <- construct_path(name, "versions")
-        lst <- self$do_operation(op)
-        get_vault_paged_list(lst, self$token)
+        lst <- get_vault_paged_list(self$do_operation(op), self$token)
+        names(lst) <- sapply(lst, function(x) basename(x$id))
+        lst
     },
 
     backup=function(name)
