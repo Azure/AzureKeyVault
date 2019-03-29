@@ -2,7 +2,9 @@
 #' @import AzureGraph
 NULL
 
-utils::globalVariables("self")
+utils::globalVariables(c("self", "private"))
+
+.az_cli_app_id <- "04b07795-8ddb-461a-bbee-02f9e1bf7b46"
 
 .onLoad <- function(libname, pkgname)
 {

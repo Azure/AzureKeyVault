@@ -1,5 +1,5 @@
 #' @export
-key_vault_endpoint <- R6::R6Class("key_vault_endpoint", public=list(
+key_vault <- R6::R6Class("key_vault", public=list(
     
     token=NULL,
     url=NULL,
@@ -10,7 +10,7 @@ key_vault_endpoint <- R6::R6Class("key_vault_endpoint", public=list(
     certificates=NULL,
     storage_accounts=NULL,
 
-    initialize=function(url, tenant, app, password=NULL, ..., token=NULL)
+    initialize=function(url, tenant="common", app=.az_cli_app_id, ..., token=NULL)
     {
         self$url <- httr::parse_url(url)
         self$tenant <- tenant

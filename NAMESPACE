@@ -2,7 +2,7 @@
 
 S3method(print,vault_access_policy)
 export(az_key_vault)
-export(key_vault_endpoint)
+export(key_vault)
 export(vault_access_policy)
 import(AzureGraph)
 import(AzureRMR)
