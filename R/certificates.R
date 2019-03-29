@@ -51,7 +51,7 @@ public=list(
 
     delete=function(name, confirm=TRUE)
     {
-        if(delete_confirmed(confirm, name, "secret"))
+        if(delete_confirmed(confirm, name, "certificate"))
             self$do_operation(name, http_verb="DELETE")
     },
 
@@ -72,7 +72,7 @@ public=list(
 
     backup=function(name)
     {
-        self$do_operation("backup", http_verb="POST")
+        self$do_operation(construct_path(name, "backup"), http_verb="POST")$value
     },
 
     restore=function(name, backup)
