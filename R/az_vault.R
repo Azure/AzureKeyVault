@@ -1,5 +1,5 @@
 #' @export
-az_vault=R6::R6Class("az_vault", inherit=AzureRMR::az_resource,
+az_key_vault=R6::R6Class("az_key_vault", inherit=AzureRMR::az_resource,
 
 public=list(
 
@@ -59,7 +59,7 @@ public=list(
                                 password=self$token$client$client_secret, ...)
     {
         url <- self$properties$vaultUri
-        vault_endpoint$new(url=url, tenant=tenant, app=app, password=password, ...)
+        key_vault_endpoint$new(url=url, tenant=tenant, app=app, password=password, ...)
     }
 ))
 

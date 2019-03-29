@@ -2,7 +2,7 @@ add_methods <- function()
 {
     ## extending AzureRMR classes
 
-    AzureRMR::az_resource_group$set("public", "create_vault", overwrite=TRUE,
+    AzureRMR::az_resource_group$set("public", "create_key_vault", overwrite=TRUE,
     function(name, location=self$location, initial_access=default_access(), sku="Standard", ..., wait=TRUE)
     {
         creds <- decode_jwt(self$token$credentials$access_token)
@@ -28,23 +28,23 @@ add_methods <- function()
             list(...)
         )
 
-        AzureKeyVault::az_vault$new(self$token, self$subscription, self$name,
+        AzureKeyVault::az_key_vault$new(self$token, self$subscription, self$name,
             type="Microsoft.KeyVault/vaults", name=name, location=location,
             properties=props, wait=wait)
     })
 
 
-    AzureRMR::az_resource_group$set("public", "get_vault", overwrite=TRUE,
+    AzureRMR::az_resource_group$set("public", "get_key_vault", overwrite=TRUE,
     function(name)
     {
-        AzureKeyVault::az_vault$new(self$token, self$subscription, self$name,
+        AzureKeyVault::az_key_vault$new(self$token, self$subscription, self$name,
             type="Microsoft.KeyVault/vaults", name=name)
     })
 
 
-    AzureRMR::az_resource_group$set("public", "delete_vault", overwrite=TRUE,
+    AzureRMR::az_resource_group$set("public", "delete_key_vault", overwrite=TRUE,
     function(name, confirm=TRUE, wait=FALSE)
     {
-        self$get_vault(name)$delete(confirm=confirm, wait=wait)
+        self$get_key_vault(name)$delete(confirm=confirm, wait=wait)
     })
 }
