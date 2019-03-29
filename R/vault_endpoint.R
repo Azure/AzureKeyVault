@@ -17,7 +17,7 @@ key_vault <- R6::R6Class("key_vault", public=list(
 
         # "https://vault.azure.net/" (with trailing slash) will fail
         if(is.null(token))
-            token <- get_azure_token("https://vault.azure.net", tenant=tenant, app=app, password=password, ...)
+            token <- get_azure_token("https://vault.azure.net", tenant=tenant, app=app, ...)
 
         self$token <- token
 
