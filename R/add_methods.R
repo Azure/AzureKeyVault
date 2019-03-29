@@ -15,7 +15,9 @@ add_methods <- function()
                 c("Get", "List", "Update", "Create", "Import", "Delete", "Recover", "Backup", "Restore"),
                 c("Get", "List", "Set", "Delete", "Recover", "Backup", "Restore"),
                 c("Get", "List", "Update", "Create", "Import", "Delete", "Recover", "Backup", "Restore",
-                  "ManageContacts", "ManageIssuers", "GetIssuers", "ListIssuers", "SetIssuers", "DeleteIssuers")
+                  "ManageContacts", "ManageIssuers", "GetIssuers", "ListIssuers", "SetIssuers", "DeleteIssuers"),
+                c("Get", "List", "Update", "Set", "Delete", "Recover", "Backup", "Restore",
+                  "GetSas", "ListSas", "SetSas", "DeleteSas", "RegenerateKey")
             ))
         }
 

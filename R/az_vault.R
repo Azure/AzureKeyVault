@@ -3,15 +3,16 @@ az_key_vault=R6::R6Class("az_key_vault", inherit=AzureRMR::az_resource,
 
 public=list(
 
-    add_principal=function(principal, key_permissions="all", secret_permissions="all", certificate_permissions="all")
+    add_principal=function(principal,
+        key_permissions="all", secret_permissions="all", certificate_permissions="all", storage_permissions="all")
     {
         principal <- find_principal(principal)
         tenant <- self$properties$tenantId
     
         props <- list(accessPolicies=list(
             # need to unclass to satisfy toJSON
-            unclass(vault_access_policy(
-                principal, tenant, key_permissions, secret_permissions, certificate_permissions))
+            unclass(vault_access_policy(principal,
+                tenant, key_permissions, secret_permissions, certificate_permissions, storage_permissions))
         ))
 
         self$do_operation("accessPolicies/add",
@@ -32,7 +33,7 @@ public=list(
 
         pol <- pols[[which(i)]]
         vault_access_policy(pol$objectId, pol$tenantId,
-            pol$permissions$keys, pol$permissions$secrets, pol$permissions$certificates)
+            pol$permissions$keys, pol$permissions$secrets, pol$permissions$certificates, pol$permissions$storage)
     },
 
     remove_principal=function(principal)
@@ -51,7 +52,7 @@ public=list(
     {
         lapply(self$properties$accessPolicies, function(pol)
             vault_access_policy(pol$objectId, pol$tenantId,
-                pol$permissions$keys, pol$permissions$secrets, pol$permissions$certificates)
+                pol$permissions$keys, pol$permissions$secrets, pol$permissions$certificates, pol$permissions$storage)
         )
     },
         
@@ -77,11 +78,13 @@ find_principal=function(principal)
 
 
 #' @export
-vault_access_policy <- function(principal, tenant, key_permissions, secret_permissions, certificate_permissions)
+vault_access_policy <- function(principal, tenant,
+                                key_permissions, secret_permissions, certificate_permissions, storage_permissions)
 {
     key_permissions <- verify_permissions(unlist(key_permissions), "key")
     secret_permissions <- verify_permissions(unlist(secret_permissions), "secret")
     certificate_permissions <- verify_permissions(unlist(certificate_permissions), "certificate")
+    storage_permissions <- verify_permissions(unlist(storage_permissions), "storage")
 
     obj <- list(
         tenantId=tenant,
@@ -123,6 +126,9 @@ verify_permissions <- function(perms, type=c("key", "secret", "certificate"))
     certificate_perms <- c("get", "list", "update", "create", "import", "delete", "recover", "backup", "restore",
                            "managecontacts", "manageissuers", "getissuers", "listissuers", "setissuers",
                            "deleteissuers", "purge")
+
+    storage_perms <- c("backup", "delete", "deletesas", "get", "getsas", "list", "listsas",
+                       "purge", "recover", "regeneratekey", "restore", "set", "setsas", "update")
 
     all_perms <- switch(match.arg(type),
         key=key_perms,
