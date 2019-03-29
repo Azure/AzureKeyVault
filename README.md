@@ -38,7 +38,7 @@ kv$add_principal(svc,
 The client interface is R6-based, with methods for keys, secrets and certificates. To access the vault, instantiate a new object of class `key_vault`.
 
 ```r
-vault <- key_vault("mykeyvault")
+vault <- key_vault("https://mykeyvault.vault.azure.net")
 
 # can also be done from the ARM resource object
 #vault <- kv$get_endpoint()
