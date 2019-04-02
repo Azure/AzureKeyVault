@@ -3,23 +3,24 @@ az_key_vault=R6::R6Class("az_key_vault", inherit=AzureRMR::az_resource,
 
 public=list(
 
-    add_principal=function(principal, tenant=self$properties$tenantId,
+    add_principal=function(principal, tenant=NULL,
         key_permissions="all", secret_permissions="all", certificate_permissions="all", storage_permissions="all")
     {
-        props <- list(accessPolicies=list(unclass(if(inherits(principal, "vault_access_policy"))
-            principal
-        else vault_access_policy(
-            find_principal(principal),
-            tenant,
-            key_permissions,
-            secret_permissions,
-            certificate_permissions,
-            storage_permissions
-        ))))
-        
+        if(!inherits(principal, "vault_access_policy"))
+            principal <- vault_access_policy(
+                find_principal(principal),
+                tenant,
+                key_permissions,
+                secret_permissions,
+                certificate_permissions,
+                storage_permissions
+            )
+
         # un-nullify tenant ID using tenant of resource
-        if(is.null(props$accessPolicies$tenantId))
-            props$accessPolicies$tenantId <- self$tenantId
+        if(is.null(principal$tenantId))
+            principal$tenantId <- self$properties$tenantId
+
+        props <- list(accessPolicies=list(unclass(principal)))
 
         self$do_operation("accessPolicies/add",
             body=list(properties=props), encode="json", http_verb="PUT")
