@@ -30,7 +30,8 @@ svc <- AzureGraph::get_graph_login()$
 kv$add_principal(svc,
     key_permissions=c("get", "list", "backup"),
     secret_permissions=c("get", "list", "backup"),
-    certificate_permissions=NULL)
+    certificate_permissions=NULL,
+    storage_permissions=NULL)
 ```
 
 ## Client interface

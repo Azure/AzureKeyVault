@@ -11,14 +11,7 @@ add_methods <- function()
         default_access=function()
         {
             principal <- creds$payload$oid
-            list(vault_access_policy(principal, tenant,
-                c("Get", "List", "Update", "Create", "Import", "Delete", "Recover", "Backup", "Restore"),
-                c("Get", "List", "Set", "Delete", "Recover", "Backup", "Restore"),
-                c("Get", "List", "Update", "Create", "Import", "Delete", "Recover", "Backup", "Restore",
-                  "ManageContacts", "ManageIssuers", "GetIssuers", "ListIssuers", "SetIssuers", "DeleteIssuers"),
-                c("Get", "List", "Update", "Set", "Delete", "Recover", "Backup", "Restore",
-                  "GetSas", "ListSas", "SetSas", "DeleteSas", "RegenerateKey")
-            ))
+            list(unclass(vault_access_policy(principal, tenant, "all", "all", "all")))
         }
 
         props <- utils::modifyList(
