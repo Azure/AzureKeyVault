@@ -11,13 +11,18 @@ add_methods <- function()
         default_access=function()
         {
             principal <- creds$payload$oid
-            list(unclass(vault_access_policy(principal, tenant, "all", "all", "all")))
+            list(vault_access_policy(principal, tenant, "all", "all", "all"))
         }
 
         props <- utils::modifyList(
             list(
                 tenantId=tenant,
-                accessPolicies=lapply(initial_access, unclass),
+                accessPolicies=lapply(initial_access, function(x)
+                {
+                    if(is.null(x$tenantId))
+                        x$tenantId <- tenant
+                    unclass(x)
+                }),
                 sku=list(family="A", name=sku)
             ),
             list(...)
