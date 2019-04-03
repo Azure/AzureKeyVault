@@ -11,7 +11,7 @@ add_methods <- function()
         default_access=function()
         {
             principal <- creds$payload$oid
-            list(vault_access_policy(principal, tenant, "all", "all", "all"))
+            list(vault_access_policy(principal, tenant, "all", "all", "all", "all"))
         }
 
         props <- utils::modifyList(
