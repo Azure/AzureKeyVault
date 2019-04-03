@@ -17,7 +17,7 @@ if(tenant == "" || app == "" || password == "" || vaultname == "" ||
 vault <- key_vault$new(vaultname)
 
 try({
-    vault$storage$delete("stor1", confirm=FALSE)
+    vault$storage$remove("stor1", confirm=FALSE)
 }, silent=TRUE)
 
 
