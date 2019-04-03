@@ -109,7 +109,7 @@ public=list(
             x509_props=x509
         )
 
-        body <- list(value=value, policy=policy, attributes=attribs, tags=list(...))
+        body <- list(value=value, pwd=pwd, policy=policy, attributes=attribs, tags=list(...))
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
     },
 
