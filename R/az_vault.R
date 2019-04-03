@@ -8,7 +8,7 @@ public=list(
     {
         if(!inherits(principal, "vault_access_policy"))
             principal <- vault_access_policy(
-                find_principal(principal),
+                principal,
                 tenant,
                 key_permissions,
                 secret_permissions,
@@ -72,18 +72,6 @@ public=list(
 ))
 
 
-find_principal=function(principal)
-{
-    if(is_user(principal) || is_service_principal(principal))
-        principal$properties$id
-    else if(is_app(principal))
-        principal$get_service_principal()$properties$id
-    else if(!is_guid(principal))
-        stop("Must supply a valid principal ID or object", call.=FALSE)
-    else AzureAuth::normalize_guid(principal)
-}
-
-
 #' @export
 vault_access_policy <- function(principal, tenant=NULL,
                                 key_permissions="all",
@@ -91,6 +79,8 @@ vault_access_policy <- function(principal, tenant=NULL,
                                 certificate_permissions="all",
                                 storage_permissions="all")
 {
+    principal <- find_principal(principal)
+
     key_permissions <- verify_key_permissions(key_permissions)
     secret_permissions <- verify_secret_permissions(secret_permissions)
     certificate_permissions <- verify_certificate_permissions(certificate_permissions)
@@ -123,9 +113,21 @@ print.vault_access_policy <- function(x, ...)
     cat("Certificate permissions:\n")
     cat(strwrap(paste(x$permissions$certificates, collapse=", "), indent=4, exdent=4), sep="\n")
     cat("Storage account permissions:\n")
-    cat(strwrap(paste(x$permissions$storage_permissions, collapse=", "), indent=4, exdent=4), sep="\n")
+    cat(strwrap(paste(x$permissions$storage, collapse=", "), indent=4, exdent=4), sep="\n")
     cat("\n")
     invisible(x)
+}
+
+
+find_principal=function(principal)
+{
+    if(is_user(principal) || is_service_principal(principal))
+        principal$properties$id
+    else if(is_app(principal))
+        principal$get_service_principal()$properties$id
+    else if(!is_guid(principal))
+        stop("Must supply a valid principal ID or object", call.=FALSE)
+    else AzureAuth::normalize_guid(principal)
 }
 
 
