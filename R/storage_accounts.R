@@ -41,7 +41,7 @@ public=list(
 
     remove=function(name, confirm=TRUE)
     {
-        if(delete_confirmed(confirm, name, "key"))
+        if(delete_confirmed(confirm, name, "storage account"))
             self$do_operation(name, http_verb="DELETE")
     },
 
@@ -62,6 +62,41 @@ public=list(
         stopifnot(is.character(backup))
         self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
     },
+
+    regenerate_key=function(name, key_name)
+    {
+        self$do_operation("regeneratekey", body=list(keyName=key_name), http_verb="POST")
+    },
+
+    create_sas_definition=function(name, sas_name, sas_type="account", sas_template, validity_period,
+                                   enabled=NULL, recovery_level=NULL, ...)
+    {
+        attribs <- list(
+            enabled=enabled,
+            recoveryLevel=recovery_level
+        )
+        attribs <- attribs[!sapply(attribs, is_empty)]
+
+        body <- list(
+            sasType=sas_type,
+            templateUri=sas_template,
+            validityPeriod=validity_period,
+            attributes=attribs,
+            tags=list(...)
+        )
+
+        op <- construct_path(name, "sas", sas_name)
+        self$do_operation(op, body=body, encode="json", http_verb="PUT")
+    },
+
+    delete_sas_definition=function(name, sas_name, confirm=TRUE)
+    {
+        if(delete_confirmed(confirm, name, "SAS definition"))
+        {
+            op <- construct_path(name, "sas", sas_name)
+            self$do_operation(op, http_verb="DELETE")
+        }
+    }
 
     do_operation=function(op="", ..., options=list(),
                           api_version=getOption("azure_keyvault_api_version"))
