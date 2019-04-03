@@ -22,6 +22,7 @@ Imports:
     AzureGraph,
     AzureAuth (>= 1.0.1)
 Suggests:
+    AzureStor,
     openssl,
     knitr,
     testthat

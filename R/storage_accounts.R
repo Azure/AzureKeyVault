@@ -23,7 +23,7 @@ public=list(
         )
         attribs <- attribs[!sapply(attribs, is_empty)]
 
-        body <- list(id=storage_account, activeKeyName=key_name,
+        body <- list(resourceId=storage_account, activeKeyName=key_name,
             autoRegenerateKey=regen_key, regenerationPeriod=regen_period,
             attributes=attribs, tags=list(...))
 
