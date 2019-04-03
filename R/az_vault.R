@@ -102,7 +102,8 @@ vault_access_policy <- function(principal, tenant=NULL,
         permissions=list(
             keys=I(key_permissions),
             secrets=I(secret_permissions),
-            certificates=I(certificate_permissions)
+            certificates=I(certificate_permissions),
+            storage_permissions=I(storage_permissions)
         )
     )
     class(obj) <- "vault_access_policy"
@@ -113,14 +114,16 @@ vault_access_policy <- function(principal, tenant=NULL,
 #' @export
 print.vault_access_policy <- function(x, ...)
 {
-    cat("Tenant:", x$tenantId, "\n")
-    cat("Principal:", if(is.null(x$objectId)) "<default>" else x$objectId, "\n")
+    cat("Tenant:", if(is.null(x$tenantId)) "<default>" else x$tenantId, "\n")
+    cat("Principal:", x$objectId, "\n")
     cat("Key permissions:\n")
     cat(strwrap(paste(x$permissions$keys, collapse=", "), indent=4, exdent=4), sep="\n")
     cat("Secret permissions:\n")
     cat(strwrap(paste(x$permissions$secrets, collapse=", "), indent=4, exdent=4), sep="\n")
     cat("Certificate permissions:\n")
     cat(strwrap(paste(x$permissions$certificates, collapse=", "), indent=4, exdent=4), sep="\n")
+    cat("Storage account permissions:\n")
+    cat(strwrap(paste(x$permissions$storage_permissions, collapse=", "), indent=4, exdent=4), sep="\n")
     cat("\n")
     invisible(x)
 }
