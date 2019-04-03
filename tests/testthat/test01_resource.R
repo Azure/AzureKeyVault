@@ -9,9 +9,6 @@ username <- Sys.getenv("AZ_TEST_USERNAME")
 if(tenant == "" || app == "" || password == "" || subscription == "" || username == "")
     skip("Tests skipped: ARM credentials not set")
 
-if(!requireNamespace("AzureGraph", quietly=TRUE))
-    skip("Resource creation tests skipped, AzureGraph not installed")
-
 rgname <- paste(sample(letters, 20, replace=TRUE), collapse="")
 kvname <- paste(sample(letters, 10, replace=TRUE), collapse="")
 
