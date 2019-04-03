@@ -23,6 +23,9 @@ public=list(
         )
         attribs <- attribs[!sapply(attribs, is_empty)]
 
+        if(is.numeric(regen_period))
+            regen_period <- sprintf("P%sD", regen_period)
+
         body <- list(resourceId=storage_account, activeKeyName=key_name,
             autoRegenerateKey=regen_key, regenerationPeriod=regen_period,
             attributes=attribs, tags=list(...))
@@ -45,14 +48,6 @@ public=list(
     list_all=function()
     {
         lst <- get_vault_paged_list(self$do_operation(), self$token)
-        names(lst) <- sapply(lst, function(x) basename(x$id))
-        lst
-    },
-
-    list_versions=function(name)
-    {
-        op <- construct_path(name, "versions")
-        lst <- get_vault_paged_list(self$do_operation(op), self$token)
         names(lst) <- sapply(lst, function(x) basename(x$id))
         lst
     },

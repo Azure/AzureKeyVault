@@ -12,7 +12,9 @@ if(tenant == "" || app == "" || password == "" || vaultname == "" ||
    subscription == "" || rgname == "" || storname == "")
     skip("Storage account tests skipped: vault credentials not set")
 
-vault <- key_vault$new(vaultname, tenant=tenant, app=app, password=password)
+# currently storage acct management requires a user principal, not svc principal
+#vault <- key_vault$new(vaultname, tenant=tenant, app=app, password=password)
+vault <- key_vault$new(vaultname)
 
 try({
     vault$storage$delete("stor1", confirm=FALSE)
@@ -26,11 +28,8 @@ test_that("Storage account interface works",
         get_resource_group(rgname)$
         get_resource(type="Microsoft.Storage/storageAccounts", name=storname)
 
-    stor1 <- vault$storage$add("stor1", storname)
-    expect_true(is.list(stor1) && stor1$value == "mysecretvalue")
-
-    storlist <- vault$storage$list_versions("stor1")
-    expect_true(is.list(seclist) && length(seclist) == 1)
+    stor1 <- vault$storage$add("stor1", stor, "key1", regen_period="P30D")
+    expect_true(is.list(stor1) && stor1$resourceId == stor$id)
 
     lst <- vault$storage$list_all()
     expect_true(is.list(lst) && length(lst) == 1)
