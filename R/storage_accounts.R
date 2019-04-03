@@ -91,7 +91,7 @@ public=list(
 
     delete_sas_definition=function(name, sas_name, confirm=TRUE)
     {
-        if(delete_confirmed(confirm, name, "SAS definition"))
+        if(delete_confirmed(confirm, sas_name, "SAS definition"))
         {
             op <- construct_path(name, "sas", sas_name)
             self$do_operation(op, http_verb="DELETE")
