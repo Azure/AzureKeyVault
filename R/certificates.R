@@ -11,9 +11,10 @@ public=list(
         self$url <- url
     },
 
-    create=function(name, type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL, key_ops=NULL,
-                    exportable=TRUE, reuse_key=FALSE, issuer=list(), secret=list(), x509=list(), actions=list(),
-                    enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL, ...)
+    create=function(name, issuer=list(), secret=list(), x509=list(), actions=list(),
+                    enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL,
+                    key_type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL, key_ops=NULL,
+                    key_exportable=TRUE, reuse_key=FALSE, ...)
     {
         attribs <- list(
             enabled=enabled,
@@ -23,7 +24,7 @@ public=list(
         )
         attribs <- attribs[!sapply(attribs, is_empty)]
 
-        keyprops <- list(kty=match.arg(type))
+        keyprops <- list(kty=match.arg(key_type), reuse_key=reuse_key, exportable=key_exportable)
         if(keyprops$kty %in% c("RSA", "RSA-HSM"))
             keyprops$key_size=rsa_key_size
         else if(keyprops$kty %in% c("EC", "EC-HSM"))
@@ -81,8 +82,10 @@ public=list(
         self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
     },
 
-    import=function(name, value, hardware=FALSE,
-                    enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL, ...)
+    import=function(name, value, pwd=NULL,
+                    enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL,
+                    key_type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL, key_ops=NULL,
+                    key_exportable=TRUE, reuse_key=FALSE, ...)
     {
         attribs <- list(
             enabled=enabled,
@@ -92,7 +95,21 @@ public=list(
         )
         attribs <- attribs[!sapply(attribs, is_empty)]
 
-        body <- list(key=value, key=type, hsm=hardware, attributes=attribs, tags=list(...))
+        keyprops <- list(kty=match.arg(key_type), reuse_key=reuse_key, exportable=key_exportable)
+        if(keyprops$kty %in% c("RSA", "RSA-HSM"))
+            keyprops$key_size=rsa_key_size
+        else if(keyprops$kty %in% c("EC", "EC-HSM"))
+            keyprops$crv <- ec_curve
+
+        policy <- list(
+            key_props=keyprops,
+            issuer=issuer,
+            lifetime_actions=actions,
+            secret_props=secret,
+            x509_props=x509
+        )
+
+        body <- list(value=value, policy=policy, attributes=attribs, tags=list(...))
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
     },
 

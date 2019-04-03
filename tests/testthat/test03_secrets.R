@@ -1,4 +1,4 @@
-context("Resource creation")
+context("Secret client interface")
 
 tenant <- Sys.getenv("AZ_TEST_TENANT_ID")
 app <- Sys.getenv("AZ_TEST_APP_ID")
@@ -6,7 +6,7 @@ password <- Sys.getenv("AZ_TEST_PASSWORD")
 vaultname <- Sys.getenv("AZ_TEST_KEYVAULT")
 
 if(tenant == "" || app == "" || password == "" || vaultname == "")
-    skip("Key tests skipped: vault credentials not set")
+    skip("Secret tests skipped: vault credentials not set")
 
 vault <- key_vault$new(vaultname, tenant=tenant, app=app, password=password)
 

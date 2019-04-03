@@ -1,4 +1,4 @@
-context("Resource creation")
+context("Key client interface")
 
 tenant <- Sys.getenv("AZ_TEST_TENANT_ID")
 app <- Sys.getenv("AZ_TEST_APP_ID")
