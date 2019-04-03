@@ -103,7 +103,7 @@ vault_access_policy <- function(principal, tenant=NULL,
             keys=I(key_permissions),
             secrets=I(secret_permissions),
             certificates=I(certificate_permissions),
-            storage_permissions=I(storage_permissions)
+            storage=I(storage_permissions)
         )
     )
     class(obj) <- "vault_access_policy"
