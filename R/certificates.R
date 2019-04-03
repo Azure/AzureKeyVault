@@ -82,7 +82,7 @@ public=list(
         self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
     },
 
-    import=function(name, value, pwd=NULL,
+    import=function(name, value, pwd=NULL, issuer=list(), secret=list(), x509=list(), actions=list(),
                     enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL,
                     key_type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL, key_ops=NULL,
                     key_exportable=TRUE, reuse_key=FALSE, ...)
