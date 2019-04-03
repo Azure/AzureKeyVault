@@ -46,7 +46,7 @@ public=list(
         lst
     },
 
-    versions_of=function(name)
+    list_versions=function(name)
     {
         op <- construct_path(name, "versions")
         lst <- get_vault_paged_list(self$do_operation(op), self$token)

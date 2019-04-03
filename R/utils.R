@@ -106,7 +106,7 @@ make_vault_date <- function(date)
 {
     if(is_empty(date))
         NULL
-    else if(is.POSIXct(date))
+    else if(inherits(date, "POSIXt"))
         as.numeric(date)
     else as.numeric(as.POSIXct(date))
 }

@@ -16,12 +16,13 @@ Imports:
     utils,
     R6,
     httr,
+    jsonlite,
+    jose,
     AzureRMR,
     AzureGraph,
     AzureAuth (>= 1.0.1)
 Suggests:
-    jsonlite,
-    jose,
+    openssl,
     knitr,
     testthat
 Roxygen: list(markdown=TRUE)

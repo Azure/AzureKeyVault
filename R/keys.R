@@ -50,15 +50,15 @@ public=list(
     list_all=function()
     {
         lst <- get_vault_paged_list(self$do_operation(), self$token)
-        names(lst) <- sapply(lst, function(x) basename(x$id))
+        names(lst) <- sapply(lst, function(x) basename(x$kid))
         lst
     },
 
-    versions_of=function(name)
+    list_versions=function(name)
     {
         op <- construct_path(name, "versions")
         lst <- get_vault_paged_list(self$do_operation(op), self$token)
-        names(lst) <- sapply(lst, function(x) basename(x$id))
+        names(lst) <- sapply(lst, function(x) basename(x$kid))
         lst
     },
 
@@ -73,9 +73,15 @@ public=list(
         self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
     },
 
-    import=function(name, value, hardware=FALSE,
+    import=function(name, key, hardware=FALSE,
                     enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL, ...)
     {
+        # support importing keys from openssl package, or as json text
+        if(inherits(key, "key"))
+            key <- jsonlite::fromJSON(jose::write_jwk(key))
+        else if(is.character(key) && jsonlite::validate(key))
+            key <- jsonlite::fromJSON(key)
+
         attribs <- list(
             enabled=enabled,
             nbf=make_vault_date(activation_date),
@@ -84,7 +90,7 @@ public=list(
         )
         attribs <- attribs[!sapply(attribs, is_empty)]
 
-        body <- list(key=value, key=type, hsm=hardware, attributes=attribs, tags=list(...))
+        body <- list(key=key, hsm=hardware, attributes=attribs, tags=list(...))
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
     },
 

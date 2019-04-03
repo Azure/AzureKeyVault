@@ -7,7 +7,7 @@ key_vault <- R6::R6Class("key_vault", public=list(
     keys=NULL,
     secrets=NULL,
     certificates=NULL,
-    storage_accounts=NULL,
+    storage=NULL,
 
     initialize=function(url, tenant="common", app=.az_cli_app_id, ..., domain="vault.azure.net", token=NULL)
     {
