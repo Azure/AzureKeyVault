@@ -36,6 +36,20 @@ test_that("Storage account interface works",
 
     backup <- vault$storage$backup("stor1")
     expect_type(backup, "character")
+
+    # SAS template (unsigned)
+    sas <- "sv=2015-04-05&ss=bqtf&srt=sco&sp=r&st=2019-01-01T00%3A00%3A00.0000000Z&se=2099-01-01T00%3A00%3A00.0000000Z"
+
+    sasdef <- vault$storage$create_sas_definition("stor1", "testsas", sas_template=sas, validity_period="P15D")
+    expect_true(is.list(sasdef) && is.character(sasdef$sid))
+
+    sasdef2 <- vault$storage$get_sas_definition("stor1", "testsas")
+    expect_true(is.list(sasdef2) && !is.null(sasdef2$sid))
+
+    sasnew <- vault$storage$show_sas("stor1", "testsas")
+    expect_true(is.character(sasnew) && substr(sasnew, 1, 1) == "?")
+
+    expect_silent(vault$storage$delete_sas_definition("stor1", "testsas", confirm=FALSE))
 })
 
 vault$storage$remove("stor1", confirm=FALSE)

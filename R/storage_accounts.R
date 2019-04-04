@@ -68,8 +68,8 @@ public=list(
         self$do_operation("regeneratekey", body=list(keyName=key_name), http_verb="POST")
     },
 
-    create_sas_definition=function(name, sas_name, sas_type="account", sas_template, validity_period,
-                                   enabled=NULL, recovery_level=NULL, ...)
+    create_sas_definition=function(name, sas_name, sas_template, validity_period, sas_type="account",
+                                   enabled=TRUE, recovery_level=NULL, ...)
     {
         attribs <- list(
             enabled=enabled,
@@ -96,7 +96,20 @@ public=list(
             op <- construct_path(name, "sas", sas_name)
             self$do_operation(op, http_verb="DELETE")
         }
-    }
+    },
+
+    get_sas_definition=function(name, sas_name)
+    {
+        op <- construct_path(name, "sas", sas_name)
+        self$do_operation(op)
+    },
+
+    show_sas=function(name, sas_name)
+    {
+        secret_url <- httr::parse_url(self$get_sas_definition(name, sas_name)$sid)
+        secret_url$query <- list(`api-version`=getOption("azure_keyvault_api_version"))
+        call_vault_url(self$token, secret_url)$value
+    },
 
     do_operation=function(op="", ..., options=list(),
                           api_version=getOption("azure_keyvault_api_version"))
