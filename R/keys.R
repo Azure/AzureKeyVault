@@ -75,7 +75,7 @@ public=list(
 
     encrypt=function(name, plaintext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), version=NULL)
     {
-        if(!is.raw(plaintext) && !is.character(plaintext))
+        if(!is.raw(plaintext) && !is.character(plaintext) && length(plaintext) != 1)
             stop("Can only encrypt raw or character plaintext")
 
         op <- construct_path(name, version, "encrypt")
@@ -88,7 +88,7 @@ public=list(
 
     decrypt=function(name, ciphertext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), version=NULL)
     {
-        if(!is.raw(ciphertext) && !is.character(ciphertext))
+        if(!is.raw(ciphertext) && !is.character(ciphertext) && length(ciphertext) != 1)
             stop("Can only decrypt raw or character ciphertext")
 
         op <- construct_path(name, version, "decrypt")
@@ -104,7 +104,7 @@ public=list(
                               "PS384", "PS512", "RS256", "RS384", "RS512"),
                   version=NULL)
     {
-        if(!is.raw(digest) && !is.character(digest))
+        if(!is.raw(digest) && !is.character(digest) && length(digest) != 1)
             stop("Can only sign raw or character digest")
 
         op <- construct_path(name, version, "sign")
@@ -137,7 +137,7 @@ public=list(
 
     wrap=function(name, value, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), version=NULL)
     {
-        if(!is.raw(value) && !is.character(value))
+        if(!is.raw(value) && !is.character(value) && length(value) != 1)
             stop("Can only wrap raw or character input")
 
         op <- construct_path(name, version, "wrapkey")
@@ -150,7 +150,7 @@ public=list(
 
     unwrap=function(name, value, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), version=NULL)
     {
-        if(!is.raw(value) && !is.character(value))
+        if(!is.raw(value) && !is.character(value) && length(value) != 1)
             stop("Can only wrap raw or character input")
 
         op <- construct_path(name, version, "unwrapkey")
