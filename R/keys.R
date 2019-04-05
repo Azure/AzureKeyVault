@@ -73,23 +73,93 @@ public=list(
         self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
     },
 
-    decrypt=function()
-    {},
+    encrypt=function(name, plaintext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), version=NULL)
+    {
+        if(!is.raw(plaintext) && !is.character(plaintext))
+            stop("Can only encrypt raw or character plaintext")
 
-    encrypt=function()
-    {},
+        op <- construct_path(name, version, "encrypt")
+        body <- list(
+            alg=match.arg(algorithm),
+            value=plaintext
+        )
+        self$do_operation(op, body=body, encode="json", http_verb="POST")$value
+    },
 
-    sign=function()
-    {},
+    decrypt=function(name, ciphertext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), version=NULL)
+    {
+        if(!is.raw(ciphertext) && !is.character(ciphertext))
+            stop("Can only decrypt raw or character ciphertext")
 
-    wrap=function()
-    {},
+        op <- construct_path(name, version, "decrypt")
+        body <- list(
+            alg=match.arg(algorithm),
+            value=ciphertext
+        )
+        self$do_operation(op, body=body, encode="json", http_verb="POST")$value
+    },
 
-    unwrap=function()
-    {},
+    sign=function(name, digest,
+                  algorithm=c("ES256", "ES256K", "ES384", "ES512", "PS256",
+                              "PS384", "PS512", "RS256", "RS384", "RS512"),
+                  version=NULL)
+    {
+        if(!is.raw(digest) && !is.character(digest))
+            stop("Can only sign raw or character digest")
 
-    verify=function()
-    {},
+        op <- construct_path(name, version, "sign")
+        body <- list(
+            alg=match.arg(algorithm),
+            value=digest
+        )
+        self$do_operation(op, body=body, encode="json", http_verb="POST")$value
+    },
+
+    verify=function(name, signature, digest,
+                    algorithm=c("ES256", "ES256K", "ES384", "ES512", "PS256",
+                                "PS384", "PS512", "RS256", "RS384", "RS512"),
+                    version=NULL)
+    {
+        if(!is.raw(signature) && !is.character(signature) && length(signature) != 1)
+            stop("Can only verify raw or character signature")
+
+        if(!is.raw(digest) && !is.character(digest) && length(digest) != 1)
+            stop("Can only verify raw or character digest")
+
+        op <- construct_path(name, version, "verify")
+        body <- list(
+            alg=match.arg(algorithm),
+            digest=digest,
+            value=signature
+        )
+        self$do_operation(op, body=body, encode="json", http_verb="POST")$value
+    },
+
+    wrap=function(name, value, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), version=NULL)
+    {
+        if(!is.raw(value) && !is.character(value))
+            stop("Can only wrap raw or character input")
+
+        op <- construct_path(name, version, "wrapkey")
+        body <- list(
+            alg=match.arg(algorithm),
+            value=value
+        )
+        self$do_operation(op, body=body, encode="json", http_verb="POST")$value
+    },
+
+    unwrap=function(name, value, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), version=NULL)
+    {
+        if(!is.raw(value) && !is.character(value))
+            stop("Can only wrap raw or character input")
+
+        op <- construct_path(name, version, "unwrapkey")
+        body <- list(
+            alg=match.arg(algorithm),
+            value=value
+        )
+        self$do_operation(op, body=body, encode="json", http_verb="POST")$value
+    },
 
     import=function(name, key, hardware=FALSE,
                     enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL, ...)
@@ -122,3 +192,4 @@ public=list(
         call_vault_url(self$token, url, ...)
     }
 ))
+

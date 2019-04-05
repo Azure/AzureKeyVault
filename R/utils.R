@@ -71,7 +71,7 @@ error_message <- function(cont)
 construct_path <- function(...)
 {
     args <- lapply(list(...), function(x) if(is_empty(x)) "" else as.character(x))
-    sub("/+$", "", do.call(file.path, args))
+    sub("//", "/", do.call(file.path, args))
 }
 
 
