@@ -73,6 +73,24 @@ public=list(
         self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
     },
 
+    decrypt=function()
+    {},
+
+    encrypt=function()
+    {},
+
+    sign=function()
+    {},
+
+    wrap=function()
+    {},
+
+    unwrap=function()
+    {},
+
+    verify=function()
+    {},
+
     import=function(name, key, hardware=FALSE,
                     enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL, ...)
     {
