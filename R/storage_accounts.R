@@ -31,12 +31,13 @@ public=list(
             attributes=attribs, tags=list(...))
 
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
+        self$show(name)
     },
 
     show=function(name, version=NULL)
     {
         op <- construct_path(name, version)
-        self$do_operation(op)
+        stored_account$new(self$token, self$url, name, version, self$do_operation(op))
     },
 
     remove=function(name, confirm=TRUE)
@@ -47,7 +48,12 @@ public=list(
 
     list_all=function()
     {
-        lst <- get_vault_paged_list(self$do_operation(), self$token)
+        lst <- lapply(get_vault_paged_list(self$do_operation(), self$token), function(props)
+        {
+            name <- basename(props$id)
+            acct <- call_vault_url(self$token, props$id)
+            stored_account$new(self$token, self$url, name, NULL, acct)
+        })
         names(lst) <- sapply(lst, function(x) basename(x$id))
         lst
     },
@@ -61,54 +67,6 @@ public=list(
     {
         stopifnot(is.character(backup))
         self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
-    },
-
-    regenerate_key=function(name, key_name)
-    {
-        self$do_operation("regeneratekey", body=list(keyName=key_name), http_verb="POST")
-    },
-
-    create_sas_definition=function(name, sas_name, sas_template, validity_period, sas_type="account",
-                                   enabled=TRUE, recovery_level=NULL, ...)
-    {
-        attribs <- list(
-            enabled=enabled,
-            recoveryLevel=recovery_level
-        )
-        attribs <- attribs[!sapply(attribs, is_empty)]
-
-        body <- list(
-            sasType=sas_type,
-            templateUri=sas_template,
-            validityPeriod=validity_period,
-            attributes=attribs,
-            tags=list(...)
-        )
-
-        op <- construct_path(name, "sas", sas_name)
-        self$do_operation(op, body=body, encode="json", http_verb="PUT")
-    },
-
-    delete_sas_definition=function(name, sas_name, confirm=TRUE)
-    {
-        if(delete_confirmed(confirm, sas_name, "SAS definition"))
-        {
-            op <- construct_path(name, "sas", sas_name)
-            self$do_operation(op, http_verb="DELETE")
-        }
-    },
-
-    get_sas_definition=function(name, sas_name)
-    {
-        op <- construct_path(name, "sas", sas_name)
-        self$do_operation(op)
-    },
-
-    show_sas=function(name, sas_name)
-    {
-        secret_url <- httr::parse_url(self$get_sas_definition(name, sas_name)$sid)
-        secret_url$query <- list(`api-version`=getOption("azure_keyvault_api_version"))
-        call_vault_url(self$token, secret_url)$value
     },
 
     do_operation=function(op="", ..., options=list(),
