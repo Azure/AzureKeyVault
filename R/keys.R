@@ -11,8 +11,8 @@ public=list(
         self$url <- url
     },
 
-    create=function(name, type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL, key_ops=NULL,
-                    enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL, ...)
+    create=function(name, type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL,
+                    key_ops=NULL, enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL, ...)
     {
         type <- match.arg(type)
 
@@ -33,12 +33,14 @@ public=list(
 
         op <- construct_path(name, "create")
         self$do_operation(op, body=body, encode="json", http_verb="POST")
+
+        self$show(name)
     },
 
     show=function(name, version=NULL)
     {
         op <- construct_path(name, version)
-        self$do_operation(op)
+        stored_key$new(self$token, self$url, name, version, self$do_operation(op))
     },
 
     delete=function(name, confirm=TRUE)
@@ -49,116 +51,43 @@ public=list(
 
     list_all=function()
     {
-        lst <- get_vault_paged_list(self$do_operation(), self$token)
-        names(lst) <- sapply(lst, function(x) basename(x$kid))
-        lst
+        lst <- lapply(get_vault_paged_list(self$do_operation(), self$token), function(props)
+        {
+            name <- basename(props$kid)
+            url <- httr::parse_url(props$kid)
+            url$query <- list(`api-version`=getOption("azure_keyvault_api_version"))
+            key <- call_vault_url(self$token, url)
+            stored_key$new(self$token, self$url, name, NULL, key)
+        })
+        named_list(lst)
     },
 
     list_versions=function(name)
     {
         op <- construct_path(name, "versions")
-        lst <- get_vault_paged_list(self$do_operation(op), self$token)
-        names(lst) <- sapply(lst, function(x) basename(x$kid))
+        lst <- lapply(get_vault_paged_list(self$do_operation(op), self$token), function(props)
+        {
+            url <- httr::parse_url(props$kid)
+            url$query <- list(`api-version`=getOption("azure_keyvault_api_version"))
+            key <- call_vault_url(self$token, url)
+            stored_key$new(self$token, self$url, name, NULL, key)
+        })
+
+        names(lst) <- sapply(lst, function(x) file.path(x$name, x$version))
         lst
     },
 
     backup=function(name)
     {
-        self$do_operation(construct_path(name, "backup"), http_verb="POST")$value
+        op <- construct_path(name, "backup")
+        self$do_operation(op, http_verb="POST")$value
     },
 
-    restore=function(name, backup)
+    restore=function(backup)
     {
         stopifnot(is.character(backup))
-        self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
-    },
-
-    encrypt=function(name, plaintext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), version=NULL)
-    {
-        if(!is.raw(plaintext) && !is.character(plaintext) && length(plaintext) != 1)
-            stop("Can only encrypt raw or character plaintext")
-
-        op <- construct_path(name, version, "encrypt")
-        body <- list(
-            alg=match.arg(algorithm),
-            value=plaintext
-        )
-        self$do_operation(op, body=body, encode="json", http_verb="POST")$value
-    },
-
-    decrypt=function(name, ciphertext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), version=NULL)
-    {
-        if(!is.raw(ciphertext) && !is.character(ciphertext) && length(ciphertext) != 1)
-            stop("Can only decrypt raw or character ciphertext")
-
-        op <- construct_path(name, version, "decrypt")
-        body <- list(
-            alg=match.arg(algorithm),
-            value=ciphertext
-        )
-        self$do_operation(op, body=body, encode="json", http_verb="POST")$value
-    },
-
-    sign=function(name, digest,
-                  algorithm=c("ES256", "ES256K", "ES384", "ES512", "PS256",
-                              "PS384", "PS512", "RS256", "RS384", "RS512"),
-                  version=NULL)
-    {
-        if(!is.raw(digest) && !is.character(digest) && length(digest) != 1)
-            stop("Can only sign raw or character digest")
-
-        op <- construct_path(name, version, "sign")
-        body <- list(
-            alg=match.arg(algorithm),
-            value=digest
-        )
-        self$do_operation(op, body=body, encode="json", http_verb="POST")$value
-    },
-
-    verify=function(name, signature, digest,
-                    algorithm=c("ES256", "ES256K", "ES384", "ES512", "PS256",
-                                "PS384", "PS512", "RS256", "RS384", "RS512"),
-                    version=NULL)
-    {
-        if(!is.raw(signature) && !is.character(signature) && length(signature) != 1)
-            stop("Can only verify raw or character signature")
-
-        if(!is.raw(digest) && !is.character(digest) && length(digest) != 1)
-            stop("Can only verify raw or character digest")
-
-        op <- construct_path(name, version, "verify")
-        body <- list(
-            alg=match.arg(algorithm),
-            digest=digest,
-            value=signature
-        )
-        self$do_operation(op, body=body, encode="json", http_verb="POST")$value
-    },
-
-    wrap=function(name, value, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), version=NULL)
-    {
-        if(!is.raw(value) && !is.character(value) && length(value) != 1)
-            stop("Can only wrap raw or character input")
-
-        op <- construct_path(name, version, "wrapkey")
-        body <- list(
-            alg=match.arg(algorithm),
-            value=value
-        )
-        self$do_operation(op, body=body, encode="json", http_verb="POST")$value
-    },
-
-    unwrap=function(name, value, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), version=NULL)
-    {
-        if(!is.raw(value) && !is.character(value) && length(value) != 1)
-            stop("Can only wrap raw or character input")
-
-        op <- construct_path(name, version, "unwrapkey")
-        body <- list(
-            alg=match.arg(algorithm),
-            value=value
-        )
-        self$do_operation(op, body=body, encode="json", http_verb="POST")$value
+        op <- construct_path(name, "restore")
+        self$do_operation(op, body=list(value=backup), encode="json", http_verb="POST") 
     },
 
     import=function(name, key, hardware=FALSE,
@@ -180,6 +109,8 @@ public=list(
 
         body <- list(key=key, hsm=hardware, attributes=attribs, tags=list(...))
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
+
+        self$show(name)
     },
 
     do_operation=function(op="", ..., options=list(),
