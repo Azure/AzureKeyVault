@@ -33,11 +33,10 @@ public=list(
 
         op <- construct_path(name, "create")
         self$do_operation(op, body=body, encode="json", http_verb="POST")
-
-        self$show(name)
+        self$get(name)
     },
 
-    show=function(name, version=NULL)
+    get=function(name, version=NULL)
     {
         op <- construct_path(name, version)
         stored_key$new(self$token, self$url, name, version, self$do_operation(op))
@@ -105,8 +104,7 @@ public=list(
 
         body <- list(key=key, hsm=hardware, attributes=attribs, tags=list(...))
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
-
-        self$show(name)
+        self$get(name)
     },
 
     do_operation=function(op="", ..., options=list())

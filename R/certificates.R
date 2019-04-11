@@ -42,10 +42,10 @@ public=list(
 
         op <- construct_path(name, "create")
         self$do_operation(op, body=body, encode="json", http_verb="POST")
-        self$show(name)
+        self$get(name)
     },
 
-    show=function(name, version=NULL)
+    get=function(name, version=NULL)
     {
         op <- construct_path(name, version)
         stored_cert$new(self$token, self$url, name, version, self$do_operation(op))
@@ -120,6 +120,7 @@ public=list(
 
         body <- list(value=value, pwd=pwd, policy=policy, attributes=attribs, tags=list(...))
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
+        self$get(name)
     },
 
     do_operation=function(op="", ..., options=list())

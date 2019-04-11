@@ -25,10 +25,10 @@ public=list(
         body <- list(value=value, contentType=content_type, attributes=attribs, tags=list(...))
 
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
-        self$show(name)
+        self$get(name)
     },
 
-    show=function(name, version=NULL)
+    get=function(name, version=NULL)
     {
         op <- construct_path(name, version)
         stored_secret$new(self$token, self$url, name, version, self$do_operation(op))
