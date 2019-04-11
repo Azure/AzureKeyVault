@@ -62,7 +62,7 @@ public=list(
 
         body <- list(
             alg=match.arg(algorithm),
-            value=digest
+            value=jose::base64url_encode(digest)
         )
         self$do_operation("sign", body=body, encode="json", http_verb="POST")$value
     },
@@ -79,7 +79,7 @@ public=list(
 
         body <- list(
             alg=match.arg(algorithm),
-            digest=digest,
+            digest=jose::base64url_encode(digest),
             value=signature
         )
         self$do_operation("verify", body=body, encode="json", http_verb="POST")$value
