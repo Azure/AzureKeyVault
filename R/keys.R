@@ -54,9 +54,7 @@ public=list(
         lst <- lapply(get_vault_paged_list(self$do_operation(), self$token), function(props)
         {
             name <- basename(props$kid)
-            url <- httr::parse_url(props$kid)
-            url$query <- list(`api-version`=getOption("azure_keyvault_api_version"))
-            key <- call_vault_url(self$token, url)
+            key <- call_vault_url(self$token, props$kid)
             stored_key$new(self$token, self$url, name, NULL, key)
         })
         named_list(lst)
@@ -67,9 +65,7 @@ public=list(
         op <- construct_path(name, "versions")
         lst <- lapply(get_vault_paged_list(self$do_operation(op), self$token), function(props)
         {
-            url <- httr::parse_url(props$kid)
-            url$query <- list(`api-version`=getOption("azure_keyvault_api_version"))
-            key <- call_vault_url(self$token, url)
+            key <- call_vault_url(self$token, props$kid)
             stored_key$new(self$token, self$url, name, NULL, key)
         })
 
@@ -113,13 +109,11 @@ public=list(
         self$show(name)
     },
 
-    do_operation=function(op="", ..., options=list(),
-                          api_version=getOption("azure_keyvault_api_version"))
+    do_operation=function(op="", ..., options=list())
     {
         url <- self$url
         url$path <- construct_path("keys", op)
-        url$query <- utils::modifyList(list(`api-version`=api_version), options)
-
+        url$query <- options
         call_vault_url(self$token, url, ...)
     }
 ))

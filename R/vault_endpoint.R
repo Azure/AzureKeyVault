@@ -81,13 +81,11 @@ key_vault <- R6::R6Class("key_vault", public=list(
         self$storage <- vault_storage_accounts$new(self$token, self$url)
     },
 
-    call_endpoint=function(op="", ..., options=list(),
-                           api_version=getOption("azure_keyvault_api_version"))
+    call_endpoint=function(op="", ..., options=list())
     {
         url <- self$url
         url$path <- op
-        url$query <- utils::modifyList(list(`api-version`=api_version), options)
-
+        url$query <- options
         call_vault_url(self$token, url, ...)
     }
 ))

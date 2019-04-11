@@ -1,8 +1,17 @@
 call_vault_url <- function(token, url, ...,
+                           api_version=getOption("azure_keyvault_api_version"),
                            http_verb=c("GET", "DELETE", "PUT", "POST", "HEAD", "PATCH"),
                            http_status_handler=c("stop", "warn", "message", "pass"))
 {
     headers <- process_headers(token, ...)
+
+    if(!inherits(url, "url"))
+        url <- httr::parse_url(url)
+
+    if(is.null(url$query))
+        url$query <- list()
+
+    url$query <- utils::modifyList(url$query, list(`api-version`=api_version))
     res <- httr::VERB(match.arg(http_verb), url, headers, ...)
     process_response(res, match.arg(http_status_handler))
 }

@@ -109,13 +109,11 @@ public=list(
         self$do_operation("unwrapkey", body=body, encode="json", http_verb="POST")$value
     },
 
-    do_operation=function(op="", ..., options=list(),
-                          api_version=getOption("azure_keyvault_api_version"))
+    do_operation=function(op="", ..., options=list())
     {
         url <- self$url
         url$path <- construct_path("keys", self$name, self$version, op)
-        url$query <- utils::modifyList(list(`api-version`=api_version), options)
-
+        url$query <- options
         call_vault_url(self$token, url, ...)
     }
 ))

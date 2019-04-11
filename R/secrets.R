@@ -25,6 +25,7 @@ public=list(
         body <- list(value=value, contentType=content_type, attributes=attribs, tags=list(...))
 
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
+        self$show(name)
     },
 
     show=function(name, version=NULL)
@@ -41,16 +42,24 @@ public=list(
 
     list_all=function()
     {
-        lst <- get_vault_paged_list(self$do_operation(), self$token)
-        names(lst) <- sapply(lst, function(x) basename(x$id))
-        lst
+        lst <- lapply(get_vault_paged_list(self$do_operation(), self$token), function(props)
+        {
+            name <- basename(props$id)
+            secret <- call_vault_url(self$token, props$id)
+            stored_secret$new(self$token, self$url, name, NULL, secret)
+        })
+        named_list(lst)
     },
 
     list_versions=function(name)
     {
         op <- construct_path(name, "versions")
-        lst <- get_vault_paged_list(self$do_operation(op), self$token)
-        names(lst) <- sapply(lst, function(x) basename(x$id))
+        lst <- lapply(get_vault_paged_list(self$do_operation(op), self$token), function(props)
+        {
+            secret <- call_vault_url(self$token, props$id)
+            stored_secret$new(self$token, self$url, name, NULL, secret)
+        })
+        names(lst) <- sapply(lst, function(x) file.path(x$name, x$version))
         lst
     },
 
@@ -65,13 +74,11 @@ public=list(
         self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
     },
 
-    do_operation=function(op="", ..., options=list(),
-                          api_version=getOption("azure_keyvault_api_version"))
+    do_operation=function(op="", ..., options=list())
     {
         url <- self$url
         url$path <- construct_path("secrets", op)
-        url$query <- utils::modifyList(list(`api-version`=api_version), options)
-
+        url$query <- options
         call_vault_url(self$token, url, ...)
     }
 ))
