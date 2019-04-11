@@ -31,7 +31,7 @@ public=list(
     show=function(name, version=NULL)
     {
         op <- construct_path(name, version)
-        self$do_operation(op)
+        stored_secret$new(self$token, self$url, name, version, self$do_operation(op))
     },
 
     delete=function(name, confirm=TRUE)

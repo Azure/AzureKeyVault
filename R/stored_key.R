@@ -22,7 +22,7 @@ public=list(
         {
             if(exists(n, self))
                 self[[n]] <- properties[[n]]
-            else warning("Unexpected key property: ", n)
+            else warning("Unexpected property: ", n)
         })
 
         if(is.null(self$version))

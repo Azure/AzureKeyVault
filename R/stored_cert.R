@@ -1,4 +1,4 @@
-stored_secret <- R6::R6Class("stored_secret",
+stored_cert <- R6::R6Class("stored_cert",
 
 public=list(
 
@@ -6,10 +6,16 @@ public=list(
     url=NULL,
     name=NULL,
     version=NULL,
+
     id=NULL,
+    sid=NULL,
     kid=NULL,
-    value=NULL,
+    cer=NULL,
+    x5t=NULL,
     contentType=NULL,
+    pending=NULL,
+    policy=NULL,
+
     attributes=NULL,
     managed=NULL,
     tags=NULL,
@@ -35,7 +41,7 @@ public=list(
     do_operation=function(op="", ..., options=list())
     {
         url <- self$url
-        url$path <- construct_path("secrets", self$name, self$version, op)
+        url$path <- construct_path("certificates", self$name, self$version, op)
         url$query <- options
         call_vault_url(self$token, url, ...)
     }
