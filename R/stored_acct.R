@@ -51,9 +51,14 @@ public=list(
         self$do_operation(op)
     },
 
+    list_sas_definitions=function()
+    {
+        get_vault_paged_list(self$do_operation("sas"), self$token)
+    },
+
     show_sas=function(sas_name)
     {
-        secret_url <- self$get_sas_definition(self$name, sas_name)$sid
+        secret_url <- self$get_sas_definition(sas_name)$sid
         call_vault_url(self$token, secret_url)$value
     }
 ))

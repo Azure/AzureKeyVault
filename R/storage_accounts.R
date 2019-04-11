@@ -54,8 +54,7 @@ public=list(
             acct <- call_vault_url(self$token, props$id)
             stored_account$new(self$token, self$url, name, NULL, acct)
         })
-        names(lst) <- sapply(lst, function(x) basename(x$id))
-        lst
+        named_list(lst)
     },
 
     backup=function(name)
