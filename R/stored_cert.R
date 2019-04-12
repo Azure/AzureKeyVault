@@ -13,13 +13,6 @@ public=list(
     pending=NULL,
     policy=NULL,
 
-    initialize=function(...)
-    {
-        super$initialize(...)
-        if(is.null(self$version))
-            self$version <- basename(self$id)
-    },
-
     sync=function()
     {
         pending <- call_vault_url(self$token, self$pending$id)
@@ -29,5 +22,37 @@ public=list(
             self$initialize(self$token, self$url, self$name, NULL, props)
         }
         self
+    },
+
+    list_versions=function(name)
+    {
+        op <- construct_path(name, "versions")
+        lst <- lapply(get_vault_paged_list(self$do_operation(op), self$token), function(props)
+        {
+            attr <- props$attributes
+            data.frame(
+                version=basename(props$id),
+                thumbprint=props$x5t,
+                created=int_to_date(attr$created),
+                updated=int_to_date(attr$updated),
+                expiry=int_to_date(attr$exp),
+                not_before=int_to_date(attr$nbf),
+                stringsAsFactors=FALSE
+            )
+        })
+        do.call(rbind, lst)
+    },
+
+    get_policy=function()
+    {
+        op <- construct_path(self$name, "policy")
+        self$do_operation(op, version=NULL)
+    },
+
+    set_policy=function(name, policy)
+    {
+        body <- list(policy=policy)
+        op <- construct_path(self$name, "policy")
+        self$do_operation(op, body=body, encode="json", version=NULL, http_verb="PATCH")
     }
 ))

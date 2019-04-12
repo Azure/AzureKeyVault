@@ -69,18 +69,6 @@ public=list(
         named_list(lst)
     },
 
-    list_versions=function(name)
-    {
-        op <- construct_path(name, "versions")
-        lst <- lapply(get_vault_paged_list(self$do_operation(op), self$token), function(props)
-        {
-            cert <- call_vault_url(self$token, props$id)
-            stored_cert$new(self$token, self$url, name, NULL, cert)
-        })
-        names(lst) <- sapply(lst, function(x) file.path(x$name, x$version))
-        lst
-    },
-
     backup=function(name)
     {
         self$do_operation(construct_path(name, "backup"), http_verb="POST")$value
@@ -130,19 +118,6 @@ public=list(
     delete_contacts=function()
     {
         self$do_operation("contacts", http_verb="DELETE")
-    },
-
-    get_policy=function(name)
-    {
-        op <- construct_path(name, "policy")
-        self$do_operation(op)
-    },
-
-    set_policy=function(name, policy)
-    {
-        body <- list(policy=policy)
-        op <- construct_path(name, "policy")
-        self$do_operation(op, body=body, encode="json", http_verb="PATCH")
     },
 
     do_operation=function(op="", ..., options=list())

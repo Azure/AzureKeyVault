@@ -9,13 +9,6 @@ public=list(
     value=NULL,
     contentType=NULL,
 
-    initialize=function(...)
-    {
-        super$initialize(...)
-        if(is.null(self$version))
-            self$version <- basename(self$id)
-    },
-
     list_versions=function()
     {
         lst <- lapply(get_vault_paged_list(self$do_operation("versions", version=NULL), self$token), function(props)
