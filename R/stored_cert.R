@@ -26,7 +26,7 @@ public=list(
 
     list_versions=function()
     {
-        lst <- lapply(get_vault_paged_list(self$do_operation("version", version=NULL), self$token), function(props)
+        lst <- lapply(get_vault_paged_list(self$do_operation("versions", version=NULL), self$token), function(props)
         {
             attr <- props$attributes
             data.frame(

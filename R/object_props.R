@@ -2,10 +2,11 @@
 key_properties <- function(type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL)
 {
     type <- match.arg(type)
-    if(type %in% c("RSA", "RSA-HSM"))
+    key <- if(type %in% c("RSA", "RSA-HSM"))
         list(kty=type, key_size=rsa_key_size)
     else if(type %in% c("EC", "EC-HSM"))
         list(kty=type, crv=ec_curve)
+    compact(key)
 }
 
 
@@ -13,7 +14,8 @@ key_properties <- function(type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NU
 cert_key_properties <- function(type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL,
                                 key_exportable=TRUE, reuse_key=FALSE)
 {
-    c(key_properties(type, ec_curve, rsa_key_size), reuse_key=reuse_key, exportable=key_exportable)
+    props <- c(key_properties(type, ec_curve, rsa_key_size), reuse_key=reuse_key, exportable=key_exportable)
+    compact(props)
 }
 
 
@@ -28,7 +30,7 @@ cert_x509_properties=function(dns_names=character(), emails=character(), upns=ch
 
 
 #' @export
-cert_issuer_properties=function(issuer="self", type=NULL, transparent=TRUE)
+cert_issuer_properties=function(issuer="self", type=NULL, transparent=NULL)
 {
     compact(list(name=issuer, cty=type, cert_transparency=transparent))
 }
