@@ -12,23 +12,20 @@ public=list(
     },
 
     add=function(name, storage_account, key_name, regen_key=TRUE, regen_period=30,
-                 enabled=NULL, recovery_level=NULL, ...)
+                 attributes=vault_object_attrs(), ...)
     {
         if(is_resource(storage_account))
             storage_account <- storage_account$id
 
-        attribs <- list(
-            enabled=enabled,
-            recoveryLevel=recovery_level
-        )
-        attribs <- attribs[!sapply(attribs, is_empty)]
-
         if(is.numeric(regen_period))
             regen_period <- sprintf("P%sD", regen_period)
 
+        # some attributes not used for storage accounts
+        attributes$nbf <- attributes$exp <- NULL
+        
         body <- list(resourceId=storage_account, activeKeyName=key_name,
             autoRegenerateKey=regen_key, regenerationPeriod=regen_period,
-            attributes=attribs, tags=list(...))
+            attributes=attributes, tags=list(...))
 
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
         self$get(name)

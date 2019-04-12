@@ -12,23 +12,12 @@ public=list(
     },
 
     create=function(name, issuer=list(), secret=list(), x509=list(), actions=list(),
-                    enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL,
-                    key_type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL, key_ops=NULL,
+                    key_properties=vault_key_properties(),
+                    attributes=vault_object_attrs(),
+                    key_ops=NULL,
                     key_exportable=TRUE, reuse_key=FALSE, ..., wait=TRUE)
     {
-        attribs <- list(
-            enabled=enabled,
-            nbf=make_vault_date(activation_date),
-            exp=make_vault_date(expiry_date),
-            recoveryLevel=recovery_level
-        )
-        attribs <- attribs[!sapply(attribs, is_empty)]
-
-        keyprops <- list(kty=match.arg(key_type), reuse_key=reuse_key, exportable=key_exportable)
-        if(keyprops$kty %in% c("RSA", "RSA-HSM"))
-            keyprops$key_size=rsa_key_size
-        else if(keyprops$kty %in% c("EC", "EC-HSM"))
-            keyprops$crv <- ec_curve
+        keyprops <- c(key_properties, reuse_key=reuse_key, exportable=key_exportable)
 
         policy <- list(
             key_props=keyprops,
@@ -38,7 +27,7 @@ public=list(
             x509_props=x509
         )
 
-        body <- list(policy=policy, attributes=attribs, tags=list(...))
+        body <- list(policy=policy, attributes=attributes, tags=list(...))
 
         op <- construct_path(name, "create")
         self$do_operation(op, body=body, encode="json", http_verb="POST")
@@ -101,23 +90,12 @@ public=list(
     },
 
     import=function(name, value, pwd=NULL, issuer=list(), secret=list(), x509=list(), actions=list(),
-                    enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL,
-                    key_type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL, key_ops=NULL,
+                    key_properties=vault_key_properties(),
+                    attributes=vault_object_attrs(),
+                    key_ops=NULL,
                     key_exportable=TRUE, reuse_key=FALSE, ...)
     {
-        attribs <- list(
-            enabled=enabled,
-            nbf=make_vault_date(activation_date),
-            exp=make_vault_date(expiry_date),
-            recoveryLevel=recovery_level
-        )
-        attribs <- attribs[!sapply(attribs, is_empty)]
-
-        keyprops <- list(kty=match.arg(key_type), reuse_key=reuse_key, exportable=key_exportable)
-        if(keyprops$kty %in% c("RSA", "RSA-HSM"))
-            keyprops$key_size=rsa_key_size
-        else if(keyprops$kty %in% c("EC", "EC-HSM"))
-            keyprops$crv <- ec_curve
+        keyprops <- c(key_properties, reuse_key=reuse_key, exportable=key_exportable)
 
         policy <- list(
             key_props=keyprops,
@@ -127,9 +105,38 @@ public=list(
             x509_props=x509
         )
 
-        body <- list(value=value, pwd=pwd, policy=policy, attributes=attribs, tags=list(...))
+        body <- list(value=value, pwd=pwd, policy=policy, attributes=attributes, tags=list(...))
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
         self$get(name)
+    },
+
+    get_contacts=function()
+    {
+        self$do_operation("contacts")
+    },
+
+    set_contacts=function(email, name, phone)
+    {
+        df <- data.frame(email, name, phone, stringsAsFactors=FALSE)
+        self$do_operation("contacts", body=list(contacts=df), encode="json", http_verb="PUT")
+    },
+
+    delete_contacts=function()
+    {
+        self$do_operation("contacts", http_verb="DELETE")
+    },
+
+    get_policy=function(name)
+    {
+        op <- construct_path(name, "policy")
+        self$do_operation(op)
+    },
+
+    set_policy=function(name, policy)
+    {
+        body <- list(policy)
+        op <- construct_path(name, "policy")
+        self$do_operation(op, body=body, encode="json", http_verb="PATCH")
     },
 
     do_operation=function(op="", ..., options=list())

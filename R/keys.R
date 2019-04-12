@@ -11,25 +11,10 @@ public=list(
         self$url <- url
     },
 
-    create=function(name, type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL,
-                    key_ops=NULL, enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL, ...)
+    create=function(name, properties=vault_key_properties(), key_ops=NULL,
+                    attributes=vault_object_attrs(), ...)
     {
-        type <- match.arg(type)
-
-        attribs <- list(
-            enabled=enabled,
-            nbf=make_vault_date(activation_date),
-            exp=make_vault_date(expiry_date),
-            recoveryLevel=recovery_level
-        )
-        attribs <- attribs[!sapply(attribs, is_empty)]
-
-        body <- list(kty=type, attributes=attribs, key_ops=key_ops, tags=list(...))
-
-        if(type %in% c("RSA", "RSA-HSM"))
-            body$key_size=rsa_key_size
-        else if(type %in% c("EC", "EC-HSM"))
-            body$crv <- ec_curve
+        body <- c(properties, list(attributes=attributes, key_ops=key_ops, tags=list(...)))
 
         op <- construct_path(name, "create")
         self$do_operation(op, body=body, encode="json", http_verb="POST")

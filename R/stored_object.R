@@ -26,6 +26,12 @@ public=list(
         })
     },
 
+    update_attributes=function(attributes=vault_object_attrs(), ...)
+    {
+        body <- list(attributes=attributes, ...)
+        self$do_operation(body=body, encode="json", http_verb="PATCH")
+    },
+
     do_operation=function(op="", ..., options=list())
     {
         url <- self$url
@@ -34,3 +40,5 @@ public=list(
         call_vault_url(self$token, url, ...)
     }
 ))
+
+

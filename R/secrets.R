@@ -11,18 +11,9 @@ public=list(
         self$url <- url
     },
 
-    create=function(name, value, content_type=NULL, enabled=NULL, expiry_date=NULL, activation_date=NULL,
-                 recovery_level=NULL, ...)
+    create=function(name, value, content_type=NULL, attributes=vault_object_attrs(), ...)
     {
-        attribs <- list(
-            enabled=enabled,
-            nbf=make_vault_date(activation_date),
-            exp=make_vault_date(expiry_date),
-            recoveryLevel=recovery_level
-        )
-        attribs <- attribs[!sapply(attribs, is_empty)]
-
-        body <- list(value=value, contentType=content_type, attributes=attribs, tags=list(...))
+        body <- list(value=value, contentType=content_type, attributes=attributes, tags=list(...))
 
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
         self$get(name)
