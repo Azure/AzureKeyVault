@@ -11,24 +11,23 @@ public=list(
         self$url <- url
     },
 
-    create=function(name, subject, x509=cert_x509_properties(subject=subject), issuer=cert_issuer_properties(),
-                    key=key_properties(),
+    create=function(name, subject, x509=cert_x509_properties(), issuer=cert_issuer_properties(),
+                    key=cert_key_properties(),
                     secret_type=c("pem", "pkcs12"),
                     actions=cert_expiry_actions(),
                     attributes=vault_object_attrs(),
-                    key_exportable=TRUE, reuse_key=FALSE, ..., wait=TRUE)
+                    ..., wait=TRUE)
     {
-        keyprops <- c(key_properties, reuse_key=reuse_key, exportable=key_exportable)
         secret_type <- if(match_arg(secret_type) == "pem")
             "application/x-pem-file"
         else "application/x-pkcs12"
 
         policy <- list(
-            key_props=keyprops,
             issuer=issuer,
-            lifetime_actions=actions,
+            key_props=key,
             secret_props=list(contentType=secret_type),
-            x509_props=x509
+            x509_props=c(subject=subject, x509),
+            lifetime_actions=actions
         )
 
         body <- list(policy=policy, attributes=attributes, tags=list(...))
@@ -93,19 +92,23 @@ public=list(
         self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
     },
 
-    import=function(name, value, pwd=NULL, issuer=list(), secret=list(), x509=list(), actions=cert_expiry_actions(),
-                    key=key_properties(),
+    import=function(name, value, pwd=NULL, subject, x509=cert_x509_properties(), issuer=cert_issuer_properties(),
+                    key=cert_key_properties(),
+                    secret_type=c("pem", "pkcs12"),
+                    actions=cert_expiry_actions(),
                     attributes=vault_object_attrs(),
-                    key_exportable=TRUE, reuse_key=FALSE, ...)
+                    ..., wait=TRUE)
     {
-        keyprops <- c(key, reuse_key=reuse_key, exportable=key_exportable)
+        secret_type <- if(match_arg(secret_type) == "pem")
+            "application/x-pem-file"
+        else "application/x-pkcs12"
 
         policy <- list(
-            key_props=keyprops,
             issuer=issuer,
-            lifetime_actions=actions,
-            secret_props=secret,
-            x509_props=x509
+            key_props=key,
+            secret_props=list(contentType=secret_type),
+            x509_props=c(subject=subject, x509),
+            lifetime_actions=actions
         )
 
         body <- list(value=value, pwd=pwd, policy=policy, attributes=attributes, tags=list(...))

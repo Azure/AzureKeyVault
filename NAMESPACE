@@ -2,7 +2,13 @@
 
 S3method(print,vault_access_policy)
 export(az_key_vault)
+export(cert_expiry_actions)
+export(cert_issuer_properties)
+export(cert_key_properties)
+export(cert_x509_properties)
+export(key_properties)
 export(key_vault)
 export(vault_access_policy)
+export(vault_object_attrs)
 import(AzureGraph)
 import(AzureRMR)

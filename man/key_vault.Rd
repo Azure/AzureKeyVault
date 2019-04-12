@@ -64,7 +64,8 @@ key_vault("https://mykeyvault.vault.azure.net")
 key_vault("mykeyvault", tenant="myaadtenant", app="app_id", password="password")
 
 # authenticating with an existing token
-token <- AzureAuth::get_azure_token("myaadtenant", "app_id", password="password")
+token <- AzureAuth::get_azure_token("https://vault.azure.net", "myaadtenant",
+                                    app="app_id", password="password")
 key_vault("mykeyvault", token=token)
 
 }

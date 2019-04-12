@@ -1,3 +1,4 @@
+#' @export
 key_properties <- function(type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL)
 {
     type <- match.arg(type)
@@ -8,21 +9,32 @@ key_properties <- function(type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NU
 }
 
 
-cert_x509_properties=function(subject, dns_names=NULL, emails=NULL, upns=NULL,
+#' @export
+cert_key_properties <- function(type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL,
+                                key_exportable=TRUE, reuse_key=FALSE)
+{
+    c(key_properties(type, ec_curve, rsa_key_size), reuse_key=reuse_key, exportable=key_exportable)
+}
+
+
+#' @export
+cert_x509_properties=function(dns_names=NULL, emails=NULL, upns=NULL,
                               key_usages=NULL, enhanced_key_usages=NULL, valid=NULL)
 {
     sans <- list(dns_names=dns_names, emails=emails, upns=upns)
-    props <- list(subject=subject, sans=sans, key_usage=key_usages, ekus=enhanced_key_usages, validity_months=valid)
+    props <- list(sans=sans, key_usage=key_usages, ekus=enhanced_key_usages, validity_months=valid)
     compact(props)
 }
 
 
+#' @export
 cert_issuer_properties=function(issuer="self", type=NULL, transparent=TRUE)
 {
     compact(list(name=issuer, cty=type, cert_transparency=transparent))
 }
 
 
+#' @export
 cert_expiry_actions <- function(auto_renew=NULL, email_contacts=NULL)
 {
     auto_renew <- if(!is.null(auto_renew))
@@ -44,6 +56,7 @@ cert_expiry_actions <- function(auto_renew=NULL, email_contacts=NULL)
 }
 
 
+#' @export
 vault_object_attrs <- function(enabled=TRUE, expiry_date=NULL, activation_date=NULL, recovery_level=NULL)
 {
     attribs <- list(
