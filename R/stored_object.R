@@ -1,4 +1,4 @@
-stored_object <- R6::R6Class("stored_secret",
+stored_object <- R6::R6Class("stored_object",
 
 public=list(
 

@@ -20,27 +20,27 @@ try({
 test_that("Key interface works",
 {
     rsakey <- vault$keys$create("rsakey")
-    expect_true(is.list(rsakey) && rsakey$key$kty == "RSA")
+    expect_true(inherits(rsakey, "stored_key"))
 
-    rsaval <- vault$keys$show("rsakey")
-    expect_true(is.list(rsaval) && is.character(rsaval$key$n))
+    rsaval <- vault$keys$get("rsakey")
+    expect_true(inherits(rsaval, "stored_key") && is.character(rsaval$key$n))
 
     rsakey2 <- vault$keys$create("rsakey", expiry_date="2099-01-01")
-    expect_true(is.list(rsakey2) && rsakey2$key$kty == "RSA")
+    expect_true(inherits(rsakey2, "stored_key") && rsakey2$key$kty == "RSA")
 
     rsalist <- vault$keys$list_versions("rsakey")
-    expect_true(is.list(rsalist) && length(rsalist) == 2)
+    expect_true(is.list(rsalist) && length(rsalist) == 2 && all(sapply(rsalist, inherits, "stored_key")))
 
     eckey <- vault$keys$create("eckey", type="EC")
-    expect_true(is.list(eckey) && eckey$key$kty == "EC")
+    expect_true(inherits(eckey, "stored_key") && eckey$key$kty == "EC")
 
     extkey <- openssl::rsa_keygen()
     extkeyval <- jsonlite::fromJSON(jose::write_jwk(extkey))
     impkey <- vault$keys$import("extkey", key=extkey)
-    expect_true(is.list(impkey) && impkey$key$kty == extkeyval$kty && impkey$key$n == extkeyval$n)
+    expect_true(inherits(impkey, "stored_key") && impkey$key$kty == extkeyval$kty && impkey$key$n == extkeyval$n)
 
     lst <- vault$keys$list_all()
-    expect_true(is.list(lst) && length(lst) == 3)
+    expect_true(is.list(lst) && length(lst) == 3 && all(sapply(lst, inherits, "stored_key")))
 
     backup <- vault$keys$backup("rsakey")
     expect_type(backup, "character")

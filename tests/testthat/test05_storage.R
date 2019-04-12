@@ -29,10 +29,10 @@ test_that("Storage account interface works",
         get_resource(type="Microsoft.Storage/storageAccounts", name=storname)
 
     stor1 <- vault$storage$add("stor1", stor, "key1", regen_period="P30D")
-    expect_true(is.list(stor1) && stor1$resourceId == stor$id)
+    expect_true(inherits(stor1, "stored_account") && stor1$resourceId == stor$id)
 
     lst <- vault$storage$list_all()
-    expect_true(is.list(lst) && length(lst) == 1)
+    expect_true(is.list(lst) && length(lst) == 1 && all(sapply(lst, inherits, "stored_account")))
 
     backup <- vault$storage$backup("stor1")
     expect_type(backup, "character")
@@ -40,16 +40,16 @@ test_that("Storage account interface works",
     # SAS template (unsigned)
     sas <- "sv=2015-04-05&ss=bqtf&srt=sco&sp=r&st=2019-01-01T00%3A00%3A00.0000000Z&se=2099-01-01T00%3A00%3A00.0000000Z"
 
-    sasdef <- vault$storage$create_sas_definition("stor1", "testsas", sas_template=sas, validity_period="P15D")
+    sasdef <- stor1$create_sas_definition("testsas", sas_template=sas, validity_period="P15D")
     expect_true(is.list(sasdef) && is.character(sasdef$sid))
 
-    sasdef2 <- vault$storage$get_sas_definition("stor1", "testsas")
+    sasdef2 <- stor1$get_sas_definition("testsas")
     expect_true(is.list(sasdef2) && !is.null(sasdef2$sid))
 
-    sasnew <- vault$storage$show_sas("stor1", "testsas")
+    sasnew <- stor1$show_sas("testsas")
     expect_true(is.character(sasnew) && substr(sasnew, 1, 1) == "?")
 
-    expect_silent(vault$storage$delete_sas_definition("stor1", "testsas", confirm=FALSE))
+    expect_silent(stor1$delete_sas_definition("testsas", confirm=FALSE))
 })
 
 vault$storage$remove("stor1", confirm=FALSE)

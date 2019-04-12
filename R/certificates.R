@@ -14,7 +14,7 @@ public=list(
     create=function(name, issuer=list(), secret=list(), x509=list(), actions=list(),
                     enabled=NULL, expiry_date=NULL, activation_date=NULL, recovery_level=NULL,
                     key_type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL, key_ops=NULL,
-                    key_exportable=TRUE, reuse_key=FALSE, ...)
+                    key_exportable=TRUE, reuse_key=FALSE, ..., wait=TRUE)
     {
         attribs <- list(
             enabled=enabled,
@@ -42,7 +42,16 @@ public=list(
 
         op <- construct_path(name, "create")
         self$do_operation(op, body=body, encode="json", http_verb="POST")
-        self$get(name)
+        cert <- self$get(name)
+
+        if(!wait)
+            message("Certificate creation started. Call the sync() method to update status.")
+        else while(is.null(cert$cer))
+        {
+            Sys.sleep(5)
+            cert <- self$get(name)
+        }
+        cert
     },
 
     get=function(name, version=NULL)
