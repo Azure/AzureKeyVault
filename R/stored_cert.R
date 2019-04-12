@@ -24,10 +24,9 @@ public=list(
         self
     },
 
-    list_versions=function(name)
+    list_versions=function()
     {
-        op <- construct_path(name, "versions")
-        lst <- lapply(get_vault_paged_list(self$do_operation(op), self$token), function(props)
+        lst <- lapply(get_vault_paged_list(self$do_operation("version", version=NULL), self$token), function(props)
         {
             attr <- props$attributes
             data.frame(
@@ -49,7 +48,7 @@ public=list(
         self$do_operation(op, version=NULL)
     },
 
-    set_policy=function(name, policy)
+    set_policy=function(policy)
     {
         body <- list(policy=policy)
         op <- construct_path(self$name, "policy")

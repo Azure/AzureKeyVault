@@ -101,7 +101,16 @@ public=list(
 
         body <- list(value=value, pwd=pwd, policy=policy, attributes=attributes, tags=list(...))
         self$do_operation(name, body=body, encode="json", http_verb="PUT")
-        self$get(name)
+        cert <- self$get(name)
+
+        if(!wait)
+            message("Certificate creation started. Call the sync() method to update status.")
+        else while(is.null(cert$cer))
+        {
+            Sys.sleep(5)
+            cert <- self$get(name)
+        }
+        cert
     },
 
     get_contacts=function()
