@@ -18,11 +18,11 @@ cert_key_properties <- function(type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_cur
 
 
 #' @export
-cert_x509_properties=function(dns_names=NULL, emails=NULL, upns=NULL,
-                              key_usages=NULL, enhanced_key_usages=NULL, valid=NULL)
+cert_x509_properties=function(dns_names=character(), emails=character(), upns=character(),
+                              key_usages=character(), enhanced_key_usages=character(), valid=NULL)
 {
-    sans <- list(dns_names=dns_names, emails=emails, upns=upns)
-    props <- list(sans=sans, key_usage=key_usages, ekus=enhanced_key_usages, validity_months=valid)
+    sans <- list(dns_names=I(dns_names), emails=I(emails), upns=I(upns))
+    props <- list(sans=sans, key_usage=I(key_usages), ekus=I(enhanced_key_usages), validity_months=valid)
     compact(props)
 }
 

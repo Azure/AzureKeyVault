@@ -18,7 +18,7 @@ public=list(
                     attributes=vault_object_attrs(),
                     ..., wait=TRUE)
     {
-        secret_type <- if(match_arg(secret_type) == "pem")
+        secret_type <- if(match.arg(secret_type) == "pem")
             "application/x-pem-file"
         else "application/x-pkcs12"
 
