@@ -28,8 +28,11 @@ test_that("Key interface works",
     rsakey2 <- vault$keys$create("rsakey", expiry_date="2099-01-01")
     expect_true(inherits(rsakey2, "stored_key") && rsakey2$key$kty == "RSA")
 
-    rsalist <- vault$keys$list_versions("rsakey")
-    expect_true(is.list(rsalist) && length(rsalist) == 2 && all(sapply(rsalist, inherits, "stored_key")))
+    rsalist <- rsakey2$list_versions()
+    expect_true(is.data.frame(rsalist) && nrow(rsalist) == 2)
+
+    rsakey2$set_version(rsalist$version[2])
+    expect_true(rsakey2$version == rsalist$version[2])
 
     eckey <- vault$keys$create("eckey", properties=key_properties(type="EC"))
     expect_true(inherits(eckey, "stored_key") && eckey$key$kty == "EC")

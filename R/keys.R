@@ -21,10 +21,9 @@ public=list(
         self$get(name)
     },
 
-    get=function(name, version=NULL)
+    get=function(name)
     {
-        op <- construct_path(name, version)
-        stored_key$new(self$token, self$url, name, version, self$do_operation(op))
+        stored_key$new(self$token, self$url, name, NULL, self$do_operation(name))
     },
 
     delete=function(name, confirm=TRUE)
@@ -42,19 +41,6 @@ public=list(
             stored_key$new(self$token, self$url, name, NULL, key)
         })
         named_list(lst)
-    },
-
-    list_versions=function(name)
-    {
-        op <- construct_path(name, "versions")
-        lst <- lapply(get_vault_paged_list(self$do_operation(op), self$token), function(props)
-        {
-            key <- call_vault_url(self$token, props$kid)
-            stored_key$new(self$token, self$url, name, NULL, key)
-        })
-
-        names(lst) <- sapply(lst, function(x) file.path(x$name, x$version))
-        lst
     },
 
     backup=function(name)

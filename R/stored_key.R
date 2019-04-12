@@ -6,11 +6,22 @@ public=list(
 
     key=NULL,
 
-    initialize=function(...)
+    list_versions=function()
     {
-        super$initialize(...)
-        if(is.null(self$version))
-            self$version <- basename(self$key$kid)
+        lst <- lapply(get_vault_paged_list(self$do_operation("versions", version=NULL), self$token), function(props)
+        {
+            attr <- props$attributes
+            data.frame(
+                version=basename(props$kid),
+                created=int_to_date(attr$created),
+                updated=int_to_date(attr$updated),
+                expiry=int_to_date(attr$exp),
+                not_before=int_to_date(attr$nbf),
+                stringsAsFactors=FALSE
+            )
+        })
+
+        do.call(rbind, lst)
     },
 
     encrypt=function(plaintext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"))

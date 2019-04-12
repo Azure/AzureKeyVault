@@ -73,3 +73,12 @@ compact <- function(lst)
 {
     lst[!sapply(lst, is.null)]
 }
+
+
+int_to_date <- function(dte)
+{
+    if(is_empty(dte))
+        NA
+    else as.POSIXct(dte, origin="1970-01-01")
+}
+

@@ -26,16 +26,33 @@ public=list(
         })
     },
 
+    delete=function(confirm=TRUE)
+    {
+        type <- if(self$type == "storage")
+            "storage account"
+        else sub("s$", "", self$type)
+
+        if(delete_confirmed(confirm, self$name, type))
+            self$do_operation(version=NULL, http_verb="DELETE")
+    },
+
     update_attributes=function(attributes=vault_object_attrs(), ...)
     {
         body <- list(attributes=attributes, ...)
         self$do_operation(body=body, encode="json", http_verb="PATCH")
     },
 
-    do_operation=function(op="", ..., options=list())
+    set_version=function(version=NULL)
+    {
+        props <- self$do_operation(version=version)
+        self$initialize(self$token, self$url, self$name, version, props)
+        self
+    },
+
+    do_operation=function(op="", ..., version=self$version, options=list())
     {
         url <- self$url
-        url$path <- construct_path(self$type, self$name, self$version, op)
+        url$path <- construct_path(self$type, self$name, version, op)
         url$query <- options
         call_vault_url(self$token, url, ...)
     }
