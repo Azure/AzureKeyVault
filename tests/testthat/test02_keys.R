@@ -31,7 +31,7 @@ test_that("Key interface works",
     rsalist <- vault$keys$list_versions("rsakey")
     expect_true(is.list(rsalist) && length(rsalist) == 2 && all(sapply(rsalist, inherits, "stored_key")))
 
-    eckey <- vault$keys$create("eckey", type="EC")
+    eckey <- vault$keys$create("eckey", properties=key_properties(type="EC"))
     expect_true(inherits(eckey, "stored_key") && eckey$key$kty == "EC")
 
     extkey <- openssl::rsa_keygen()

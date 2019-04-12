@@ -11,19 +11,22 @@ public=list(
         self$url <- url
     },
 
-    create=function(name, issuer=list(), secret=list(), x509=list(), actions=list(),
-                    key_properties=vault_key_properties(),
+    create=function(name, issuer=cert_issuer_properties(), x509=cert_x509_properties(), actions=cert_expiry_actions(),
+                    key=key_properties(),
+                    secret_type=c("pem", "pkcs12"),
                     attributes=vault_object_attrs(),
-                    key_ops=NULL,
                     key_exportable=TRUE, reuse_key=FALSE, ..., wait=TRUE)
     {
         keyprops <- c(key_properties, reuse_key=reuse_key, exportable=key_exportable)
+        secret_type <- if(match_arg(secret_type) == "pem")
+            "application/x-pem-file"
+        else "application/x-pkcs12"
 
         policy <- list(
             key_props=keyprops,
             issuer=issuer,
             lifetime_actions=actions,
-            secret_props=secret,
+            secret_props=list(contentType=secret_type),
             x509_props=x509
         )
 
@@ -89,13 +92,12 @@ public=list(
         self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
     },
 
-    import=function(name, value, pwd=NULL, issuer=list(), secret=list(), x509=list(), actions=list(),
-                    key_properties=vault_key_properties(),
+    import=function(name, value, pwd=NULL, issuer=list(), secret=list(), x509=list(), actions=cert_expiry_actions(),
+                    key=key_properties(),
                     attributes=vault_object_attrs(),
-                    key_ops=NULL,
                     key_exportable=TRUE, reuse_key=FALSE, ...)
     {
-        keyprops <- c(key_properties, reuse_key=reuse_key, exportable=key_exportable)
+        keyprops <- c(key, reuse_key=reuse_key, exportable=key_exportable)
 
         policy <- list(
             key_props=keyprops,
@@ -134,7 +136,7 @@ public=list(
 
     set_policy=function(name, policy)
     {
-        body <- list(policy)
+        body <- list(policy=policy)
         op <- construct_path(name, "policy")
         self$do_operation(op, body=body, encode="json", http_verb="PATCH")
     },

@@ -11,7 +11,7 @@ public=list(
         self$url <- url
     },
 
-    create=function(name, properties=vault_key_properties(), key_ops=NULL,
+    create=function(name, properties=key_properties(), key_ops=NULL,
                     attributes=vault_object_attrs(), ...)
     {
         body <- c(properties, list(attributes=attributes, key_ops=key_ops, tags=list(...)))

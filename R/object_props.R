@@ -1,10 +1,46 @@
-vault_key_properties <- function(type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL)
+key_properties <- function(type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL)
 {
     type <- match.arg(type)
     if(type %in% c("RSA", "RSA-HSM"))
         list(kty=type, key_size=rsa_key_size)
     else if(type %in% c("EC", "EC-HSM"))
         list(kty=type, crv=ec_curve)
+}
+
+
+cert_x509_properties=function(subject, dns_names=NULL, emails=NULL, upns=NULL,
+                              key_usages=NULL, enhanced_key_usages=NULL, valid=NULL)
+{
+    sans <- list(dns_names=dns_names, emails=emails, upns=upns)
+    props <- list(subject=subject, sans=sans, key_usage=key_usages, ekus=enhanced_key_usages, validity_months=valid)
+    compact(props)
+}
+
+
+cert_issuer_properties=function(issuer="self", type=NULL, transparent=TRUE)
+{
+    compact(list(name=issuer, cty=type, cert_transparency=transparent))
+}
+
+
+cert_expiry_actions <- function(auto_renew=NULL, email_contacts=NULL)
+{
+    auto_renew <- if(!is.null(auto_renew))
+    {
+        if(auto_renew < 1)
+            list(action="AutoRenew", trigger=list(lifetime_percentage=round(auto_renew*100)))
+        else list(action="AutoRenew", trigger=list(days_before_expiry=auto_renew))
+    }
+
+    email_contacts <- if(!is.null(email_contacts))
+    {
+        if(email_contacts < 1)
+            list(action="EmailContacts", trigger=list(lifetime_percentage=round(email_contacts*100)))
+        else list(action="EmailContacts", trigger=list(days_before_expiry=email_contacts))
+    }
+
+    actions <- list(auto_renew, email_contacts)
+    compact(actions)
 }
 
 
@@ -16,5 +52,11 @@ vault_object_attrs <- function(enabled=TRUE, expiry_date=NULL, activation_date=N
         exp=make_vault_date(expiry_date),
         recoveryLevel=recovery_level
     )
-    attribs[!sapply(attribs, is_empty)]
+    compact(attribs)
+}
+
+
+compact <- function(lst)
+{
+    lst[!sapply(lst, is.null)]
 }
