@@ -17,10 +17,10 @@ try({
 
 test_that("Secret interface works",
 {
-    secret1 <- vault$secrets$set("secret1", "mysecretvalue")
+    secret1 <- vault$secrets$create("secret1", "mysecretvalue")
     expect_true(inherits(secret1, "stored_secret") && secret1$value == "mysecretvalue")
 
-    secret12 <- vault$secrets$set("secret1", "newsecretvalue", expiry_date="2099-01-01")
+    secret12 <- vault$secrets$create("secret1", "newsecretvalue", expiry_date="2099-01-01")
     expect_true(inherits(secret12, "stored_secret") && secret12$value == "newsecretvalue")
 
     seclist <- vault$secrets$list_versions("secret1")

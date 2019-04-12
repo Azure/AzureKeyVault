@@ -11,7 +11,7 @@ public=list(
         self$url <- url
     },
 
-    set=function(name, value, content_type=NULL, enabled=NULL, expiry_date=NULL, activation_date=NULL,
+    create=function(name, value, content_type=NULL, enabled=NULL, expiry_date=NULL, activation_date=NULL,
                  recovery_level=NULL, ...)
     {
         attribs <- list(
