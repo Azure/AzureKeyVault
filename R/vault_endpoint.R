@@ -48,7 +48,8 @@
 #' key_vault("mykeyvault", tenant="myaadtenant", app="app_id", password="password")
 #'
 #' # authenticating with an existing token
-#' token <- AzureAuth::get_azure_token("myaadtenant", "app_id", password="password")
+#' token <- AzureAuth::get_azure_token("https://vault.azure.net", "myaadtenant",
+#'                                     app="app_id", password="password")
 #' key_vault("mykeyvault", token=token)
 #'
 #' }
@@ -87,5 +88,11 @@ key_vault <- R6::R6Class("key_vault", public=list(
         url$path <- op
         url$query <- options
         call_vault_url(self$token, url, ...)
+    },
+
+    print=function(...)
+    {
+        cat("<key vault endpoint '", httr::build_url(self$url), "'>\n")
+        invisible(self)
     }
 ))
