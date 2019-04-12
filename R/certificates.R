@@ -11,9 +11,10 @@ public=list(
         self$url <- url
     },
 
-    create=function(name, issuer=cert_issuer_properties(), x509=cert_x509_properties(), actions=cert_expiry_actions(),
+    create=function(name, subject, x509=cert_x509_properties(subject=subject), issuer=cert_issuer_properties(),
                     key=key_properties(),
                     secret_type=c("pem", "pkcs12"),
+                    actions=cert_expiry_actions(),
                     attributes=vault_object_attrs(),
                     key_exportable=TRUE, reuse_key=FALSE, ..., wait=TRUE)
     {
