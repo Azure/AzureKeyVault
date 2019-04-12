@@ -34,7 +34,6 @@ public=list(
                 stringsAsFactors=FALSE
             )
         })
-        names(lst) <- sapply(lst, function(x) file.path(x$name, x$version))
         do.call(rbind, lst)
     }
 ))
