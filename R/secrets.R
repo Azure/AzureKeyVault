@@ -42,18 +42,6 @@ public=list(
         named_list(lst)
     },
 
-    list_versions=function(name)
-    {
-        op <- construct_path(name, "versions")
-        lst <- lapply(get_vault_paged_list(self$do_operation(op), self$token), function(props)
-        {
-            secret <- call_vault_url(self$token, props$id)
-            stored_secret$new(self$token, self$url, name, NULL, secret)
-        })
-        names(lst) <- sapply(lst, function(x) file.path(x$name, x$version))
-        lst
-    },
-
     backup=function(name)
     {
         self$do_operation(construct_path(name, "backup"), http_verb="POST")$value
