@@ -39,7 +39,9 @@ public=list(
     update_attributes=function(attributes=vault_object_attrs(), ...)
     {
         body <- list(attributes=attributes, ...)
-        self$do_operation(body=body, encode="json", http_verb="PATCH")
+        props <- self$do_operation(body=body, encode="json", http_verb="PATCH")
+        self$initialize(self$token, self$url, self$name, self$version, props)
+        self
     },
 
     set_version=function(version=NULL)
