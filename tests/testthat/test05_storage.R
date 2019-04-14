@@ -31,8 +31,8 @@ test_that("Storage account interface works",
     stor1 <- vault$storage$add("stor1", stor, "key1", regen_period="P30D")
     expect_true(inherits(stor1, "stored_account") && stor1$resourceId == stor$id)
 
-    lst <- vault$storage$list_all()
-    expect_true(is.list(lst) && length(lst) == 1 && all(sapply(lst, inherits, "stored_account")))
+    lst <- vault$storage$list()
+    expect_true(is.character(lst) && length(lst) == 1)
 
     backup <- vault$storage$backup("stor1")
     expect_type(backup, "character")

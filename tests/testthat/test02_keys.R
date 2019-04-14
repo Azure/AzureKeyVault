@@ -42,8 +42,8 @@ test_that("Key interface works",
     impkey <- vault$keys$import("extkey", key=extkey)
     expect_true(inherits(impkey, "stored_key") && impkey$key$kty == extkeyval$kty && impkey$key$n == extkeyval$n)
 
-    lst <- vault$keys$list_all()
-    expect_true(is.list(lst) && length(lst) == 3 && all(sapply(lst, inherits, "stored_key")))
+    lst <- vault$keys$list()
+    expect_true(is.character(lst) && length(lst) == 3)
 
     backup <- vault$keys$backup("rsakey")
     expect_type(backup, "character")

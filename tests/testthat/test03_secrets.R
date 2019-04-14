@@ -29,8 +29,8 @@ test_that("Secret interface works",
     secret12$set_version(seclist$version[2])
     expect_true(secret12$version == seclist$version[2])
 
-    lst <- vault$secrets$list_all()
-    expect_true(is.list(lst) && length(lst) == 1 && all(sapply(lst, inherits, "stored_secret")))
+    lst <- vault$secrets$list()
+    expect_true(is.character(lst) && length(lst) == 1)
 
     backup <- vault$secrets$backup("secret1")
     expect_type(backup, "character")

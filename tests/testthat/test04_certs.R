@@ -37,8 +37,8 @@ test_that("Certficate interface works",
     rsalist <- rsacert$list_versions()
     expect_true(is.data.frame(rsalist) && nrow(rsalist) == 2)
 
-    lst <- vault$certificates$list_all()
-    expect_true(is.list(lst) && length(lst) == 1 && all(sapply(lst, inherits, "stored_cert")))
+    lst <- vault$certificates$list()
+    expect_true(is.character(lst) && length(lst) == 1)
 
     backup <- vault$certificates$backup("rsacert")
     expect_type(backup, "character")

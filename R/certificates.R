@@ -58,15 +58,10 @@ public=list(
             self$do_operation(name, http_verb="DELETE")
     },
 
-    list_all=function()
+    list=function()
     {
-        lst <- lapply(get_vault_paged_list(self$do_operation(), self$token), function(props)
-        {
-            name <- basename(props$id)
-            cert <- call_vault_url(self$token, props$id)
-            stored_cert$new(self$token, self$url, name, NULL, cert)
-        })
-        named_list(lst)
+        sapply(get_vault_paged_list(self$do_operation(), self$token),
+            function(props) basename(props$id))
     },
 
     backup=function(name)
