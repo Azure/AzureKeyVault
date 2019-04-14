@@ -70,6 +70,8 @@ public=list(
         body <- list(policy=compact(policy), attributes=attributes)
 
         op <- construct_path(self$name, "policy")
-        self$do_operation(op, body=body, encode="json", version=NULL, http_verb="PATCH")
+        pol <- self$do_operation(op, body=body, encode="json", version=NULL, http_verb="PATCH")
+        self$policy <- pol
+        pol
     }
 ))
