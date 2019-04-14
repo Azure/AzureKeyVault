@@ -48,9 +48,27 @@ public=list(
         self$do_operation(op, version=NULL)
     },
 
-    set_policy=function(policy)
+    set_policy=function(subject=NULL, x509=NULL, issuer=NULL,
+                        key=NULL, secret_type=NULL, actions=NULL,
+                        attributes=NULL, wait=TRUE)
     {
-        body <- list(policy=policy)
+        if(!is.null(secret_type))
+        {
+            secret_type <- if(secret_type == "pem")
+                "application/x-pem-file"
+            else "application/x-pkcs12"
+        }
+
+        policy <- list(
+            issuer=issuer,
+            key_props=key,
+            secret_props=list(contentType=secret_type),
+            x509_props=c(subject=subject, x509),
+            lifetime_actions=actions
+        )
+
+        body <- list(policy=compact(policy), attributes=attributes)
+
         op <- construct_path(self$name, "policy")
         self$do_operation(op, body=body, encode="json", version=NULL, http_verb="PATCH")
     }
