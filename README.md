@@ -56,6 +56,9 @@ vault$certificates$create("newcert",
     subject="CN=mydomain.com",
     x509=cert_x509_properties(dns_names="mydomain.com"))
 
+# import a certificate from a PFX file
+vault$certificates$import("importedcert", "mycert.pfx")
+
 # add a managed storage account
 stor <- rg$get_resource(type="Microsoft.Storage/storageAccounts", name="mystorage")
 vault$storage$add("mystorage", stor, "key1")
