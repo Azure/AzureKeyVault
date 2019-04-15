@@ -27,7 +27,8 @@ public=list(
             key_props=key,
             secret_props=list(contentType=secret_type),
             x509_props=c(subject=subject, x509),
-            lifetime_actions=actions
+            lifetime_actions=actions,
+            attributes=attributes
         )
 
         body <- list(policy=policy, attributes=attributes, tags=list(...))
@@ -75,27 +76,14 @@ public=list(
         self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
     },
 
-    import=function(name, value, pwd=NULL, subject, x509=cert_x509_properties(), issuer=cert_issuer_properties(),
-                    key=cert_key_properties(),
-                    secret_type=c("pem", "pkcs12"),
-                    actions=cert_expiry_actions(),
+    import=function(name, value, pwd=NULL,
                     attributes=vault_object_attrs(),
                     ..., wait=TRUE)
     {
-        secret_type <- if(match_arg(secret_type) == "pem")
-            "application/x-pem-file"
-        else "application/x-pkcs12"
+        body <- list(value=value, pwd=pwd, attributes=attributes, tags=list(...))
 
-        policy <- list(
-            issuer=issuer,
-            key_props=key,
-            secret_props=list(contentType=secret_type),
-            x509_props=c(subject=subject, x509),
-            lifetime_actions=actions
-        )
-
-        body <- list(value=value, pwd=pwd, policy=policy, attributes=attributes, tags=list(...))
-        self$do_operation(name, body=body, encode="json", http_verb="PUT")
+        op <- construct_path(name, "import")
+        self$do_operation(op, body=body, encode="json", http_verb="POST")
         cert <- self$get(name)
 
         if(!wait)
