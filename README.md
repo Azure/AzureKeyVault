@@ -44,12 +44,23 @@ vault <- key_vault$new("https://mykeyvault.vault.azure.net")
 # can also be done from the ARM resource object
 #vault <- kv$get_endpoint()
 
+
 # create a new secret
 vault$secrets$create("newsecret", "secret value")
 vault$secrets$get("newsecret")
 
+
 # create a new RSA key with 4096-bit key size
 vault$keys$create("newkey", properties=key_properties(type="RSA", rsa_key_size=4096))
+
+# encrypting and decrypting
+key <- vault$keys$get("newkey")
+plaintext <- "super secret"
+ciphertext <- key$encrypt(plaintext)
+decrypted_text <- key$decrypt(ciphertext)
+plaintext == decrypted_text
+#> [1] TRUE
+
 
 # create a new self-signed certificate (will also create the associated key and secret)
 vault$certificates$create("newcert",
@@ -58,6 +69,7 @@ vault$certificates$create("newcert",
 
 # import a certificate from a PFX file
 vault$certificates$import("importedcert", "mycert.pfx")
+
 
 # add a managed storage account
 stor <- rg$get_resource(type="Microsoft.Storage/storageAccounts", name="mystorage")
