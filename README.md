@@ -14,10 +14,10 @@ AzureKeyVault extends the [AzureRMR](https://github.com/cloudyr/AzureRMR) packag
 
 ```r
 # create a key vault
-kv <- AzureRMR::get_azure_login()$
+rg <- AzureRMR::get_azure_login()$
     get_subscription("sub_id")$
-    get_resource_group("rgname")$
-    create_key_vault("mykeyvault")
+    get_resource_group("rgname")
+kv <- rg$create_key_vault("mykeyvault")
 
 # list current principals (by default includes logged-in user)
 kv$list_principals()
@@ -39,24 +39,26 @@ kv$add_principal(svc,
 The client interface is R6-based, with methods for keys, secrets and certificates. To access the vault, instantiate a new object of class `key_vault`.
 
 ```r
-vault <- key_vault("https://mykeyvault.vault.azure.net")
+vault <- key_vault$new("https://mykeyvault.vault.azure.net")
 
 # can also be done from the ARM resource object
 #vault <- kv$get_endpoint()
 
 # create a new secret
-vault$secrets$set("newsecret", "secret value")
-vault$secrets$show("newsecret")
+vault$secrets$create("newsecret", "secret value")
+vault$secrets$get("newsecret")
 
 # create a new RSA key with 4096-bit key size
-vault$keys$create("newkey", type="RSA", rsa_key_size=4096)
+vault$keys$create("newkey", properties=key_properties(type="RSA", rsa_key_size=4096))
 
 # create a new self-signed certificate (will also create the associated key and secret)
 vault$certificates$create("newcert",
-    issuer=list(name="self"),
-    secret=list(contentType="application/x-pkcs12"),
-    x509=list(subject="CN=mydomain.com", sans=list(dns_names=list("mydomain.com")))
-)
+    subject="CN=mydomain.com",
+    x509=cert_x509_properties(dns_names="mydomain.com"))
+
+# add a managed storage account
+stor <- rg$get_resource(type="Microsoft.Storage/storageAccounts", name="mystorage")
+vault$storage$add("mystorage", stor, "key1")
 ```
 
 ---
