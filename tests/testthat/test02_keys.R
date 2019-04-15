@@ -37,14 +37,18 @@ test_that("Key interface works",
     eckey <- vault$keys$create("eckey", properties=key_properties(type="EC"))
     expect_true(inherits(eckey, "stored_key") && eckey$key$kty == "EC")
 
-    plaintext <- paste(sample(letters, 20, replace=TRUE), collapse="")
+    plaintext <- paste(sample(letters, 50, replace=TRUE), collapse=" ")
     ciphertext <- rsakey$encrypt(plaintext)
-    decrypted_text <- rsakey$decrypt(ciphertext)
+    decrypted_text <- rsakey$decrypt(ciphertext, as_raw=FALSE)
     expect_equal(plaintext, decrypted_text)
 
     wraptext <- rsakey$wrap(plaintext)
-    unwrap_text <- rsakey$unwrap(wraptext)
+    unwrap_text <- rsakey$unwrap(wraptext, as_raw=FALSE)
     expect_equal(plaintext, unwrap_text)
+
+    dig <- digest::digest(plaintext, "sha256", raw=TRUE)
+    sig <- rsakey$sign(dig)
+    expect_true(rsakey$verify(sig, dig))
 
     extkey <- openssl::rsa_keygen()
     extkeyval <- jsonlite::fromJSON(jose::write_jwk(extkey))

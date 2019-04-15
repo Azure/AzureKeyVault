@@ -26,33 +26,36 @@ public=list(
 
     encrypt=function(plaintext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"))
     {
-        if(!is.raw(plaintext) && !is.character(plaintext) && length(plaintext) != 1)
+        if(!is.raw(plaintext) && !is.character(plaintext))
             stop("Can only encrypt raw or character plaintext")
 
         body <- list(
             alg=match.arg(algorithm),
-            value=plaintext
+            value=jose::base64url_encode(plaintext)
         )
         self$do_operation("encrypt", body=body, encode="json", http_verb="POST")$value
     },
 
-    decrypt=function(ciphertext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"))
+    decrypt=function(ciphertext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), as_raw=TRUE)
     {
-        if(!is.raw(ciphertext) && !is.character(ciphertext) && length(ciphertext) != 1)
+        if(!is.raw(ciphertext) && !is.character(ciphertext))
             stop("Can only decrypt raw or character ciphertext")
 
         body <- list(
             alg=match.arg(algorithm),
             value=ciphertext
         )
-        self$do_operation("decrypt", body=body, encode="json", http_verb="POST")$value
+        out <- jose::base64url_decode(
+            self$do_operation("decrypt", body=body, encode="json", http_verb="POST")$value)
+
+        if(as_raw) out else rawToChar(out)
     },
 
     sign=function(digest,
-                  algorithm=c("ES256", "ES256K", "ES384", "ES512", "PS256",
-                              "PS384", "PS512", "RS256", "RS384", "RS512"))
+                  algorithm=c("PS256", "PS384", "PS512", "RS256", "RS384", "RS512",
+                              "ES256", "ES256K", "ES384", "ES512"))
     {
-        if(!is.raw(digest) && !is.character(digest) && length(digest) != 1)
+        if(!is.raw(digest) && !is.character(digest))
             stop("Can only sign raw or character digest")
 
         body <- list(
@@ -63,13 +66,13 @@ public=list(
     },
 
     verify=function(signature, digest,
-                    algorithm=c("ES256", "ES256K", "ES384", "ES512", "PS256",
-                                "PS384", "PS512", "RS256", "RS384", "RS512"))
+                    algorithm=c("PS256", "PS384", "PS512", "RS256", "RS384", "RS512",
+                                "ES256", "ES256K", "ES384", "ES512"))
     {
-        if(!is.raw(signature) && !is.character(signature) && length(signature) != 1)
+        if(!is.raw(signature) && !is.character(signature))
             stop("Can only verify raw or character signature")
 
-        if(!is.raw(digest) && !is.character(digest) && length(digest) != 1)
+        if(!is.raw(digest) && !is.character(digest))
             stop("Can only verify raw or character digest")
 
         body <- list(
@@ -82,25 +85,28 @@ public=list(
 
     wrap=function(value, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"))
     {
-        if(!is.raw(value) && !is.character(value) && length(value) != 1)
+        if(!is.raw(value) && !is.character(value))
             stop("Can only wrap raw or character input")
 
         body <- list(
             alg=match.arg(algorithm),
-            value=value
+            value=jose::base64url_encode(value)
         )
         self$do_operation("wrapkey", body=body, encode="json", http_verb="POST")$value
     },
 
-    unwrap=function(value, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"))
+    unwrap=function(value, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), as_raw=TRUE)
     {
-        if(!is.raw(value) && !is.character(value) && length(value) != 1)
+        if(!is.raw(value) && !is.character(value))
             stop("Can only wrap raw or character input")
 
         body <- list(
             alg=match.arg(algorithm),
             value=value
         )
-        self$do_operation("unwrapkey", body=body, encode="json", http_verb="POST")$value
+        out <- jose::base64url_decode(
+            self$do_operation("unwrapkey", body=body, encode="json", http_verb="POST")$value)
+
+        if(as_raw) out else rawToChar(out)
     }
 ))
