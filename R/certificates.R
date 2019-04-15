@@ -80,10 +80,12 @@ public=list(
                     attributes=vault_object_attrs(),
                     ..., wait=TRUE)
     {
+        if(is.character(value) && length(value) == 1 && file.exists(value))
+            value <- readBin(value, "raw", file.info(value)$size)
+
         body <- list(value=value, pwd=pwd, attributes=attributes, tags=list(...))
 
-        op <- construct_path(name, "import")
-        self$do_operation(op, body=body, encode="json", http_verb="POST")
+        self$do_operation(construct_path(name, "import"), body=body, encode="json", http_verb="POST")
         cert <- self$get(name)
 
         if(!wait)
