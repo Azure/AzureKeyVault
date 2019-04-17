@@ -3,7 +3,7 @@
 \docType{class}
 \name{key_vault}
 \alias{key_vault}
-\title{Key vault endpoint class}
+\title{Azure Key Vault endpoint class}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 key_vault

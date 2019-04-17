@@ -52,8 +52,13 @@ test_that("Key interface works",
 
     extkey <- openssl::rsa_keygen()
     extkeyval <- jsonlite::fromJSON(jose::write_jwk(extkey))
-    impkey <- vault$keys$import("extkey", key=extkey)
+    impkey <- vault$keys$import("extkey", extkey)
     expect_true(inherits(impkey, "stored_key") && impkey$key$kty == extkeyval$kty && impkey$key$n == extkeyval$n)
+
+    pemfile <- tempfile(fileext=".pem")
+    openssl::write_pem(extkey, pemfile)
+    impkey2 <- vault$keys$import("extkey", pemfile)
+    expect_true(inherits(impkey2, "stored_key") && impkey2$key$kty == extkeyval$kty && impkey2$key$n == extkeyval$n)
 
     lst <- vault$keys$list()
     expect_true(is.character(lst) && length(lst) == 3)

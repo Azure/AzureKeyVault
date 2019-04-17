@@ -1,4 +1,4 @@
-#' Key vault endpoint class
+#' Azure Key Vault endpoint class
 #'
 #' Class representing the client endpoint for a key vault, exposing methods for working with it.
 #'
@@ -24,7 +24,6 @@
 #' To work with objects stored in the key vault, use the methods provided by one of the sub-objects listed in 'Fields'.
 #'
 #' @section Keys:
-#'
 #'
 #' @section Secrets:
 #'
