@@ -1,6 +1,7 @@
 #' Helper functions for key vault objects
 #'
-#' @param type For key properties, the type of key to create: RSA or elliptic curve (EC). Adding the "-HSM" suffix indicates a hardware key (requires a premium key vault).
+#' @param type For key properties, the type of key to create: RSA or elliptic curve (EC).
+#' @param hardware Whether to use a hardware key or software key. The former requires a premium key vault.
 #' @param ec_curve For an EC key, the type of elliptic curve.
 #' @param rsa_key_size For an RSA key, the key size, either 2048, 3072 or 4096.
 #' @param key_exportable For a key used in a certificate, whether it should be exportable.
@@ -23,13 +24,17 @@
 #'
 #' @rdname helpers
 #' @export
-key_properties <- function(type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL)
+key_properties <- function(type=c("RSA", "EC"), hardware=FALSE, ec_curve=NULL, rsa_key_size=NULL)
 {
     type <- match.arg(type)
+    if(hardware)
+        type <- paste0(type, "-HSM")
+
     key <- if(type %in% c("RSA", "RSA-HSM"))
         list(kty=type, key_size=rsa_key_size)
     else if(type %in% c("EC", "EC-HSM"))
         list(kty=type, crv=ec_curve)
+
     compact(key)
 }
 

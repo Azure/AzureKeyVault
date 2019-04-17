@@ -9,7 +9,7 @@
 \alias{vault_object_attrs}
 \title{Helper functions for key vault objects}
 \usage{
-key_properties(type = c("RSA", "RSA-HSM", "EC", "EC-HSM"),
+key_properties(type = c("RSA", "EC"), hardware = FALSE,
   ec_curve = NULL, rsa_key_size = NULL)
 
 cert_key_properties(type = c("RSA", "RSA-HSM", "EC", "EC-HSM"),
@@ -29,7 +29,9 @@ vault_object_attrs(enabled = TRUE, expiry_date = NULL,
   activation_date = NULL, recovery_level = NULL)
 }
 \arguments{
-\item{type}{For key properties, the type of key to create: RSA or elliptic curve (EC). Adding the "-HSM" suffix indicates a hardware key (requires a premium key vault).}
+\item{type}{For key properties, the type of key to create: RSA or elliptic curve (EC).}
+
+\item{hardware}{Whether to use a hardware key or software key. The former requires a premium key vault.}
 
 \item{ec_curve}{For an EC key, the type of elliptic curve.}
 
