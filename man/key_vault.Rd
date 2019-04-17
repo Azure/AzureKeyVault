@@ -57,21 +57,21 @@ To work with objects stored in the key vault, use the methods provided by one of
 \examples{
 \dontrun{
 
-key_vault("mykeyvault")
-key_vault("https://mykeyvault.vault.azure.net")
+key_vault$new("mykeyvault")
+key_vault$new("https://mykeyvault.vault.azure.net")
 
 # authenticating as a service principal
-key_vault("mykeyvault", tenant="myaadtenant", app="app_id", password="password")
+key_vault$new("mykeyvault", tenant="myaadtenant", app="app_id", password="password")
 
 # authenticating with an existing token
 token <- AzureAuth::get_azure_token("https://vault.azure.net", "myaadtenant",
                                     app="app_id", password="password")
-key_vault("mykeyvault", token=token)
+key_vault$new("mykeyvault", token=token)
 
 }
 }
 \seealso{
-\link{az_vault},
+\link{az_vault}, \link{keys}, \link{secrets}, \link{certificates}, \link{storage}
 
 \href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
 \href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
