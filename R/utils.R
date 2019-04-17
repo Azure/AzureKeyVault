@@ -111,13 +111,3 @@ delete_confirmed <- function(confirm, name, type)
     return(tolower(substr(yn, 1, 1)) == "y")
 }
 
-
-make_vault_date <- function(date)
-{
-    if(is_empty(date))
-        NULL
-    else if(inherits(date, "POSIXt"))
-        as.numeric(date)
-    else as.numeric(as.POSIXct(date))
-}
-
