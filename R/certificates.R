@@ -47,7 +47,7 @@
 #' For `backup`, a string representing the backup blob for a certificate. If the certificate has multiple versions, the blob will contain all versions.
 #'
 #' @seealso
-#' [key], [key_properties], [vault_object_attrs]
+#' [certificiate], [cert_key_properties], [cert_x509_properties], [cert_issuer_properties], [vault_object_attrs]
 #'
 #' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
 #' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
@@ -65,14 +65,14 @@
 #' vault$certificates$create("mynewcert", x509=cert_x509_properties(valid=24))
 #'
 #' # setting management tags
-#' vault$certificates$create("mynewkey", tag1="a value", othertag="another value")
+#' vault$certificates$create("mynewcert", tag1="a value", othertag="another value")
 #'
 #' # importing a cert from a PFX file
 #' vault$certificates$import("importedcert", "mycert.pfx")
 #'
 #' # backup and restore a cert
-#' bak <- vault$certificates$backup("mynewkey")
-#' vault$certificates$delete("mynewkey", confirm=FALSE)
+#' bak <- vault$certificates$backup("mynewcert")
+#' vault$certificates$delete("mynewcert", confirm=FALSE)
 #' vault$certificates$restore(bak)
 #'
 #' # set a contact

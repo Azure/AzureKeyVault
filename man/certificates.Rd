@@ -70,14 +70,14 @@ vault$certificates$get("mynewcert")
 vault$certificates$create("mynewcert", x509=cert_x509_properties(valid=24))
 
 # setting management tags
-vault$certificates$create("mynewkey", tag1="a value", othertag="another value")
+vault$certificates$create("mynewcert", tag1="a value", othertag="another value")
 
 # importing a cert from a PFX file
 vault$certificates$import("importedcert", "mycert.pfx")
 
 # backup and restore a cert
-bak <- vault$certificates$backup("mynewkey")
-vault$certificates$delete("mynewkey", confirm=FALSE)
+bak <- vault$certificates$backup("mynewcert")
+vault$certificates$delete("mynewcert", confirm=FALSE)
 vault$certificates$restore(bak)
 
 # set a contact
@@ -87,7 +87,7 @@ vault$certificates$get_contacts()
 }
 }
 \seealso{
-\link{key}, \link{key_properties}, \link{vault_object_attrs}
+\link{certificiate}, \link{cert_key_properties}, \link{cert_x509_properties}, \link{cert_issuer_properties}, \link{vault_object_attrs}
 
 \href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
 \href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
