@@ -36,7 +36,7 @@ delete(confirm=TRUE)
 \item \code{signature}: For \code{verify}, a signature to verify for authenticity.
 \item \code{value}: For \code{wrap}, a symmetric key to be wrapped; for \code{unwrap}, the value to be unwrapped to obtain the symmetric key.
 \item \code{as_raw}: For \code{decrypt} and \code{unwrap}, whether to return a character vector or a raw vector (the default).
-\item \code{algorithm}: The algorithm to use for each operation. Note that the operation must be compatible with the key type.
+\item \code{algorithm}: The algorithm to use for each operation. Note that the algorithm must be compatible with the key type, eg RSA keys cannot use ECDSA for signing or verifying.
 \item \code{attributes}: For \code{update_attributes}, the new attributes for the object, such as the expiry date and activation date. A convenient way to provide this is via the \link{vault_object_attrs} helper function.
 \item \code{...}: For \code{update_attributes}, additional key-specific properties to update. See \link{keys}.
 \item \code{version}: For \code{set_version}, the version ID or NULL for the current version.

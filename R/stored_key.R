@@ -30,7 +30,7 @@
 #' - `signature`: For `verify`, a signature to verify for authenticity.
 #' - `value`: For `wrap`, a symmetric key to be wrapped; for `unwrap`, the value to be unwrapped to obtain the symmetric key.
 #' - `as_raw`: For `decrypt` and `unwrap`, whether to return a character vector or a raw vector (the default).
-#' - `algorithm`: The algorithm to use for each operation. Note that the operation must be compatible with the key type.
+#' - `algorithm`: The algorithm to use for each operation. Note that the algorithm must be compatible with the key type, eg RSA keys cannot use ECDSA for signing or verifying.
 #' - `attributes`: For `update_attributes`, the new attributes for the object, such as the expiry date and activation date. A convenient way to provide this is via the [vault_object_attrs] helper function.
 #' - `...`: For `update_attributes`, additional key-specific properties to update. See [keys].
 #' - `version`: For `set_version`, the version ID or NULL for the current version.
