@@ -82,8 +82,8 @@
 #' plaintext == unwrap_text  # TRUE
 #'
 #' }
-#' @name keys
-#' @rdname keys
+#' @name key
+#' @rdname key
 NULL
 
 stored_key <- R6::R6Class("stored_key", inherit=stored_object,
