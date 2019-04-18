@@ -1,3 +1,91 @@
+#' Encryption key object
+#'
+#' This class represents an encryption keys stored in a vault. It provides methods for carrying out operations, including encryption and decryption, signing and verification, and wrapping and unwrapping.
+#'
+#' @docType class
+#'
+#' @section Methods:
+#' This class provides the following methods:
+#' ```
+#' encrypt(plaintext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"))
+#' decrypt(ciphertext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), as_raw=TRUE)
+#' sign(digest,
+#'      algorithm=c("PS256", "PS384", "PS512", "RS256", "RS384", "RS512",
+#'                  "ES256", "ES256K", "ES384", "ES512"))
+#' verify(signature, digest,
+#'        algorithm=c("PS256", "PS384", "PS512", "RS256", "RS384", "RS512",
+#'                    "ES256", "ES256K", "ES384", "ES512"))
+#' wrap(value, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"))
+#' unwrap(value, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), as_raw=TRUE)
+#'
+#' update_attributes(attributes=vault_object_attrs(), ...)
+#' list_versions()
+#' set_version(version=NULL)
+#' delete(confirm=TRUE)
+#' ```
+#' @section Arguments:
+#' - `plaintext`: For `encrypt`, the plaintext to encrypt.
+#' - `ciphertext`: For `decrypt`, the ciphertext to decrypt.
+#' - `digest`: For `sign`, a generated hash to sign. For `verify`, the digest to verify for authenticity.
+#' - `signature`: For `verify`, a signature to verify for authenticity.
+#' - `value`: For `wrap`, a symmetric key to be wrapped; for `unwrap`, the value to be unwrapped to obtain the symmetric key.
+#' - `as_raw`: For `decrypt` and `unwrap`, whether to return a character vector or a raw vector (the default).
+#' - `algorithm`: The algorithm to use for each operation. Note that the operation must be compatible with the key type.
+#' - `attributes`: For `update_attributes`, the new attributes for the object, such as the expiry date and activation date. A convenient way to provide this is via the [vault_object_attrs] helper function.
+#' - `...`: For `update_attributes`, additional key-specific properties to update. See [keys].
+#' - `version`: For `set_version`, the version ID or NULL for the current version.
+#' - `confirm`: For `delete`, whether to ask for confirmation before deleting the key.
+#'
+#' @section Details:
+#' The operations supported by a key will be those given by the `key_ops` argument when the key was created. By default, a new key supports all the operations listed above: encrypt/decrypt, sign/verify, and wrap/unwrap.
+#'
+#' A key can have multiple _versions_, which are automatically generated when a key is created with the same name as an existing key. By default, the most recent (current) version is used for key operations; use `list_versions` and `set_version` to change the version.
+#'
+#' @section Value:
+#' For the key operations, a raw vector (for `decrypt` and `unwrap`, if `as_raw=TRUE`) or character vector.
+#'
+#' For `list`, a vector of key version IDs.
+#'
+#' For `set_version`, the key object with the updated version.
+#'
+#' @seealso
+#' [keys]
+#'
+#' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
+#' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
+#'
+#' @examples
+#' \dontrun{
+#'
+#' vault <- key_vault$new("mykeyvault")
+#'
+#' vault$keys$create("mynewkey")
+#' # new version of an existing key
+#' vault$keys$create("mynewkey", key_properties(type="RSA", rsa_key_size=4096))
+#'
+#' key <- vault$keys$get("mynewkey")
+#' vers <- key$list_versions()
+#' key$set_version(vers[2])
+#'
+#' plaintext <- "some secret text"
+#'
+#' ciphertext <- key$encrypt(plaintext)
+#' decrypted <- key$decrypt(ciphertext, as_raw=FALSE)
+#' decrypted == plaintext  # TRUE
+#'
+#' dig <- digest::digest(plaintext, "sha256", raw=TRUE)
+#' sig <- key$sign(dig)
+#' key$verify(sig, dig)  # TRUE
+#' 
+#' wraptext <- key$wrap(plaintext)
+#' unwrap_text <- key$unwrap(wraptext, as_raw=FALSE)
+#' plaintext == unwrap_text  # TRUE
+#'
+#' }
+#' @name keys
+#' @rdname keys
+NULL
+
 stored_key <- R6::R6Class("stored_key", inherit=stored_object,
 
 public=list(
