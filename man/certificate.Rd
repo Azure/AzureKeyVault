@@ -8,6 +8,20 @@
 \description{
 This class represents a certificate stored in a vault. It provides methods for carrying out operations, including encryption and decryption, signing and verification, and wrapping and unwrapping.
 }
+\section{Fields}{
+
+This class provides the following fields:
+\itemize{
+\item \code{cer}: The contents of the certificate, in CER format.
+\item \code{id}: The ID of the certificate.
+\item \code{kid}: The ID of the key backing the certificate.
+\item \code{sid}: The ID of the secret backing the certificate.
+\item \code{contentType}: The content type of the secret backing the certificate.
+\item \code{policy}: The certificate management policy, containing the authentication details.
+\item \code{x5t}: The thumbprint of the certificate.
+}
+}
+
 \section{Methods}{
 
 This class provides the following methods:\preformatted{set_policy(subject=NULL, x509=NULL, issuer=NULL,
@@ -55,7 +69,9 @@ For \code{set_version}, the key object with the updated version.
 
 vault <- key_vault$new("mykeyvault")
 
-vault$certificates$create("mynewcert")
+cert <- vault$certificates$create("mynewcert")
+cert$cer
+
 # new version of an existing certificate
 vault$certificates$create("mynewcert", x509=cert_x509_properties(valid=24))
 

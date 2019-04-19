@@ -4,6 +4,16 @@
 #'
 #' @docType class
 #'
+#' @section Fields:
+#' This class provides the following fields:
+#' - `cer`: The contents of the certificate, in CER format.
+#' - `id`: The ID of the certificate.
+#' - `kid`: The ID of the key backing the certificate.
+#' - `sid`: The ID of the secret backing the certificate.
+#' - `contentType`: The content type of the secret backing the certificate.
+#' - `policy`: The certificate management policy, containing the authentication details.
+#' - `x5t`: The thumbprint of the certificate.
+#'
 #' @section Methods:
 #' This class provides the following methods:
 #' ```
@@ -48,7 +58,9 @@
 #'
 #' vault <- key_vault$new("mykeyvault")
 #'
-#' vault$certificates$create("mynewcert")
+#' cert <- vault$certificates$create("mynewcert")
+#' cert$cer
+#'
 #' # new version of an existing certificate
 #' vault$certificates$create("mynewcert", x509=cert_x509_properties(valid=24))
 #'

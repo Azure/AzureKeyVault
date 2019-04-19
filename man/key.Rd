@@ -7,6 +7,15 @@
 \description{
 This class represents an encryption key stored in a vault. It provides methods for carrying out operations, including encryption and decryption, signing and verification, and wrapping and unwrapping.
 }
+\section{Fields}{
+
+This class provides the following fields:
+\itemize{
+\item \code{key}: The key details as a parsed JSON web key (JWK).
+\item \code{managed}: Whether this key's lifetime is managed by Key Vault. TRUE if the key backs a certificate.
+}
+}
+
 \section{Methods}{
 
 This class provides the following methods:\preformatted{encrypt(plaintext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"))

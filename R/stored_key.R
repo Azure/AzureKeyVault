@@ -4,6 +4,11 @@
 #'
 #' @docType class
 #'
+#' @section Fields:
+#' This class provides the following fields:
+#' - `key`: The key details as a parsed JSON web key (JWK).
+#' - `managed`: Whether this key's lifetime is managed by Key Vault. TRUE if the key backs a certificate.
+#'
 #' @section Methods:
 #' This class provides the following methods:
 #' ```

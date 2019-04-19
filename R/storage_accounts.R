@@ -35,7 +35,7 @@
 #' For `backup`, a string representing the backup blob for a storage account. If the account has multiple versions, the blob will contain all versions.
 #'
 #' @seealso
-#' [storage], [vault_object_attrs]
+#' [storage_account], [vault_object_attrs]
 #'
 #' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
 #' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
@@ -68,8 +68,9 @@
 #' vault$storage$restore(bak)
 #' 
 #' }
-#' @name storage
-#' @rdname storage
+#' @name storage_accounts
+#' @aliases storage_accounts storage
+#' @rdname storage_accounts
 NULL
 
 vault_storage_accounts <- R6::R6Class("vault_storage_accounts", 

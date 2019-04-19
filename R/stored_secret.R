@@ -4,6 +4,14 @@
 #'
 #' @docType class
 #'
+#' @section Fields:
+#' This class provides the following fields:
+#' - `value`: The value of the secret.
+#' - `id`: The ID of the secret.
+#' - `kid`: If this secret backs a certificate, the ID of the corresponding key.
+#' - `managed`: Whether this secret's lifetime is managed by Key Vault. TRUE if the secret backs a certificate.
+#' - `contentType`: The content type of the secret.
+#'
 #' @section Methods:
 #' This class provides the following methods:
 #' ```
@@ -37,17 +45,19 @@
 #'
 #' vault <- key_vault$new("mykeyvault")
 #'
-#' vault$secrets$create("mynewsecret", "secret value")
+#' vault$secrets$create("mynewsecret", "secret text")
 #' # new version of an existing secret
-#' vault$secrets$create("mynewsecret", "extra secret value"))
+#' vault$secrets$create("mynewsecret", "extra secret text"))
 #'
 #' secret <- vault$secrets$get("mynewsecret")
 #' vers <- secret$list_versions()
 #' secret$set_version(vers[2])
 #'
+#' secret$value  # "secret text"
+#'
 #' }
-#' @name secret
-#' @rdname secret
+#' @name storage_account
+#' @rdname storage_account
 NULL
 
 stored_secret <- R6::R6Class("stored_secret", inherit=stored_object,
