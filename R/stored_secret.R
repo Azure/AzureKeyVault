@@ -1,3 +1,55 @@
+#' Stored secret object
+#'
+#' This class represents a secret stored in a vault.
+#'
+#' @docType class
+#'
+#' @section Methods:
+#' This class provides the following methods:
+#' ```
+#' update_attributes(attributes=vault_object_attrs(), ...)
+#' list_versions()
+#' set_version(version=NULL)
+#' delete(confirm=TRUE)
+#' ```
+#' @section Arguments:
+#' - `attributes`: For `update_attributes`, the new attributes for the object, such as the expiry date and activation date. A convenient way to provide this is via the [vault_object_attrs] helper function.
+#' - `...`: For `update_attributes`, additional secret-specific properties to update. See [secrets].
+#' - `version`: For `set_version`, the version ID or NULL for the current version.
+#' - `confirm`: For `delete`, whether to ask for confirmation before deleting the secret.
+#'
+#' @section Details:
+#' A secret can have multiple _versions_, which are automatically generated when a secret is created with the same name as an existing secret. By default, the most recent (current) version is used for secret operations; use `list_versions` and `set_version` to change the version.
+#'
+#' @section Value:
+#' For `list_versions`, a vector of secret version IDs.
+#'
+#' For `set_version`, the secret object with the updated version.
+#'
+#' @seealso
+#' [secrets]
+#'
+#' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
+#' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
+#'
+#' @examples
+#' \dontrun{
+#'
+#' vault <- key_vault$new("mykeyvault")
+#'
+#' vault$secrets$create("mynewsecret", "secret value")
+#' # new version of an existing secret
+#' vault$secrets$create("mynewsecret", "extra secret value"))
+#'
+#' secret <- vault$secrets$get("mynewsecret")
+#' vers <- secret$list_versions()
+#' secret$set_version(vers[2])
+#'
+#' }
+#' @name secret
+#' @rdname secret
+NULL
+
 stored_secret <- R6::R6Class("stored_secret", inherit=stored_object,
 
 public=list(

@@ -5,7 +5,7 @@
 \alias{key}
 \title{Encryption key object}
 \description{
-This class represents an encryption keys stored in a vault. It provides methods for carrying out operations, including encryption and decryption, signing and verification, and wrapping and unwrapping.
+This class represents an encryption key stored in a vault. It provides methods for carrying out operations, including encryption and decryption, signing and verification, and wrapping and unwrapping.
 }
 \section{Methods}{
 
@@ -55,7 +55,7 @@ A key can have multiple \emph{versions}, which are automatically generated when 
 
 For the key operations, a raw vector (for \code{decrypt} and \code{unwrap}, if \code{as_raw=TRUE}) or character vector.
 
-For \code{list}, a vector of key version IDs.
+For \code{list_versions}, a vector of key version IDs.
 
 For \code{set_version}, the key object with the updated version.
 }

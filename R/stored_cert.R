@@ -1,3 +1,70 @@
+#' Certificate object
+#'
+#' This class represents a certificate stored in a vault. It provides methods for carrying out operations, including encryption and decryption, signing and verification, and wrapping and unwrapping.
+#'
+#' @docType class
+#'
+#' @section Methods:
+#' This class provides the following methods:
+#' ```
+#' set_policy(subject=NULL, x509=NULL, issuer=NULL,
+#'            key=NULL, secret_type=NULL, actions=NULL,
+#'            attributes=NULL, wait=TRUE)
+#' get_policy()
+#' sync()
+#'
+#' update_attributes(attributes=vault_object_attrs(), ...)
+#' list_versions()
+#' set_version(version=NULL)
+#' delete(confirm=TRUE)
+#' ```
+#' @section Arguments:
+#' - `subject,x509,issuer,key,secret_type,actions,wait`: These are the same arguments as used when creating a new certificate. See [certificates] for more information.
+#' - `attributes`: For `update_attributes`, the new attributes for the object, such as the expiry date and activation date. A convenient way to provide this is via the [vault_object_attrs] helper function.
+#' - `...`: For `update_attributes`, additional key-specific properties to update. See [keys].
+#' - `version`: For `set_version`, the version ID or NULL for the current version.
+#' - `confirm`: For `delete`, whether to ask for confirmation before deleting the key.
+#'
+#' @section Details:
+#' `set_policy` updates the authentication details of a certificate: its issuer, identity, key type, renewal actions, and so on. `get_policy` returns the current policy of a certificate.
+#'
+#' A certificate can have multiple _versions_, which are automatically generated when a cert is created with the same name as an existing cert. By default, this object contains the information for the most recent (current) version; use `list_versions` and `set_version` to change the version.
+#'
+#' @section Value:
+#' For `get_policy`, a list of certificate policy details.
+#'
+#' For `list_versions`, a vector of certificate version IDs.
+#'
+#' For `set_version`, the key object with the updated version.
+#'
+#' @seealso
+#' [certificates]
+#'
+#' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
+#' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
+#'
+#' @examples
+#' \dontrun{
+#'
+#' vault <- key_vault$new("mykeyvault")
+#'
+#' vault$certificates$create("mynewcert")
+#' # new version of an existing certificate
+#' vault$certificates$create("mynewcert", x509=cert_x509_properties(valid=24))
+#'
+#' cert <- vault$certificates$get("mynewcert")
+#' vers <- cert$list_versions()
+#' cert$set_version(vers[2])
+#'
+#' # updating an existing cert version
+#' cert$set_policy(x509=cert_x509_properties(valid=12))
+#'
+#' }
+#' @name certificate
+#' @aliases certificate cert
+#' @rdname certificate
+NULL
+
 stored_cert <- R6::R6Class("stored_cert", inherit=stored_object,
 
 public=list(

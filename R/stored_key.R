@@ -1,6 +1,6 @@
 #' Encryption key object
 #'
-#' This class represents an encryption keys stored in a vault. It provides methods for carrying out operations, including encryption and decryption, signing and verification, and wrapping and unwrapping.
+#' This class represents an encryption key stored in a vault. It provides methods for carrying out operations, including encryption and decryption, signing and verification, and wrapping and unwrapping.
 #'
 #' @docType class
 #'
@@ -44,7 +44,7 @@
 #' @section Value:
 #' For the key operations, a raw vector (for `decrypt` and `unwrap`, if `as_raw=TRUE`) or character vector.
 #'
-#' For `list`, a vector of key version IDs.
+#' For `list_versions`, a vector of key version IDs.
 #'
 #' For `set_version`, the key object with the updated version.
 #'
