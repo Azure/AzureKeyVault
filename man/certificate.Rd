@@ -52,7 +52,7 @@ delete(confirm=TRUE)
 
 \section{Details}{
 
-\code{export} exports the certificate to a file. The format wll be either PEM or PFX (aka PKCS#12), as set by the \code{format} argument when the certificate was created.
+\code{export} exports the certificate to a file. The format wll be either PEM or PFX (aka PKCS#12), as set by the \code{format} argument when the certificate was created. Note that if all you want is the contents of the CER file, this can be found in the \code{cer} field (see above).
 
 \code{set_policy} updates the authentication details of a certificate: its issuer, identity, key type, renewal actions, and so on. \code{get_policy} returns the current policy of a certificate.
 
@@ -75,6 +75,7 @@ vault <- key_vault$new("mykeyvault")
 
 cert <- vault$certificates$create("mynewcert")
 cert$cer
+cert$export("mynewcert.pem")
 
 # new version of an existing certificate
 vault$certificates$create("mynewcert", x509=cert_x509_properties(valid=24))
