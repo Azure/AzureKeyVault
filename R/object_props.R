@@ -1,6 +1,6 @@
 #' Helper functions for key vault objects
 #'
-#' @param type For key properties, the type of key to create: RSA or elliptic curve (EC).
+#' @param type For key properties, the type of key to create: RSA or elliptic curve (EC). Note that for keys backing a certificate, only RSA is allowed.
 #' @param hardware Whether to use a hardware key or software key. The former requires a premium key vault.
 #' @param ec_curve For an EC key, the type of elliptic curve.
 #' @param rsa_key_size For an RSA key, the key size, either 2048, 3072 or 4096.
@@ -32,7 +32,7 @@ key_properties <- function(type=c("RSA", "EC"), hardware=FALSE, ec_curve=NULL, r
         "EC"=list(kty=type, crv=ec_curve))
 
     if(hardware)
-        type <- paste0(type, "-HSM")
+        key$kty <- paste0(key$kty, "-HSM")
 
     compact(key)
 }

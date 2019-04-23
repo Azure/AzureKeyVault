@@ -29,7 +29,7 @@ vault_object_attrs(enabled = TRUE, expiry_date = NULL,
   activation_date = NULL, recovery_level = NULL)
 }
 \arguments{
-\item{type}{For key properties, the type of key to create: RSA or elliptic curve (EC).}
+\item{type}{For key properties, the type of key to create: RSA or elliptic curve (EC). Note that for keys backing a certificate, only RSA is allowed.}
 
 \item{hardware}{Whether to use a hardware key or software key. The former requires a premium key vault.}
 
