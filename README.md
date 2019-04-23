@@ -42,7 +42,7 @@ The client interface is R6-based, with methods for keys, secrets and certificate
 vault <- key_vault$new("https://mykeyvault.vault.azure.net")
 
 # can also be done from the ARM resource object
-#vault <- kv$get_endpoint()
+vault <- kv$get_endpoint()
 
 
 # create a new secret
@@ -62,10 +62,13 @@ plaintext == decrypted_text
 #> [1] TRUE
 
 
-# create a new self-signed certificate (will also create the associated key and secret)
-vault$certificates$create("newcert",
+# create a new self-signed certificate (will also create an associated key and secret)
+cert <- vault$certificates$create("newcert",
     subject="CN=mydomain.com",
     x509=cert_x509_properties(dns_names="mydomain.com"))
+
+# export the certificate as a PEM file
+cert$export("newcert.pem")
 
 # import a certificate from a PFX file
 vault$certificates$import("importedcert", "mycert.pfx")
