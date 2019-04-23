@@ -11,7 +11,7 @@
 #' @param enhanced_key_usages For `cert_x509_properties`, a character vector of enhanced key usages (EKUs).
 #' @param valid For `cert_x509_properties`, the number of months the certificate should be valid for.
 #' @param issuer For `cert_issuer_properties`, the name of the issuer. Defaults to "self" for a self-signed certificate.
-#' @param type For `cert_issuer_properties`, the type of certificate to issue.
+#' @param cert_type For `cert_issuer_properties`, the type of certificate to issue, eg "OV-SSL", "DV-SSL" or "EV-SSL".
 #' @param transparent For `cert_issuer_properties`, whether the certificate should be transparent.
 #' @param auto_renew For `cert_expiry_actions`, when to automatically renew the certificate. If this is a number between 0 and 1, it is interpreted as the fraction of lifetime remaining; if greater than 1, the number of days remaining.
 #' @param email_contacts For `cert_expiry_actions`, when to notify the listed contacts for the key vault that a certificate is about to expire. If this is a number between 0 and 1, it is interpreted as the fraction of lifetime remaining; if greater than 1, the number of days remaining.
@@ -27,13 +27,12 @@
 key_properties <- function(type=c("RSA", "EC"), hardware=FALSE, ec_curve=NULL, rsa_key_size=NULL)
 {
     type <- match.arg(type)
+    key <- switch(type,
+        "RSA"=list(kty=type, key_size=rsa_key_size),
+        "EC"=list(kty=type, crv=ec_curve))
+
     if(hardware)
         type <- paste0(type, "-HSM")
-
-    key <- if(type %in% c("RSA", "RSA-HSM"))
-        list(kty=type, key_size=rsa_key_size)
-    else if(type %in% c("EC", "EC-HSM"))
-        list(kty=type, crv=ec_curve)
 
     compact(key)
 }
@@ -41,10 +40,11 @@ key_properties <- function(type=c("RSA", "EC"), hardware=FALSE, ec_curve=NULL, r
 
 #' @rdname helpers
 #' @export
-cert_key_properties <- function(type=c("RSA", "RSA-HSM", "EC", "EC-HSM"), ec_curve=NULL, rsa_key_size=NULL,
+cert_key_properties <- function(type=c("RSA", "EC"), hardware=FALSE, ec_curve=NULL, rsa_key_size=NULL,
                                 key_exportable=TRUE, reuse_key=FALSE)
 {
-    props <- c(key_properties(type, ec_curve, rsa_key_size), reuse_key=reuse_key, exportable=key_exportable)
+    type <- match.arg(type)
+    props <- c(key_properties(type, hardware, ec_curve, rsa_key_size), reuse_key=reuse_key, exportable=key_exportable)
     compact(props)
 }
 
@@ -62,9 +62,9 @@ cert_x509_properties=function(dns_names=character(), emails=character(), upns=ch
 
 #' @rdname helpers
 #' @export
-cert_issuer_properties=function(issuer="self", type=NULL, transparent=NULL)
+cert_issuer_properties=function(issuer="self", cert_type=NULL, transparent=NULL)
 {
-    compact(list(name=issuer, cty=type, cert_transparency=transparent))
+    compact(list(name=issuer, cty=cert_type, cert_transparency=transparent))
 }
 
 

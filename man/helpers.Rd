@@ -12,7 +12,7 @@
 key_properties(type = c("RSA", "EC"), hardware = FALSE,
   ec_curve = NULL, rsa_key_size = NULL)
 
-cert_key_properties(type = c("RSA", "RSA-HSM", "EC", "EC-HSM"),
+cert_key_properties(type = c("RSA", "EC"), hardware = FALSE,
   ec_curve = NULL, rsa_key_size = NULL, key_exportable = TRUE,
   reuse_key = FALSE)
 
@@ -20,7 +20,7 @@ cert_x509_properties(dns_names = character(), emails = character(),
   upns = character(), key_usages = character(),
   enhanced_key_usages = character(), valid = NULL)
 
-cert_issuer_properties(issuer = "self", type = NULL,
+cert_issuer_properties(issuer = "self", cert_type = NULL,
   transparent = NULL)
 
 cert_expiry_actions(auto_renew = NULL, email_contacts = NULL)
@@ -51,6 +51,8 @@ vault_object_attrs(enabled = TRUE, expiry_date = NULL,
 
 \item{issuer}{For \code{cert_issuer_properties}, the name of the issuer. Defaults to "self" for a self-signed certificate.}
 
+\item{cert_type}{For \code{cert_issuer_properties}, the type of certificate to issue, eg "OV-SSL", "DV-SSL" or "EV-SSL".}
+
 \item{transparent}{For \code{cert_issuer_properties}, whether the certificate should be transparent.}
 
 \item{auto_renew}{For \code{cert_expiry_actions}, when to automatically renew the certificate. If this is a number between 0 and 1, it is interpreted as the fraction of lifetime remaining; if greater than 1, the number of days remaining.}
@@ -62,8 +64,6 @@ vault_object_attrs(enabled = TRUE, expiry_date = NULL,
 \item{expiry_date, activation_date}{For \code{vault_object_attrs}, the optional expiry date and activation date of the stored object. Can be any R object that can be coerced to POSIXct format.}
 
 \item{recovery_level}{For \code{vault_object_attrs}, the recovery level for the stored object.}
-
-\item{type}{For \code{cert_issuer_properties}, the type of certificate to issue.}
 }
 \description{
 Helper functions for key vault objects

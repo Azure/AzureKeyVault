@@ -24,7 +24,8 @@ This class provides the following fields:
 
 \section{Methods}{
 
-This class provides the following methods:\preformatted{set_policy(subject=NULL, x509=NULL, issuer=NULL,
+This class provides the following methods:\preformatted{export(file)
+set_policy(subject=NULL, x509=NULL, issuer=NULL,
            key=NULL, secret_type=NULL, actions=NULL,
            attributes=NULL, wait=TRUE)
 get_policy()
@@ -40,6 +41,7 @@ delete(confirm=TRUE)
 \section{Arguments}{
 
 \itemize{
+\item \code{file}: For \code{export}, a connection object or a character string naming a file to export to.
 \item \code{subject,x509,issuer,key,secret_type,actions,wait}: These are the same arguments as used when creating a new certificate. See \link{certificates} for more information.
 \item \code{attributes}: For \code{update_attributes}, the new attributes for the object, such as the expiry date and activation date. A convenient way to provide this is via the \link{vault_object_attrs} helper function.
 \item \code{...}: For \code{update_attributes}, additional key-specific properties to update. See \link{keys}.
@@ -49,6 +51,8 @@ delete(confirm=TRUE)
 }
 
 \section{Details}{
+
+\code{export} exports the certificate to a file. The format wll be either PEM or PFX (aka PKCS#12), as set by the \code{format} argument when the certificate was created.
 
 \code{set_policy} updates the authentication details of a certificate: its issuer, identity, key type, renewal actions, and so on. \code{get_policy} returns the current policy of a certificate.
 

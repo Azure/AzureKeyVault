@@ -17,6 +17,7 @@
 #' @section Methods:
 #' This class provides the following methods:
 #' ```
+#' export(file)
 #' set_policy(subject=NULL, x509=NULL, issuer=NULL,
 #'            key=NULL, secret_type=NULL, actions=NULL,
 #'            attributes=NULL, wait=TRUE)
@@ -29,6 +30,7 @@
 #' delete(confirm=TRUE)
 #' ```
 #' @section Arguments:
+#' - `file`: For `export`, a connection object or a character string naming a file to export to.
 #' - `subject,x509,issuer,key,secret_type,actions,wait`: These are the same arguments as used when creating a new certificate. See [certificates] for more information.
 #' - `attributes`: For `update_attributes`, the new attributes for the object, such as the expiry date and activation date. A convenient way to provide this is via the [vault_object_attrs] helper function.
 #' - `...`: For `update_attributes`, additional key-specific properties to update. See [keys].
@@ -36,6 +38,8 @@
 #' - `confirm`: For `delete`, whether to ask for confirmation before deleting the key.
 #'
 #' @section Details:
+#' `export` exports the certificate to a file. The format wll be either PEM or PFX (aka PKCS#12), as set by the `format` argument when the certificate was created.
+#'
 #' `set_policy` updates the authentication details of a certificate: its issuer, identity, key type, renewal actions, and so on. `get_policy` returns the current policy of a certificate.
 #'
 #' A certificate can have multiple _versions_, which are automatically generated when a cert is created with the same name as an existing cert. By default, this object contains the information for the most recent (current) version; use `list_versions` and `set_version` to change the version.
@@ -91,6 +95,22 @@ public=list(
     contentType=NULL,
     pending=NULL,
     policy=NULL,
+
+    export=function(file)
+    {
+        if(is.character(file))
+        {
+            file <- file(file, "wb")
+            on.exit(close(file))
+        }
+
+        secret <- call_vault_url(self$token, self$sid)
+        value <- if(secret$contentType == "application/x-pkcs12")
+            openssl::base64_decode(secret$value)
+        else charToRaw(secret$value)
+
+        writeBin(value, file)
+    },
 
     sync=function()
     {

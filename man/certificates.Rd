@@ -11,7 +11,7 @@ This class represents the collection of certificates stored in a vault. It provi
 \section{Methods}{
 
 This class provides the following methods:\preformatted{create(name, subject, x509=cert_x509_properties(), issuer=cert_issuer_properties(),
-       key=cert_key_properties(), secret_type=c("pem", "pkcs12"),
+       key=cert_key_properties(), format=c("pem", "pkcs12"),
        actions=cert_expiry_actions(),
        attributes=vault_object_attrs(),
        ..., wait=TRUE)
@@ -36,7 +36,7 @@ set_contacts(email, name, phone)
 \item \code{x509}: Other X.509 properties for the certificate, such as the domain name(s) and validity period. A convenient way to provide this is via the \link{cert_x509_properties} helper function.
 \item \code{issuer}: Issuer properties for the certificate. A convenient way to provide this is via the \link{cert_issuer_properties} helper function. The default is to specify a self-signed certificate.
 \item \code{key}: Key properties for the certificate. A convenient way to provide this is via the \link{cert_key_properties} helper function.
-\item \code{secret_type}: The format to store the certificate secret in. Can be either PEM or PKCS#12.
+\item \code{format}: The format to store the certificate in. Can be either PEM or PFX, aka PKCS#12. This also determines the format in which the certificate will be exported (see \link{certificate}).
 \item \code{actions}: The actions to take when the certificate is about to expire. A convenient way to provide this is via the \link{cert_expiry_actions} helper function.
 \item \code{attributes}: Optional attributes for the secret. A convenient way to provide this is via the \link{vault_object_attrs} helper function.
 \item \code{value}: For \code{import}, the certificate to import. This can be the name of a PFX file, or a raw vector with the contents of the file.
