@@ -19,7 +19,7 @@ Method for the \link[AzureRMR:az_resource_group]{AzureRMR::az_resource_group} cl
 \item \code{location}: The location/region in which to create the account. Defaults to the resource group location.
 \item \code{initial_access}: The user or service principals that will have access to the vault. This should be a list of objects of type \code{[vault_access_policy]}, created by the function of the same name. The default is to grant access to the logged-in user or service principal of the current Resource Manager client.
 \item \code{sku}: The sku for the vault. Set this to "Premium" to enable the use of hardware security modules (HSMs).
-\item \code{...}: Other named arguments to pass to the \link{az_storage} initialization function.
+\item \code{...}: Other named arguments to pass to the \link{az_key_vault} initialization function.
 \item \code{wait}: Whether to wait for the resource creation to complete before returning.
 }
 }

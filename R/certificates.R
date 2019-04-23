@@ -47,7 +47,7 @@
 #' For `backup`, a string representing the backup blob for a certificate. If the certificate has multiple versions, the blob will contain all versions.
 #'
 #' @seealso
-#' [certificiate], [cert_key_properties], [cert_x509_properties], [cert_issuer_properties], [vault_object_attrs]
+#' [certificate], [cert_key_properties], [cert_x509_properties], [cert_issuer_properties], [vault_object_attrs]
 #'
 #' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
 #' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)

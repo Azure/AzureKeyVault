@@ -14,10 +14,10 @@ Class representing the client endpoint for a key vault, exposing methods for wor
 \section{Fields}{
 
 \itemize{
-\item \code{keys}: A sub-object for working with encryption keys stored in the vault. See \code{Keys} below.
-\item \code{secrets}: A sub-object for working with secrets stored in the vault. See \code{Secrets} below.
-\item \code{certificates}: A sub-object for working with certificates stored in the vault. See \code{Certificates} below.
-\item \code{storage}: A sub-object for working with storage accounts managed by the vault. See \code{Storage accounts} below.
+\item \code{keys}: A sub-object for working with encryption keys stored in the vault. See \link{keys}.
+\item \code{secrets}: A sub-object for working with secrets stored in the vault. See \link{secrets}.
+\item \code{certificates}: A sub-object for working with certificates stored in the vault. See \link{certificates}.
+\item \code{storage}: A sub-object for working with storage accounts managed by the vault. See \link{storage}.
 }
 }
 
@@ -38,22 +38,6 @@ The arguments are as follows:
 To work with objects stored in the key vault, use the methods provided by one of the sub-objects listed in 'Fields'.
 }
 
-\section{Keys}{
-
-}
-
-\section{Secrets}{
-
-}
-
-\section{Certificates}{
-
-}
-
-\section{Storage accounts}{
-
-}
-
 \examples{
 \dontrun{
 
@@ -71,7 +55,7 @@ key_vault$new("mykeyvault", token=token)
 }
 }
 \seealso{
-\link{az_vault}, \link{keys}, \link{secrets}, \link{certificates}, \link{storage}
+\link{az_key_vault}, \link{keys}, \link{secrets}, \link{certificates}, \link{storage}
 
 \href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
 \href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}

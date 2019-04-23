@@ -87,7 +87,7 @@ vault$certificates$get_contacts()
 }
 }
 \seealso{
-\link{certificiate}, \link{cert_key_properties}, \link{cert_x509_properties}, \link{cert_issuer_properties}, \link{vault_object_attrs}
+\link{certificate}, \link{cert_key_properties}, \link{cert_x509_properties}, \link{cert_issuer_properties}, \link{vault_object_attrs}
 
 \href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
 \href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}

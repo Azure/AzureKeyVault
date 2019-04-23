@@ -4,10 +4,10 @@
 #'
 #' @docType class
 #' @section Fields:
-#' - `keys`: A sub-object for working with encryption keys stored in the vault. See `Keys` below.
-#' - `secrets`: A sub-object for working with secrets stored in the vault. See `Secrets` below.
-#' - `certificates`: A sub-object for working with certificates stored in the vault. See `Certificates` below.
-#' - `storage`: A sub-object for working with storage accounts managed by the vault. See `Storage accounts` below.
+#' - `keys`: A sub-object for working with encryption keys stored in the vault. See [keys].
+#' - `secrets`: A sub-object for working with secrets stored in the vault. See [secrets].
+#' - `certificates`: A sub-object for working with certificates stored in the vault. See [certificates].
+#' - `storage`: A sub-object for working with storage accounts managed by the vault. See [storage].
 #'
 #' @section Methods:
 #' This class provides one method, for initialization:
@@ -23,16 +23,8 @@
 #'
 #' To work with objects stored in the key vault, use the methods provided by one of the sub-objects listed in 'Fields'.
 #'
-#' @section Keys:
-#'
-#' @section Secrets:
-#'
-#' @section Certificates:
-#'
-#' @section Storage accounts:
-#'
 #' @seealso
-#' [az_vault], [keys], [secrets], [certificates], [storage]
+#' [az_key_vault], [keys], [secrets], [certificates], [storage]
 #'
 #' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
 #' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)

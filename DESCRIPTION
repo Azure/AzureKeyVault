@@ -1,6 +1,6 @@
 Package: AzureKeyVault
 Title: Key and Secret Management in 'Azure'
-Version: 0.0.1
+Version: 1.0.0
 Authors@R: c(
     person("Hong", "Ooi", , "hongooi@microsoft.com", role = c("aut", "cre")),
     person("Microsoft", role="cph")

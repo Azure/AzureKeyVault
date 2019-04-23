@@ -17,7 +17,7 @@
 #' - `location`: The location/region in which to create the account. Defaults to the resource group location.
 #' - `initial_access`: The user or service principals that will have access to the vault. This should be a list of objects of type `[vault_access_policy]`, created by the function of the same name. The default is to grant access to the logged-in user or service principal of the current Resource Manager client.
 #' - `sku`: The sku for the vault. Set this to "Premium" to enable the use of hardware security modules (HSMs).
-#' - `...`: Other named arguments to pass to the [az_storage] initialization function.
+#' - `...`: Other named arguments to pass to the [az_key_vault] initialization function.
 #' - `wait`: Whether to wait for the resource creation to complete before returning.
 #'
 #' @section Details:
@@ -142,7 +142,7 @@ add_methods <- function()
     AzureRMR::az_resource_group$set("public", "create_key_vault", overwrite=TRUE,
     function(name, location=self$location, initial_access=default_access(), sku="Standard", ..., wait=TRUE)
     {
-        creds <- decode_jwt(self$token$credentials$access_token)
+        creds <- AzureAuth::decode_jwt(self$token$credentials$access_token)
         tenant <- creds$payload$tid
 
         default_access=function()
