@@ -36,7 +36,7 @@ kv$add_principal(svc,
 
 ## Client interface
 
-The client interface is R6-based, with methods for keys, secrets and certificates. To access the vault, instantiate a new object of class `key_vault`.
+The client interface is R6-based. To access the vault, instantiate a new object of class `key_vault`. This object includes sub-objects for interacting with keys, secrets, certificates and managed storage accounts.
 
 ```r
 vault <- key_vault$new("https://mykeyvault.vault.azure.net")
@@ -46,8 +46,10 @@ vault <- kv$get_endpoint()
 
 
 # create a new secret
-vault$secrets$create("newsecret", "secret value")
-vault$secrets$get("newsecret")
+vault$secrets$create("newsecret", "hidden text")
+secret <- vault$secrets$get("newsecret")
+secret$value
+#> [1] "hidden text"
 
 
 # create a new RSA key with 4096-bit key size
@@ -57,7 +59,7 @@ vault$keys$create("newkey", properties=key_properties(type="RSA", rsa_key_size=4
 key <- vault$keys$get("newkey")
 plaintext <- "super secret"
 ciphertext <- key$encrypt(plaintext)
-decrypted_text <- key$decrypt(ciphertext)
+decrypted_text <- key$decrypt(ciphertext, as_raw=FALSE)
 plaintext == decrypted_text
 #> [1] TRUE
 
