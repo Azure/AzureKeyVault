@@ -24,7 +24,7 @@ list()
 backup(name)
 restore(backup)
 get_contacts()
-set_contacts(email, name, phone)
+set_contacts(email)
 }
 }
 

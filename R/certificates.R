@@ -21,7 +21,7 @@
 #' backup(name)
 #' restore(backup)
 #' get_contacts()
-#' set_contacts(email, name, phone)
+#' set_contacts(email)
 #' ```
 #' @section Arguments:
 #' - `name`: The name of the certificate.
