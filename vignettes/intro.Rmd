@@ -10,12 +10,6 @@ vignette: >
 
 AzureKeyVault is a package for working with [Azure Key Vault](https://azure.microsoft.com/services/key-vault/), a secure storage facility for secrets, encryption keys, authentication certificates, and storage account access keys. It provides both a client interface, to access the contents of the vault, and a Resource Manager interface for administering the Key Vault itself.
 
-You can install the development version of the package from GitHub:
-
-```r
-devtools::install_github("cloudyr/AzureKeyVault")
-```
-
 ## Resource Manager interface
 
 AzureKeyVault extends the [AzureRMR](https://github.com/cloudyr/AzureRMR) package to handle key vaults. In addition to creating and deleting vaults, it provides methods to manage access policies for user and service principals.
@@ -46,7 +40,6 @@ kv$add_principal(svc,
 
 The client interface is R6-based. To access the vault, instantiate a new object of class `key_vault`. This object includes component objects for interacting with keys, secrets, certificates and managed storage accounts.
 
-
 ```r
 vault <- key_vault$new("https://mykeyvault.vault.azure.net")
 
@@ -57,21 +50,24 @@ vault <- kv$get_endpoint()
 ### Keys
 
 The `keys` component provides methods for working with encryption keys:
+
 - `create`: Create a new key, or a new version of an existing key.
 - `import`: Import a key from a PEM file.
 - `get`: Retrieve an existing key.
 - `list`: List all keys in the vault.
+- `delete`: Delete a key.
 - `backup`: Return a base64-encoded blob representing the key.
 - `restore`: Use a blob obtained by the `backup` method to restore a key.
 
 In turn, an individual key is represented by an object of class `stored_key`. This has the following methods:
+
 - `list_versions`: List the available versions for this key.
 - `set_version`: Set the version of the key to use. The default is to use the most recently created version.
 - `encrypt`: Encrypt a character string or raw vector, producing a ciphertext string.
 - `decrypt`: Decrypt a ciphertext string, producing either a character string or raw vector. The inverse operation of `encrypt`.
 - `sign`: Sign a hashed digest.
 - `verify`: Verify the signature of a hash. The inverse operation of `sign`.
-- `wrap`: Wrap a symmetric key.
+- `wrap`: Wrap a symmetric key. This is technically the same as encrypting it, but Key Vault provides a separate operation to allow more granular management of roles.
 - `unwrap`: Unwrap a wrapped key. The inverse operation of `wrap`.
 
 The key object contains the public key component in the `key` field, as a parsed JSON web key. Note that Azure Key Vault does not provide access to the _private_ key component.
@@ -82,9 +78,11 @@ vault$keys$create("newkey", properties=key_properties(type="RSA", rsa_key_size=4
 
 # encrypting and decrypting
 key <- vault$keys$get("newkey")
+
 plaintext <- "super secret"
 ciphertext <- key$encrypt(plaintext)
 decrypted_text <- key$decrypt(ciphertext, as_raw=FALSE)
+
 plaintext == decrypted_text
 #> [1] TRUE
 
@@ -104,13 +102,16 @@ vault$keys$import("sslkeyfromfile", "sslkey.pem")
 ### Secrets
 
 The `secrets` component provides methods for working with generic secrets:
+
 - `create`: Create a new secret, or a new version of an existing secret.
 - `get`: Retrieve an existing secret.
 - `list`: List all secrets in the vault.
+- `delete`: Delete a secret.
 - `backup`: Return a base64-encoded blob representing the secret.
 - `restore`: Use a blob obtained by the `backup` method to restore a secret.
 
-An individual secret is represented by an object of class `stored_secret`. Unlike a key, a secret is essentially just data, so the object does not have any operations associated with it. It has the following methods for managing secret versions:
+An individual secret is represented by an object of class `stored_secret`. Unlike a key, a secret is essentially just data, so the object does not provide any operations. It has the following methods for managing secret versions:
+
 - `list_versions`: List the available versions for this secret.
 - `set_version`: Set the version of the secret to use. The default is to use the most recently created version.
 
@@ -127,19 +128,24 @@ secret$value
 ### Certificates
 
 The `certificates` component provides methods for working with authentication certificates:
-- `create`: Create a new certificate, or a new version of an existing certificate.
+
+- `create`: Create a new certificate, or a new version of an existing certificate. The default is to create a self-signed certificate.
 - `import`: Import a certificate from a PFX file.
 - `get`: Retrieve an existing certificate.
 - `list`: List all certificates in the vault.
+- `delete`: Delete a certificate.
 - `backup`: Return a base64-encoded blob representing the certificate.
 - `restore`: Use a blob obtained by the `backup` method to restore a certificate.
+- `set_contacts`: Set the email address(es) to contact when a certificate is due for renewal.
+- `get_contacts`: Get the email address(es) of the contacts.
 
 An individual certificate is represented by an object of class `stored_certificate`. This has the following methods:
-- `list_versions`: List the available versions for this key.
-- `set_version`: Set the version of the key to use. The default is to use the most recently created version.
-- `export`: Encrypt a character string or raw vector, producing a ciphertext string.
-- `set_policy`: Decrypt a ciphertext string, producing either a character string or raw vector. The inverse operation of 
 
+- `list_versions`: List the available versions for this certificate.
+- `set_version`: Set the version of the certificate to use. The default is to use the most recently created version.
+- `export`: Export the certificate as either a PEM or PFX file (the format is fixed at certificate creation).
+- `set_policy`: Sets the policy for a certificate, ie the authentication details.
+- `get_policy`: Retrieve the policy for a certificate.
 
 ```r
 # create a new self-signed certificate (will also create an associated key and secret)
@@ -147,19 +153,56 @@ cert <- vault$certificates$create("newcert",
     subject="CN=example.com",
     x509=cert_x509_properties(dns_names="example.com"))
 
+# import a certificate from a PFX file
+vault$certificates$import("importedcert", "mycert.pfx")
+
 # export the certificate as a PEM file
 cert$export("newcert.pem")
 
-# import a certificate from a PFX file
-vault$certificates$import("importedcert", "mycert.pfx")
+# to export as a PFX file, set the 'format' argument at cert creation
+newcert2 <- vault$certificates$create("newcert2",
+    subject="CN=example.com",
+    format="pfx")
+newcert2$export("newcert2.pfx")
 ```
-
 
 ### Storage accounts
 
+The `storage` component provides methods for working with managed storage accounts:
+
+- `add`: Add a new storage account.
+- `get`: Retrieve an existing account.
+- `list`: List all storage accounts in the vault.
+- `remove`: Stop managing a storage account.
+- `backup`: Return a base64-encoded blob representing the storage account.
+- `restore`: Use a blob obtained by the `backup` method to restore an account.
+
+An individual certificate is represented by an object of class `stored_account`, which has the following methods. Note that unlike the other types of objects, storage accounts are not versioned.
+
+- `regenerate_key`: Manually regenerate an access key.
+- `create_sas_definition`: Create a shared access signature (SAS) definition, from which an actual SAS can be obtained.
+- `get_sas_definition`: Retrieve an existing SAS definition.
+- `delete_sas_definition`: Delete a SAS definition.
+- `list_sas_definitions`: List existing SAS definitions.
+- `show_sas`: Get a SAS from a definition.
+
+
 ```r
+# get the storage account details
+library(AzureStor)
+res <- AzureRMR::get_azure_login()$
+    get_subscription("sub_id")$
+    get_resource_group("rgname")$
+    get_storage_account("mystorageacct")
+
 # add a managed storage account
-stor <- rg$get_resource(type="Microsoft.Storage/storageAccounts", name="mystorage")
-vault$storage$add("mystorage", stor, "key1")
+stor <- vault$storage$add("mystorage", res, "key1")
+
+# Creating a new SAS definition
+today <- Sys.time()
+sasdef <- res$get_account_sas(expiry=today + 7*24*60*60, services="b", permissions="rw")
+stor$create_sas_definition("newsas", sasdef, validity_period="P15D")
+
+stor$show_sas("newsas")
 ```
 
