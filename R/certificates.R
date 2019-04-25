@@ -22,6 +22,10 @@
 #' restore(backup)
 #' get_contacts()
 #' set_contacts(email)
+#' add_issuer(issuer, provider, credentials=NULL, details=NULL)
+#' remove_issuer(issuer)
+#' get_issuer(issuer)
+#' list_issuers()
 #' ```
 #' @section Arguments:
 #' - `name`: The name of the certificate.
@@ -38,11 +42,17 @@
 #' - `wait`: For `create` and `import`, whether to wait until the certificate has been created before returning. If FALSE, you can check on the status of the certificate via the returned object's `sync` method.
 #' - `backup`: For `restore`, a string representing the backup blob for a key.
 #' - `email`: For `set_contacts`, the email addresses of the contacts.
+#' - `issuer`: For the issuer methods, the name by which to refer to an issuer.
+#' - `provider`: For `add_issuer`, the provider name as a string.
+#' - `credentials`: For `add_issuer`, the credentials for the issuer, if required. Should be a list containing the components `account_id` and `password`.
+#' - `details`: For `add_issuer`, the organisation details, if required. See the [Azure docs](https://docs.microsoft.com/en-us/rest/api/keyvault/setcertificateissuer/setcertificateissuer#administratordetails) for more information.
 #'
 #' @section Value:
 #' For `get`, `create` and `import`, an object of class `stored_certificate`, representing the certificate itself.
 #'
 #' For `list`, a vector of key names.
+#'
+#' For `add_issuer` and `get_issuer`, an object representing an issuer. For `list_issuers`, a list of such objects.
 #'
 #' For `backup`, a string representing the backup blob for a certificate. If the certificate has multiple versions, the blob will contain all versions.
 #'
@@ -57,15 +67,20 @@
 #'
 #' vault <- key_vault$new("mykeyvault")
 #'
-#' vault$certificates$create("mynewcert", wait=TRUE)
+#' vault$certificates$create("mynewcert", "CN=mydomain.com")
 #' vault$certificates$list()
 #' vault$certificates$get("mynewcert")
 #'
+#' # specifying some domain names
+#' vault$certificates$create("mynewcert", "CN=mydomain.com",
+#'     x509=cert_x509_properties(dns_names=c("mydomain.com", "otherdomain.com")))
+#'
 #' # specifying a validity period of 2 years (24 months)
-#' vault$certificates$create("mynewcert", x509=cert_x509_properties(valid=24))
+#' vault$certificates$create("mynewcert", "CN=mydomain.com",
+#'     x509=cert_x509_properties(valid=24))
 #'
 #' # setting management tags
-#' vault$certificates$create("mynewcert", tag1="a value", othertag="another value")
+#' vault$certificates$create("mynewcert", "CN=mydomain.com", tag1="a value", othertag="another value")
 #'
 #' # importing a cert from a PFX file
 #' vault$certificates$import("importedcert", "mycert.pfx")
@@ -79,6 +94,13 @@
 #' vault$certificates$set_contacts("username@mydomain.com")
 #' vault$certificates$get_contacts()
 #' 
+#' # add an issuer and then obtain a cert
+#' # this can take a long time, so set wait=FALSE to return immediately
+#' vault$certificates$add_issuer("newissuer", provider="OneCert")
+#' vault$certificates$create("issuedcert", "CN=mydomain.com",
+#'     issuer=cert_issuer_properties("newissuer"),
+#'     wait=FALSE)
+#'
 #' }
 #' @name certificates
 #' @aliases certificates certs
@@ -199,6 +221,30 @@ public=list(
     delete_contacts=function()
     {
         self$do_operation("contacts", http_verb="DELETE")
+    },
+
+    add_issuer=function(issuer, provider, credentials=NULL, details=NULL)
+    {
+        op <- construct_path("issuers", issuer)
+        body <- list(provider=provider, credentials=credentials, org_details=details)
+        self$do_operation(op, body=body, encode="json", http_verb="PUT")
+    },
+
+    get_issuer=function(issuer)
+    {
+        op <- construct_path("issuers", issuer)
+        self$do_operation(op)
+    },
+
+    remove_issuer=function(issuer)
+    {
+        op <- construct_path("issuers", issuer)
+        self$do_operation(op, http_verb="DELETE")
+    },
+
+    list_issuers=function()
+    {
+        self$do_operation("issuers")
     },
 
     do_operation=function(op="", ..., options=list())

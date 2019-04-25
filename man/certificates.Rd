@@ -25,6 +25,10 @@ backup(name)
 restore(backup)
 get_contacts()
 set_contacts(email)
+add_issuer(issuer, provider, credentials=NULL, details=NULL)
+remove_issuer(issuer)
+get_issuer(issuer)
+list_issuers()
 }
 }
 
@@ -45,6 +49,10 @@ set_contacts(email)
 \item \code{wait}: For \code{create} and \code{import}, whether to wait until the certificate has been created before returning. If FALSE, you can check on the status of the certificate via the returned object's \code{sync} method.
 \item \code{backup}: For \code{restore}, a string representing the backup blob for a key.
 \item \code{email}: For \code{set_contacts}, the email addresses of the contacts.
+\item \code{issuer}: For the issuer methods, the name by which to refer to an issuer.
+\item \code{provider}: For \code{add_issuer}, the provider name as a string.
+\item \code{credentials}: For \code{add_issuer}, the credentials for the issuer, if required. Should be a list containing the components \code{account_id} and \code{password}.
+\item \code{details}: For \code{add_issuer}, the organisation details, if required. See the \href{https://docs.microsoft.com/en-us/rest/api/keyvault/setcertificateissuer/setcertificateissuer#administratordetails}{Azure docs} for more information.
 }
 }
 
@@ -54,6 +62,8 @@ For \code{get}, \code{create} and \code{import}, an object of class \code{stored
 
 For \code{list}, a vector of key names.
 
+For \code{add_issuer} and \code{get_issuer}, an object representing an issuer. For \code{list_issuers}, a list of such objects.
+
 For \code{backup}, a string representing the backup blob for a certificate. If the certificate has multiple versions, the blob will contain all versions.
 }
 
@@ -62,15 +72,20 @@ For \code{backup}, a string representing the backup blob for a certificate. If t
 
 vault <- key_vault$new("mykeyvault")
 
-vault$certificates$create("mynewcert", wait=TRUE)
+vault$certificates$create("mynewcert", "CN=mydomain.com")
 vault$certificates$list()
 vault$certificates$get("mynewcert")
 
+# specifying some domain names
+vault$certificates$create("mynewcert", "CN=mydomain.com",
+    x509=cert_x509_properties(dns_names=c("mydomain.com", "otherdomain.com")))
+
 # specifying a validity period of 2 years (24 months)
-vault$certificates$create("mynewcert", x509=cert_x509_properties(valid=24))
+vault$certificates$create("mynewcert", "CN=mydomain.com",
+    x509=cert_x509_properties(valid=24))
 
 # setting management tags
-vault$certificates$create("mynewcert", tag1="a value", othertag="another value")
+vault$certificates$create("mynewcert", "CN=mydomain.com", tag1="a value", othertag="another value")
 
 # importing a cert from a PFX file
 vault$certificates$import("importedcert", "mycert.pfx")
@@ -83,6 +98,13 @@ vault$certificates$restore(bak)
 # set a contact
 vault$certificates$set_contacts("username@mydomain.com")
 vault$certificates$get_contacts()
+
+# add an issuer and then obtain a cert
+# this can take a long time, so set wait=FALSE to return immediately
+vault$certificates$add_issuer("newissuer", provider="OneCert")
+vault$certificates$create("issuedcert", "CN=mydomain.com",
+    issuer=cert_issuer_properties("newissuer"),
+    wait=FALSE)
 
 }
 }
