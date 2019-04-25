@@ -65,6 +65,7 @@ Key Vault supports RSA and elliptic curve (ECDSA) asymmetric encryption keys. Th
 - `delete`: Delete a key.
 - `backup`: Return a base64-encoded blob representing the key.
 - `restore`: Use a blob obtained by the `backup` method to restore a key.
+- `do_operation`: Carry out arbitrary REST operations on keys. Used by the above methods.
 
 In turn, an individual key is represented by an object of class `stored_key`. This has the following methods:
 
@@ -116,6 +117,7 @@ Key Vault allows you to store confidential information such as passwords, databa
 - `delete`: Delete a secret.
 - `backup`: Return a base64-encoded blob representing the secret.
 - `restore`: Use a blob obtained by the `backup` method to restore a secret.
+- `do_operation`: Carry out arbitrary REST operations on secrets. Used by the above methods.
 
 An individual secret is represented by an object of class `stored_secret`. Unlike a key, a secret is essentially just data, so the object does not provide any operations. It has the following methods for managing secret versions:
 
@@ -145,6 +147,7 @@ The `certificates` component provides methods for working with SSL/TLS authentic
 - `restore`: Use a blob obtained by the `backup` method to restore a certificate.
 - `set_contacts`: Set the email address(es) to contact when a certificate is due for renewal.
 - `get_contacts`: Get the email address(es) of the contacts.
+- `do_operation`: Carry out arbitrary REST operations on certificates. Used by the above methods.
 
 An individual certificate is represented by an object of class `stored_certificate`. This has the following methods:
 
@@ -183,6 +186,7 @@ Key Vault can be configured to manage access to an [Azure Storage Account](https
 - `remove`: Stop managing a storage account.
 - `backup`: Return a base64-encoded blob representing the storage account.
 - `restore`: Use a blob obtained by the `backup` method to restore an account.
+- `do_operation`: Carry out arbitrary REST operations on accounts. Used by the above methods.
 
 An individual certificate is represented by an object of class `stored_account`, which has the following methods. Note that unlike the other types of objects, storage accounts are not versioned.
 
