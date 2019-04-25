@@ -8,7 +8,14 @@ vignette: >
   %\VignetteEncoding{utf8}
 ---
 
-AzureKeyVault is a package for working with [Azure Key Vault](https://azure.microsoft.com/services/key-vault/), a secure storage facility for secrets, encryption keys, authentication certificates, and storage account access keys. It provides both a client interface, to access the contents of the vault, and a Resource Manager interface for administering the Key Vault itself.
+[Azure Key Vault](https://azure.microsoft.com/services/key-vault/) enables Microsoft Azure applications and users to store and use several types of secret/key data:
+
+- Cryptographic keys: Supports multiple key types and algorithms, and enables the use of Hardware Security Modules (HSM) for high value keys.
+- Secrets: Provides secure storage of secrets, such as passwords and database connection strings.
+- Certificates: Supports certificates, which are built on top of keys and secrets and add an automated renewal feature.
+- Azure Storage: Can manage keys of an Azure Storage account for you. Internally, Key Vault can list (sync) keys with an Azure Storage Account, and regenerate (rotate) the keys periodically.
+
+AzureKeyVault is an R package for working with the Key Vault service. It provides both a client interface, to access the contents of the vault, and a Resource Manager interface for administering the Key Vault itself.
 
 ## Resource Manager interface
 
@@ -49,7 +56,7 @@ vault <- kv$get_endpoint()
 
 ### Keys
 
-The `keys` component provides methods for working with encryption keys:
+Key Vault supports RSA and elliptic curve (ECDSA) asymmetric encryption keys. The `keys` component of the client object provides methods for managing keys:
 
 - `create`: Create a new key, or a new version of an existing key.
 - `import`: Import a key from a PEM file.
@@ -63,11 +70,11 @@ In turn, an individual key is represented by an object of class `stored_key`. Th
 
 - `list_versions`: List the available versions for this key.
 - `set_version`: Set the version of the key to use. The default is to use the most recently created version.
-- `encrypt`: Encrypt a character string or raw vector, producing a ciphertext string.
+- `encrypt`: Encrypt a character string or raw vector, producing a base64-encoded ciphertext string.
 - `decrypt`: Decrypt a ciphertext string, producing either a character string or raw vector. The inverse operation of `encrypt`.
 - `sign`: Sign a hashed digest.
 - `verify`: Verify the signature of a hash. The inverse operation of `sign`.
-- `wrap`: Wrap a symmetric key. This is technically the same as encrypting it, but Key Vault provides a separate operation to allow more granular management of roles.
+- `wrap`: Wrap a symmetric key. This is technically the same as encrypting it, but is provided as a distinct operation to allow more granular management of permissions.
 - `unwrap`: Unwrap a wrapped key. The inverse operation of `wrap`.
 
 The key object contains the public key component in the `key` field, as a parsed JSON web key. Note that Azure Key Vault does not provide access to the _private_ key component.
@@ -101,7 +108,7 @@ vault$keys$import("sslkeyfromfile", "sslkey.pem")
 
 ### Secrets
 
-The `secrets` component provides methods for working with generic secrets:
+Key Vault allows you to store confidential information such as passwords, database connection strings, tokens, API keys, and so on. The `secrets` component of the client object provides methods for managing generic secrets:
 
 - `create`: Create a new secret, or a new version of an existing secret.
 - `get`: Retrieve an existing secret.
@@ -127,7 +134,7 @@ secret$value
 
 ### Certificates
 
-The `certificates` component provides methods for working with authentication certificates:
+The `certificates` component provides methods for working with SSL/TLS authentication certificates:
 
 - `create`: Create a new certificate, or a new version of an existing certificate. The default is to create a self-signed certificate.
 - `import`: Import a certificate from a PFX file.
@@ -168,7 +175,7 @@ newcert2$export("newcert2.pfx")
 
 ### Storage accounts
 
-The `storage` component provides methods for working with managed storage accounts:
+Key Vault can be configured to manage access to an [Azure Storage Account](https://azure.microsoft.com/Services/Storage), by automatically regenerating access keys and saving commonly-used access patterns as shared access signature (SAS) templates. The `storage` component of the client object provides methods for working with managed accounts:
 
 - `add`: Add a new storage account.
 - `get`: Retrieve an existing account.
@@ -180,7 +187,7 @@ The `storage` component provides methods for working with managed storage accoun
 An individual certificate is represented by an object of class `stored_account`, which has the following methods. Note that unlike the other types of objects, storage accounts are not versioned.
 
 - `regenerate_key`: Manually regenerate an access key.
-- `create_sas_definition`: Create a shared access signature (SAS) definition, from which an actual SAS can be obtained.
+- `create_sas_definition`: Create a SAS definition, from which an actual SAS can be obtained.
 - `get_sas_definition`: Retrieve an existing SAS definition.
 - `delete_sas_definition`: Delete a SAS definition.
 - `list_sas_definitions`: List existing SAS definitions.
@@ -205,4 +212,9 @@ stor$create_sas_definition("newsas", sasdef, validity_period="P15D")
 
 stor$show_sas("newsas")
 ```
+
+## See also
+
+For more information, see the official [Key Vault documentation](https://docs.microsoft.com/en-au/azure/key-vault/).
+
 
