@@ -201,5 +201,14 @@ public=list(
             self$do_operation("unwrapkey", body=body, encode="json", http_verb="POST")$value)
 
         if(as_raw) out else rawToChar(out)
+    },
+
+    print=function(...)
+    {
+        cat("<cryptographic key '", self$name, "'>\n", sep="")
+        cat("  version:", if(is.null(self$version)) "<default>" else self$version, "\n")
+        cat("  type:", self$key$kty, "\n")
+        cat("  operations:", unlist(self$key$key_ops), "\n")
+        invisible(self)
     }
 ))

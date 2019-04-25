@@ -144,5 +144,12 @@ public=list(
     {
         secret_url <- self$get_sas_definition(sas_name)$sid
         call_vault_url(self$token, secret_url)$value
+    },
+
+    print=function(...)
+    {
+        cat("<managed storage account '", self$name, "'>\n", sep="")
+        cat("  account:", basename(self$resourceId), "\n")
+        invisible(self)
     }
 ))

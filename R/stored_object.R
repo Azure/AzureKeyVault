@@ -57,6 +57,12 @@ public=list(
         url$path <- construct_path(self$type, self$name, version, op)
         url$query <- options
         call_vault_url(self$token, url, ...)
+    },
+
+    print=function(...)
+    {
+        cat("<vault stored object '", self$name, "'>\n")
+        invisible(self)
     }
 ))
 

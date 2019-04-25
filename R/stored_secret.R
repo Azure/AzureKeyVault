@@ -90,5 +90,11 @@ public=list(
             )
         })
         do.call(rbind, lst)
+    },
+
+    print=function(...)
+    {
+        cat("<secret '", self$name, "'>\n", sep="")
+        invisible(self)
     }
 ))

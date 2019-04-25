@@ -173,5 +173,15 @@ public=list(
         pol <- self$do_operation(op, body=body, encode="json", version=NULL, http_verb="PATCH")
         self$policy <- pol
         pol
+    },
+
+    print=function(...)
+    {
+        cat("<certificate '", self$name, "'>\n", sep="")
+        cat("  version:", if(is.null(self$version)) "<default>" else self$version, "\n")
+        cat("  subject:", self$policy$x509_props$subject, "\n")
+        cat("  issuer:", self$policy$issuer$name, "\n")
+        cat("  valid for:", self$policy$x509_props$validity_months, "months\n")
+        invisible(self)
     }
 ))
