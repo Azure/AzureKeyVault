@@ -83,7 +83,7 @@ key_vault <- R6::R6Class("key_vault", public=list(
 
     print=function(...)
     {
-        cat("<key vault endpoint '", httr::build_url(self$url), "'>\n")
+        cat("<key vault '", httr::build_url(self$url), "'>\n", sep="")
         invisible(self)
     }
 ))

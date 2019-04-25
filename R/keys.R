@@ -156,6 +156,14 @@ public=list(
         url$path <- construct_path("keys", op)
         url$query <- options
         call_vault_url(self$token, url, ...)
+    },
+
+    print=function(...)
+    {
+        url <- self$url
+        url$path <- "keys"
+        cat("<key vault endpoint '", httr::build_url(url), "'>\n", sep="")
+        invisible(self)
     }
 ))
 

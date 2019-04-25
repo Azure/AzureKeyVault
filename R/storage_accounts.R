@@ -143,5 +143,13 @@ public=list(
         url$query <- utils::modifyList(list(`api-version`=api_version), options)
 
         call_vault_url(self$token, url, ...)
+    },
+
+    print=function(...)
+    {
+        url <- self$url
+        url$path <- "storage"
+        cat("<key vault endpoint '", httr::build_url(url), "'>\n", sep="")
+        invisible(self)
     }
 ))
