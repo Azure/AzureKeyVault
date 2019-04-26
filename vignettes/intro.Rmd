@@ -183,20 +183,23 @@ newcert2 <- vault$certificates$create("newcert2",
 newcert2$export("newcert2.pfx")
 ```
 
-A common use for certificates is for authenticating logins. Here is some example code for using a certificate to authenticate with Azure Active Directory. Note that the app (client) in question needs to be setup with the certificate public key ahead of time.
+A common use for certificates is for authenticating logins. Here is some example code for using a certificate to authenticate with Azure Active Directory. Note that the app (client) in question needs to be setup with the certificate public key; here we create it via the AzureGraph package and pass it the key.
 
 ```r
-## signing a JSON web token (JWT) for authenticating with Azure Active Directory
-app <- "app_id"
-tenant <- "tenant_id"
+## create a registered app in Azure Active Directory with cert credentials
+gr <- AzureGraph::get_graph_login()
+certapp <- gr$create_app("certapp", password=FALSE, certificate=cert$cer)
+
+## create a JSON web token (JWT) for authentication
+appid <- certapp$properties$appId
 claim <- jose::jwt_claim(
-    iss=app,
-    sub=app,
+    iss=appid,
+    sub=appid,
     aud="https://login.microsoftonline.com/tenant_id/oauth2/token",
     exp=as.numeric(Sys.time() + 60*60),
     nbf=as.numeric(Sys.time())
 )
-# header includes cert thumbprint
+# JWT header includes cert thumbprint
 header <- list(alg="RS256", typ="JWT", x5t=cert$x5t)
 
 token_encode <- function(x)
@@ -209,7 +212,7 @@ token_contents <- paste(token_encode(header), token_encode(claim), sep=".")
 sig <- cert$sign(openssl::sha256(charToRaw(token_contents)))
 cert_creds <- paste(token_contents, sig, sep=".")
 
-AzureAuth::get_azure_token("resource_url", tenant, app, certificate=cert_creds)
+AzureAuth::get_azure_token("resource_url", "tenant_id", appid, certificate=cert_creds)
 ```
 
 
