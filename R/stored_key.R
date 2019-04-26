@@ -15,10 +15,10 @@
 #' encrypt(plaintext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"))
 #' decrypt(ciphertext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), as_raw=TRUE)
 #' sign(digest,
-#'      algorithm=c("PS256", "PS384", "PS512", "RS256", "RS384", "RS512",
+#'      algorithm=c("RS256", "RS384", "RS512", "PS256", "PS384", "PS512",
 #'                  "ES256", "ES256K", "ES384", "ES512"))
 #' verify(signature, digest,
-#'        algorithm=c("PS256", "PS384", "PS512", "RS256", "RS384", "RS512",
+#'        algorithm=c("RS256", "RS384", "RS512", "PS256", "PS384", "PS512",
 #'                    "ES256", "ES256K", "ES384", "ES512"))
 #' wrap(value, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"))
 #' unwrap(value, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), as_raw=TRUE)
@@ -145,7 +145,7 @@ public=list(
     },
 
     sign=function(digest,
-                  algorithm=c("PS256", "PS384", "PS512", "RS256", "RS384", "RS512",
+                  algorithm=c("RS256", "RS384", "RS512", "PS256", "PS384", "PS512",
                               "ES256", "ES256K", "ES384", "ES512"))
     {
         if(!is.raw(digest) && !is.character(digest))
@@ -159,7 +159,7 @@ public=list(
     },
 
     verify=function(signature, digest,
-                    algorithm=c("PS256", "PS384", "PS512", "RS256", "RS384", "RS512",
+                    algorithm=c("RS256", "RS384", "RS512", "PS256", "PS384", "PS512",
                                 "ES256", "ES256K", "ES384", "ES512"))
     {
         if(!is.raw(signature) && !is.character(signature))
