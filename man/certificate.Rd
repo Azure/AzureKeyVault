@@ -102,7 +102,7 @@ claim <- jose::jwt_claim(
     iss=app,
     sub=app,
     aud="https://login.microsoftonline.com/tenant_id/oauth2/token",
-    exp=as.numeric(Sys.time() + 365*24*60*60),
+    exp=as.numeric(Sys.time() + 60*60),
     nbf=as.numeric(Sys.time())
 )
 # header includes cert thumbprint

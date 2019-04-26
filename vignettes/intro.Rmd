@@ -147,6 +147,10 @@ The `certificates` component provides methods for working with SSL/TLS authentic
 - `restore`: Use a blob obtained by the `backup` method to restore a certificate.
 - `set_contacts`: Set the email address(es) to contact when a certificate is due for renewal.
 - `get_contacts`: Get the email address(es) of the contacts.
+- `add_issuer`: Adds the details for an issuer (certificate authority).
+- `get_issuer`: Retrieve the details for an issuer.
+- `remove_issuer`: Removes the details for an issuer.
+- `list_issuers`: Lists the issuers available to this vault.
 - `do_operation`: Carry out arbitrary REST operations on certificates. Used by the above methods.
 
 An individual certificate is represented by an object of class `stored_certificate`. This has the following methods:
@@ -154,6 +158,9 @@ An individual certificate is represented by an object of class `stored_certifica
 - `list_versions`: List the available versions for this certificate.
 - `set_version`: Set the version of the certificate to use. The default is to use the most recently created version.
 - `export`: Export the certificate as either a PEM or PFX file (the format is fixed at certificate creation).
+- `export_cer`: Export the certificate public key as a CER file.
+- `sign`: Sign a hashed digest.
+- `verify`: Verify a signature against a digest.
 - `set_policy`: Sets the policy for a certificate, ie the authentication details.
 - `get_policy`: Retrieve the policy for a certificate.
 
@@ -175,6 +182,36 @@ newcert2 <- vault$certificates$create("newcert2",
     format="pfx")
 newcert2$export("newcert2.pfx")
 ```
+
+A common use for certificates is for authenticating logins. Here is some example code for using a certificate to authenticate with Azure Active Directory. Note that the app (client) in question needs to be setup with the certificate public key ahead of time.
+
+```r
+## signing a JSON web token (JWT) for authenticating with Azure Active Directory
+app <- "app_id"
+tenant <- "tenant_id"
+claim <- jose::jwt_claim(
+    iss=app,
+    sub=app,
+    aud="https://login.microsoftonline.com/tenant_id/oauth2/token",
+    exp=as.numeric(Sys.time() + 60*60),
+    nbf=as.numeric(Sys.time())
+)
+# header includes cert thumbprint
+header <- list(alg="RS256", typ="JWT", x5t=cert$x5t)
+
+token_encode <- function(x)
+{
+    jose::base64url_encode(jsonlite::toJSON(x, auto_unbox=TRUE))
+}
+token_contents <- paste(token_encode(header), token_encode(claim), sep=".")
+
+# get the signature and concatenate it with header and claim to form JWT
+sig <- cert$sign(openssl::sha256(charToRaw(token_contents)))
+cert_creds <- paste(token_contents, sig, sep=".")
+
+AzureAuth::get_azure_token("resource_url", tenant, app, certificate=cert_creds)
+```
+
 
 ### Storage accounts
 
