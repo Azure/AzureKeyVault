@@ -25,6 +25,9 @@ This class provides the following fields:
 \section{Methods}{
 
 This class provides the following methods:\preformatted{export(file)
+export_cer(file)
+sign(digest, ...)
+verify(signature, digest, ...)
 set_policy(subject=NULL, x509=NULL, issuer=NULL,
            key=NULL, secret_type=NULL, actions=NULL,
            attributes=NULL, wait=TRUE)
@@ -41,10 +44,12 @@ delete(confirm=TRUE)
 \section{Arguments}{
 
 \itemize{
-\item \code{file}: For \code{export}, a connection object or a character string naming a file to export to.
+\item \code{file}: For \code{export} and \code{export_cer}, a connection object or a character string naming a file to export to.
+\item \code{digest}: For \code{sign}, a hash digest string to sign. For \code{verify}, a digest to compare to a signature.
+\item \code{signature}: For \code{verify}, a signature string.
 \item \code{subject,x509,issuer,key,secret_type,actions,wait}: These are the same arguments as used when creating a new certificate. See \link{certificates} for more information.
 \item \code{attributes}: For \code{update_attributes}, the new attributes for the object, such as the expiry date and activation date. A convenient way to provide this is via the \link{vault_object_attrs} helper function.
-\item \code{...}: For \code{update_attributes}, additional key-specific properties to update. See \link{keys}.
+\item \code{...}: For \code{update_attributes}, additional key-specific properties to update. For \code{sign} and \code{verify}, additional arguments for the corresponding key object methods. See \link{keys} and \link{key}.
 \item \code{version}: For \code{set_version}, the version ID or NULL for the current version.
 \item \code{confirm}: For \code{delete}, whether to ask for confirmation before deleting the key.
 }
@@ -52,7 +57,9 @@ delete(confirm=TRUE)
 
 \section{Details}{
 
-\code{export} exports the certificate to a file. The format wll be either PEM or PFX (aka PKCS#12), as set by the \code{format} argument when the certificate was created. Note that if all you want is the contents of the CER file, this can be found in the \code{cer} field (see above).
+\code{export} exports the full certificate to a file. The format wll be either PEM or PFX (aka PKCS#12), as set by the \code{format} argument when the certificate was created. \code{export_cer} exports the public key component, aka the CER file. Note that the public key can also be found in the \code{cer} field of the object.
+
+\code{sign} uses the key associated with the a certificate to sign a digest, and \code{verify} checks a signature against a digest for authenticity. See below for an example of using \code{sign} to do OAuth authentication with certificate credentials.
 
 \code{set_policy} updates the authentication details of a certificate: its issuer, identity, key type, renewal actions, and so on. \code{get_policy} returns the current policy of a certificate.
 
@@ -86,6 +93,32 @@ cert$set_version(vers[2])
 
 # updating an existing cert version
 cert$set_policy(x509=cert_x509_properties(valid=12))
+
+
+## signing a JSON web token (JWT) for authenticating with Azure Active Directory
+app <- "app_id"
+tenant <- "tenant_id"
+claim <- jose::jwt_claim(
+    iss=app,
+    sub=app,
+    aud="https://login.microsoftonline.com/tenant_id/oauth2/token",
+    exp=as.numeric(Sys.time() + 365*24*60*60),
+    nbf=as.numeric(Sys.time())
+)
+# header includes cert thumbprint
+header <- list(alg="RS256", typ="JWT", x5t=cert$x5t)
+
+token_encode <- function(x)
+{
+    jose::base64url_encode(jsonlite::toJSON(x, auto_unbox=TRUE))
+}
+token_contents <- paste(token_encode(header), token_encode(claim), sep=".")
+
+# get the signature and concatenate it with header and claim to form JWT
+sig <- cert$sign(openssl::sha256(charToRaw(token_contents)))
+cert_creds <- paste(token_contents, sig, sep=".")
+
+AzureAuth::get_azure_token("resource_url", tenant, app, certificate=cert_creds)
 
 }
 }

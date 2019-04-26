@@ -18,6 +18,9 @@
 #' This class provides the following methods:
 #' ```
 #' export(file)
+#' export_cer(file)
+#' sign(digest, ...)
+#' verify(signature, digest, ...)
 #' set_policy(subject=NULL, x509=NULL, issuer=NULL,
 #'            key=NULL, secret_type=NULL, actions=NULL,
 #'            attributes=NULL, wait=TRUE)
@@ -30,15 +33,19 @@
 #' delete(confirm=TRUE)
 #' ```
 #' @section Arguments:
-#' - `file`: For `export`, a connection object or a character string naming a file to export to.
+#' - `file`: For `export` and `export_cer`, a connection object or a character string naming a file to export to.
+#' - `digest`: For `sign`, a hash digest string to sign. For `verify`, a digest to compare to a signature.
+#' - `signature`: For `verify`, a signature string.
 #' - `subject,x509,issuer,key,secret_type,actions,wait`: These are the same arguments as used when creating a new certificate. See [certificates] for more information.
 #' - `attributes`: For `update_attributes`, the new attributes for the object, such as the expiry date and activation date. A convenient way to provide this is via the [vault_object_attrs] helper function.
-#' - `...`: For `update_attributes`, additional key-specific properties to update. See [keys].
+#' - `...`: For `update_attributes`, additional key-specific properties to update. For `sign` and `verify`, additional arguments for the corresponding key object methods. See [keys] and [key].
 #' - `version`: For `set_version`, the version ID or NULL for the current version.
 #' - `confirm`: For `delete`, whether to ask for confirmation before deleting the key.
 #'
 #' @section Details:
-#' `export` exports the certificate to a file. The format wll be either PEM or PFX (aka PKCS#12), as set by the `format` argument when the certificate was created. Note that if all you want is the contents of the CER file, this can be found in the `cer` field (see above).
+#' `export` exports the full certificate to a file. The format wll be either PEM or PFX (aka PKCS#12), as set by the `format` argument when the certificate was created. `export_cer` exports the public key component, aka the CER file. Note that the public key can also be found in the `cer` field of the object.
+#'
+#' `sign` uses the key associated with the a certificate to sign a digest, and `verify` checks a signature against a digest for authenticity. See below for an example of using `sign` to do OAuth authentication with certificate credentials.
 #'
 #' `set_policy` updates the authentication details of a certificate: its issuer, identity, key type, renewal actions, and so on. `get_policy` returns the current policy of a certificate.
 #'
@@ -76,6 +83,32 @@
 #' # updating an existing cert version
 #' cert$set_policy(x509=cert_x509_properties(valid=12))
 #'
+#'
+#' ## signing a JSON web token (JWT) for authenticating with Azure Active Directory
+#' app <- "app_id"
+#' tenant <- "tenant_id"
+#' claim <- jose::jwt_claim(
+#'     iss=app,
+#'     sub=app,
+#'     aud="https://login.microsoftonline.com/tenant_id/oauth2/token",
+#'     exp=as.numeric(Sys.time() + 365*24*60*60),
+#'     nbf=as.numeric(Sys.time())
+#' )
+#' # header includes cert thumbprint
+#' header <- list(alg="RS256", typ="JWT", x5t=cert$x5t)
+#'
+#' token_encode <- function(x)
+#' {
+#'     jose::base64url_encode(jsonlite::toJSON(x, auto_unbox=TRUE))
+#' }
+#' token_contents <- paste(token_encode(header), token_encode(claim), sep=".")
+#'
+#' # get the signature and concatenate it with header and claim to form JWT
+#' sig <- cert$sign(openssl::sha256(charToRaw(token_contents)))
+#' cert_creds <- paste(token_contents, sig, sep=".")
+#'
+#' AzureAuth::get_azure_token("resource_url", tenant, app, certificate=cert_creds)
+#'
 #' }
 #' @name certificate
 #' @aliases certificate cert
@@ -111,6 +144,16 @@ public=list(
         else charToRaw(secret$value)
 
         writeBin(value, file)
+    },
+
+    export_cer=function(file)
+    {
+        if(is.character(file))
+        {
+            file <- file(file, "wb")
+            on.exit(close(file))
+        }
+        writeLines(self$cer, file)
     },
 
     sync=function()
@@ -173,6 +216,20 @@ public=list(
         pol <- self$do_operation(op, body=body, encode="json", version=NULL, http_verb="PATCH")
         self$policy <- pol
         pol
+    },
+
+    sign=function(digest, ...)
+    {
+        key <- stored_key$new(self$token, self$url, self$name, NULL,
+            call_vault_url(self$token, self$kid))
+        key$sign(digest, ...)
+    },
+
+    verify=function(signature, digest, ...)
+    {
+        key <- stored_key$new(self$token, self$url, self$name, NULL,
+            call_vault_url(self$token, self$kid))
+        key$verify(signature, digest, ...)
     },
 
     print=function(...)

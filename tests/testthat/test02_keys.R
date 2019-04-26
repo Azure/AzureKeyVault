@@ -67,7 +67,7 @@ test_that("Key operations work",
     unwrap_text <- rsakey$unwrap(wraptext, as_raw=FALSE)
     expect_equal(plaintext, unwrap_text)
 
-    dig <- digest::digest(plaintext, "sha256", raw=TRUE)
+    dig <- openssl::sha2(charToRaw(plaintext))
     sig <- rsakey$sign(dig)
     expect_true(rsakey$verify(sig, dig))
 })

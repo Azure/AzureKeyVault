@@ -78,7 +78,7 @@
 #' decrypted <- key$decrypt(ciphertext, as_raw=FALSE)
 #' decrypted == plaintext  # TRUE
 #'
-#' dig <- digest::digest(plaintext, "sha256", raw=TRUE)
+#' dig <- openssl::sha2(charToRaw(plaintext))
 #' sig <- key$sign(dig)
 #' key$verify(sig, dig)  # TRUE
 #' 

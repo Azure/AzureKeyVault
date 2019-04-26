@@ -24,7 +24,6 @@ Imports:
 Suggests:
     AzureStor,
     openssl,
-    digest,
     knitr,
     testthat
 Roxygen: list(markdown=TRUE)
