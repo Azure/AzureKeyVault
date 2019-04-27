@@ -59,7 +59,7 @@
 #' @examples
 #' \dontrun{
 #'
-#' vault <- key_vault$new("mykeyvault")
+#' vault <- key_vault("mykeyvault")
 #'
 #' # get the storage account details
 #' library(AzureStor)

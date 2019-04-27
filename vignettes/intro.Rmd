@@ -45,10 +45,10 @@ kv$add_principal(svc,
 
 ## Client interface
 
-The client interface is R6-based. To access the vault, instantiate a new object of class `key_vault`. This object includes component objects for interacting with keys, secrets, certificates and managed storage accounts.
+The client interface is R6-based. To instantiate a new client object, call the `key_vault` function. This object includes sub-objects for interacting with keys, secrets, certificates and managed storage accounts.
 
 ```r
-vault <- key_vault$new("https://mykeyvault.vault.azure.net")
+vault <- key_vault("https://mykeyvault.vault.azure.net")
 
 # can also be done from the ARM resource object
 vault <- kv$get_endpoint()

@@ -13,8 +13,8 @@ if(tenant == "" || app == "" || password == "" || vaultname == "" ||
     skip("Storage account tests skipped: vault credentials not set")
 
 # currently storage acct management requires a user principal, not svc principal
-#vault <- key_vault$new(vaultname, tenant=tenant, app=app, password=password)
-vault <- key_vault$new(vaultname)
+#vault <- key_vault(vaultname, tenant=tenant, app=app, password=password)
+vault <- key_vault(vaultname)
 
 try({
     vault$storage$remove("stor1", confirm=FALSE)

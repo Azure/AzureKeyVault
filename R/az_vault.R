@@ -163,7 +163,7 @@ public=list(
                           password=self$token$client$client_secret, ...)
     {
         url <- self$properties$vaultUri
-        key_vault$new(url=url, tenant=tenant, app=app, password=password, ...)
+        key_vault(url=url, tenant=tenant, app=app, password=password, ...)
     }
 ))
 

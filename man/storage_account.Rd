@@ -104,7 +104,7 @@ For \code{set_version}, the secret object with the updated version.
 \examples{
 \dontrun{
 
-vault <- key_vault$new("mykeyvault")
+vault <- key_vault("mykeyvault")
 
 # get the storage account details
 library(AzureStor)
@@ -125,7 +125,7 @@ stor$show_sas("newsas")
 }
 \dontrun{
 
-vault <- key_vault$new("mykeyvault")
+vault <- key_vault("mykeyvault")
 
 vault$secrets$create("mynewsecret", "secret text")
 # new version of an existing secret

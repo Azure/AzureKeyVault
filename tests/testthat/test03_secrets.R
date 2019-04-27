@@ -8,7 +8,7 @@ vaultname <- Sys.getenv("AZ_TEST_KEYVAULT")
 if(tenant == "" || app == "" || password == "" || vaultname == "")
     skip("Secret tests skipped: vault credentials not set")
 
-vault <- key_vault$new(vaultname, tenant=tenant, app=app, password=password)
+vault <- key_vault(vaultname, tenant=tenant, app=app, password=password)
 
 try({
     vault$secrets$delete("secret1", confirm=FALSE)

@@ -62,7 +62,7 @@
 #' @examples
 #' \dontrun{
 #'
-#' vault <- key_vault$new("mykeyvault")
+#' vault <- key_vault("mykeyvault")
 #'
 #' vault$keys$create("mynewkey")
 #' # new version of an existing key

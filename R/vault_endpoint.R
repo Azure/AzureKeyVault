@@ -1,6 +1,6 @@
 #' Azure Key Vault endpoint class
 #'
-#' Class representing the client endpoint for a key vault, exposing methods for working with it.
+#' Class representing the client endpoint for a key vault, exposing methods for working with it. Use the `[key_vault]` function to instantiate new objects of this class.
 #'
 #' @docType class
 #' @section Fields:
@@ -9,22 +9,8 @@
 #' - `certificates`: A sub-object for working with certificates stored in the vault. See [certificates].
 #' - `storage`: A sub-object for working with storage accounts managed by the vault. See [storage].
 #'
-#' @section Methods:
-#' This class provides one method, for initialization:
-#' ```
-#' new(url, tenant = "common", app = .az_cli_app_id, ...,
-#'     domain = "vault.azure.net", token = NULL)
-#' ```
-#' The arguments are as follows:
-#' - `url`: The location of the vault. This can be a full URL, or the vault name alone; in the latter case, the `domain` argument is appended to obtain the URL.
-#' - `tenant, app, ...`: Authentication arguments that will be passed to [AzureAuth::get_azure_token]. The default is to authenticate interactively.
-#' - `domain`: The domain of the vault; for the public Azure cloud, this is `vault.azure.net`. Also the resource for OAuth authentication.
-#' - `token`: An OAuth token obtained via [AzureAuth::get_azure_token]. If provided, this overrides the other authentication arguments.
-#'
-#' To work with objects stored in the key vault, use the methods provided by one of the sub-objects listed in 'Fields'.
-#'
 #' @seealso
-#' [az_key_vault], [keys], [secrets], [certificates], [storage]
+#' [key_vault], [keys], [secrets], [certificates], [storage]
 #'
 #' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
 #' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
@@ -32,20 +18,20 @@
 #' @examples
 #' \dontrun{
 #'
-#' key_vault$new("mykeyvault")
-#' key_vault$new("https://mykeyvault.vault.azure.net")
+#' key_vault("mykeyvault")
+#' key_vault("https://mykeyvault.vault.azure.net")
 #'
 #' # authenticating as a service principal
-#' key_vault$new("mykeyvault", tenant="myaadtenant", app="app_id", password="password")
+#' key_vault("mykeyvault", tenant="myaadtenant", app="app_id", password="password")
 #'
 #' # authenticating with an existing token
 #' token <- AzureAuth::get_azure_token("https://vault.azure.net", "myaadtenant",
 #'                                     app="app_id", password="password")
-#' key_vault$new("mykeyvault", token=token)
+#' key_vault("mykeyvault", token=token)
 #'
 #' }
 #' @export
-key_vault <- R6::R6Class("key_vault", public=list(
+AzureKeyVault <- R6::R6Class("AzureKeyVault", public=list(
     
     token=NULL,
     url=NULL,
@@ -55,17 +41,10 @@ key_vault <- R6::R6Class("key_vault", public=list(
     certificates=NULL,
     storage=NULL,
 
-    initialize=function(url, tenant="common", app=.az_cli_app_id, ..., domain="vault.azure.net", token=NULL)
+    initialize=function(token, url)
     {
-        if(!is_url(url))
-            url <- sprintf("https://%s.%s", url, domain)
-
-        # "https://vault.azure.net/" (with trailing slash) will fail
-        if(is.null(token))
-            token <- get_azure_token(sprintf("https://%s", domain), tenant=tenant, app=app, ...)
-
-        self$url <- httr::parse_url(url)
         self$token <- token
+        self$url <- url
 
         self$keys <- vault_keys$new(self$token, self$url)
         self$secrets <- vault_secrets$new(self$token, self$url)
@@ -87,3 +66,54 @@ key_vault <- R6::R6Class("key_vault", public=list(
         invisible(self)
     }
 ))
+
+
+#' Azure Key Vault client
+#'
+#' @param url The location of the vault. This can be a full URL, or the vault name alone; in the latter case, the `domain` argument is appended to obtain the URL.
+#' @param tenant,app,... Authentication arguments that will be passed to [AzureAuth::get_azure_token]. The default is to authenticate interactively.
+#' @param domain The domain of the vault; for the public Azure cloud, this is `vault.azure.net`. Also the resource for OAuth authentication.
+#' @param token An OAuth token obtained via [AzureAuth::get_azure_token]. If provided, this overrides the other authentication arguments.
+#'
+#' @details
+#' This function creates a new Key Vault client object. It includes the following component objects for working with data in the vault:
+#'
+#' - `keys`: A sub-object for working with encryption keys stored in the vault. See [keys].
+#' - `secrets`: A sub-object for working with secrets stored in the vault. See [secrets].
+#' - `certificates`: A sub-object for working with certificates stored in the vault. See [certificates].
+#' - `storage`: A sub-object for working with storage accounts managed by the vault. See [storage].
+#'
+#' @seealso
+#' [keys], [secrets], [certificates], [storage]
+#'
+#' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
+#' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
+#'
+#' @examples
+#' \dontrun{
+#'
+#' key_vault("mykeyvault")
+#' key_vault("https://mykeyvault.vault.azure.net")
+#'
+#' # authenticating as a service principal
+#' key_vault("mykeyvault", tenant="myaadtenant", app="app_id", password="password")
+#'
+#' # authenticating with an existing token
+#' token <- AzureAuth::get_azure_token("https://vault.azure.net", "myaadtenant",
+#'                                     app="app_id", password="password")
+#' key_vault("mykeyvault", token=token)
+#'
+#' }
+#' @export
+key_vault <- function(url, tenant="common", app=.az_cli_app_id, ..., domain="vault.azure.net", token=NULL)
+{
+    if(!is_url(url))
+        url <- sprintf("https://%s.%s", url, domain)
+
+    # "https://vault.azure.net/" (with trailing slash) will fail
+    if(is.null(token))
+        token <- get_azure_token(sprintf("https://%s", domain), tenant=tenant, app=app, ...)
+
+    AzureKeyVault$new(token, httr::parse_url(url))
+}
+

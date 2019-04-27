@@ -47,7 +47,7 @@ For \code{backup}, a string representing the backup blob for a key. If the key h
 \examples{
 \dontrun{
 
-vault <- key_vault$new("mykeyvault")
+vault <- key_vault("mykeyvault")
 
 vault$keys$create("mynewkey")
 vault$keys$create("myRSAkey", key_properties(type="RSA", rsa_key_size=4096))

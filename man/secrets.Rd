@@ -42,7 +42,7 @@ For \code{backup}, a string representing the backup blob for a secret. If the se
 \examples{
 \dontrun{
 
-vault <- key_vault$new("mykeyvault")
+vault <- key_vault("mykeyvault")
 
 vault$secrets$create("mysecret", "secret string")
 

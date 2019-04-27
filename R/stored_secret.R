@@ -43,7 +43,7 @@
 #' @examples
 #' \dontrun{
 #'
-#' vault <- key_vault$new("mykeyvault")
+#' vault <- key_vault("mykeyvault")
 #'
 #' vault$secrets$create("mynewsecret", "secret text")
 #' # new version of an existing secret
