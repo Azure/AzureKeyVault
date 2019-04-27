@@ -115,7 +115,7 @@ public=list(
     remove=function(name, confirm=TRUE)
     {
         if(delete_confirmed(confirm, name, "storage account"))
-            self$do_operation(name, http_verb="DELETE")
+            invisible(self$do_operation(name, http_verb="DELETE"))
     },
 
     list=function()

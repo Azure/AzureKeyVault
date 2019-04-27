@@ -125,7 +125,7 @@ public=list(
         if(delete_confirmed(confirm, sas_name, "SAS definition"))
         {
             op <- construct_path("sas", sas_name)
-            self$do_operation(op, http_verb="DELETE")
+            invisible(self$do_operation(op, http_verb="DELETE"))
         }
     },
 

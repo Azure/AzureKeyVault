@@ -165,7 +165,7 @@ public=list(
     delete=function(name, confirm=TRUE)
     {
         if(delete_confirmed(confirm, name, "certificate"))
-            self$do_operation(name, http_verb="DELETE")
+            invisible(self$do_operation(name, http_verb="DELETE"))
     },
 
     list=function()
@@ -220,7 +220,7 @@ public=list(
 
     delete_contacts=function()
     {
-        self$do_operation("contacts", http_verb="DELETE")
+        invisible(self$do_operation("contacts", http_verb="DELETE"))
     },
 
     add_issuer=function(issuer, provider, credentials=NULL, details=NULL)
@@ -239,7 +239,7 @@ public=list(
     remove_issuer=function(issuer)
     {
         op <- construct_path("issuers", issuer)
-        self$do_operation(op, http_verb="DELETE")
+        invisible(self$do_operation(op, http_verb="DELETE"))
     },
 
     list_issuers=function()

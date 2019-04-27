@@ -111,7 +111,7 @@ public=list(
     delete=function(name, confirm=TRUE)
     {
         if(delete_confirmed(confirm, name, "key"))
-            self$do_operation(name, http_verb="DELETE")
+            invisible(self$do_operation(name, http_verb="DELETE"))
     },
 
     list=function()

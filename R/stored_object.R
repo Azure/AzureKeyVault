@@ -33,7 +33,7 @@ public=list(
         else sub("s$", "", self$type)
 
         if(delete_confirmed(confirm, self$name, type))
-            self$do_operation(version=NULL, http_verb="DELETE")
+            invisible(self$do_operation(version=NULL, http_verb="DELETE"))
     },
 
     update_attributes=function(attributes=vault_object_attrs(), ...)
