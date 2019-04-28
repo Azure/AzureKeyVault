@@ -62,7 +62,7 @@ For \code{get}, \code{create} and \code{import}, an object of class \code{stored
 
 For \code{list}, a vector of key names.
 
-For \code{add_issuer} and \code{get_issuer}, an object representing an issuer. For \code{list_issuers}, a list of such objects.
+For \code{add_issuer} and \code{get_issuer}, an object representing an issuer. For \code{list_issuers}, a vector of issuer names.
 
 For \code{backup}, a string representing the backup blob for a certificate. If the certificate has multiple versions, the blob will contain all versions.
 }
