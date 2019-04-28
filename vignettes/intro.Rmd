@@ -84,14 +84,19 @@ The key object contains the public key component in the `key` field, as a parsed
 # create a new RSA key with 4096-bit key size
 vault$keys$create("newkey", properties=key_properties(type="RSA", rsa_key_size=4096))
 
-# encrypting and decrypting
 key <- vault$keys$get("newkey")
 
+# encrypting and decrypting
 plaintext <- "super secret"
 ciphertext <- key$encrypt(plaintext)
 decrypted_text <- key$decrypt(ciphertext, as_raw=FALSE)
-
 plaintext == decrypted_text
+#> [1] TRUE
+
+# signing and verifying
+dig <- openssl::sha256(charToRaw(plaintext))
+sig <- key$sign(dig)
+key$verify(sig, dig)
 #> [1] TRUE
 
 # exporting the public key component, using the jose and openssl packages
@@ -183,7 +188,7 @@ newcert2 <- vault$certificates$create("newcert2",
 newcert2$export("newcert2.pfx")
 ```
 
-A common use for certificates is for authenticating logins. Here is some example code for using a certificate to authenticate with Azure Active Directory. Note that the app (client) in question needs to be setup with the certificate public key; here we create it via the AzureGraph package and pass it the key.
+Here is some example code for using a certificate to authenticate with Azure Active Directory. Note that the app (client) in question needs to be setup with the certificate public key; here we create the app via the AzureGraph package and pass it the key.
 
 ```r
 ## create a registered app in Azure Active Directory with cert credentials
