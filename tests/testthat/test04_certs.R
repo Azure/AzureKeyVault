@@ -13,10 +13,12 @@ vault <- key_vault(vaultname, tenant=tenant, app=app, password=password)
 try({
     vault$certificates$delete("rsacert", confirm=FALSE)
     vault$certificates$delete("pfxcert", confirm=FALSE)
+    vault$certificates$set_contacts(NULL)
+    vault$certificates$remove_issuer("issuer1")
 }, silent=TRUE)
 
 
-test_that("Certficate interface works",
+test_that("Certificate interface works",
 {
     rsacert <- vault$certificates$create("rsacert",
         subject="CN=example.com",
@@ -56,6 +58,14 @@ test_that("Certficate interface works",
 
     backup <- vault$certificates$backup("rsacert")
     expect_type(backup, "character")
+
+    expect_silent(vault$certificates$set_contacts("name@example.com"))
+    expect_type(vault$certificates$get_contacts(), "list")
+    expect_silent(vault$certificates$set_contacts(NULL))
+
+    expect_silent(vault$certificates$add_issuer("issuer1", provider="OneCert"))
+    expect_type(vault$certificates$list_issuers(), "character")
+    expect_silent(vault$certificates$remove_issuer("issuer1"))
 })
 
 vault$certificates$delete("rsacert", confirm=FALSE)
