@@ -24,7 +24,7 @@
 #' show_sas(sas_name)
 #'
 #' update_attributes(attributes=vault_object_attrs(), ...)
-#' delete(confirm=TRUE)
+#' remove(confirm=TRUE)
 #' ```
 #' @section Arguments:
 #' - `key_name`: For `regenerate_key`, the name of the access key to regenerate.
@@ -93,6 +93,15 @@ public=list(
     activeKeyName=NULL,
     autoRegenerateKey=NULL,
     regenerationPeriod=NULL,
+
+    # change delete -> remove for storage accts
+    delete=NULL,
+
+    remove=function(confirm=TRUE)
+    {
+        if(delete_confirmed(confirm, self$name, "storage"))
+            invisible(self$do_operation(version=NULL, http_verb="DELETE"))
+    },
 
     regenerate_key=function(key_name)
     {

@@ -42,7 +42,7 @@ list_sas_definitions()
 show_sas(sas_name)
 
 update_attributes(attributes=vault_object_attrs(), ...)
-delete(confirm=TRUE)
+remove(confirm=TRUE)
 }
 
 
