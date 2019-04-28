@@ -242,6 +242,7 @@ public=list(
 ))
 
 
+#' @export
 print.cert_policy <- function(x, ...)
 {
     out <- lapply(x[-1], data.frame)  # remove ID, use data.frame for printing
