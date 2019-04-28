@@ -52,7 +52,7 @@
 #'
 #' For `list`, a vector of key names.
 #'
-#' For `add_issuer` and `get_issuer`, an object representing an issuer. For `list_issuers`, a list of such objects.
+#' For `add_issuer` and `get_issuer`, an object representing an issuer. For `list_issuers`, a vector of issuer names.
 #'
 #' For `backup`, a string representing the backup blob for a certificate. If the certificate has multiple versions, the blob will contain all versions.
 #'
@@ -244,7 +244,7 @@ public=list(
 
     list_issuers=function()
     {
-        self$do_operation("issuers")
+        sapply(self$do_operation("issuers")$value, function(x) basename(x$id))
     },
 
     do_operation=function(op="", ..., options=list())
