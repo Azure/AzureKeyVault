@@ -187,8 +187,7 @@ public=list(
 
     get_policy=function()
     {
-        op <- construct_path(self$name, "policy")
-        self$do_operation(op, version=NULL)
+        structure(self$do_operation("policy", version=NULL), class="cert_policy")
     },
 
     set_policy=function(subject=NULL, x509=NULL, issuer=NULL,
@@ -212,10 +211,9 @@ public=list(
 
         body <- list(policy=compact(policy), attributes=attributes)
 
-        op <- construct_path(self$name, "policy")
-        pol <- self$do_operation(op, body=body, encode="json", version=NULL, http_verb="PATCH")
+        pol <- self$do_operation("policy", body=body, encode="json", version=NULL, http_verb="PATCH")
         self$policy <- pol
-        pol
+        structure(pol, class="cert_policy")
     },
 
     sign=function(digest, ...)
@@ -242,3 +240,19 @@ public=list(
         invisible(self)
     }
 ))
+
+
+print.cert_policy <- function(x, ...)
+{
+    out <- lapply(x[-1], data.frame)  # remove ID, use data.frame for printing
+    names(out$x509_props) <- names(unlist(x$x509_props))  # fixup names for x509_props
+
+    mapply(function(name, value)
+    {
+        cat(name, ":\n", sep="")
+        print(value, row.names=FALSE)
+        cat("\n")
+    }, names(out), out)
+
+    invisible(x)
+}
