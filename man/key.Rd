@@ -64,7 +64,7 @@ A key can have multiple \emph{versions}, which are automatically generated when 
 
 For the key operations, a raw vector (for \code{decrypt} and \code{unwrap}, if \code{as_raw=TRUE}) or character vector.
 
-For \code{list_versions}, a vector of key version IDs.
+For \code{list_versions}, a data frame containing details of each version.
 
 For \code{set_version}, the key object with the updated version.
 }

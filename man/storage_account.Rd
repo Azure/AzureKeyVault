@@ -96,7 +96,7 @@ For \code{create_sas_definition} and \code{get_sas_definition}, a list represent
 For \code{show_sas}, a string containing the SAS.
 
 
-For \code{list_versions}, a vector of secret version IDs.
+For \code{list_versions}, a data frame containing details of each version.
 
 For \code{set_version}, the secret object with the updated version.
 }

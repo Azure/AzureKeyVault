@@ -49,7 +49,7 @@
 #' @section Value:
 #' For the key operations, a raw vector (for `decrypt` and `unwrap`, if `as_raw=TRUE`) or character vector.
 #'
-#' For `list_versions`, a vector of key version IDs.
+#' For `list_versions`, a data frame containing details of each version.
 #'
 #' For `set_version`, the key object with the updated version.
 #'

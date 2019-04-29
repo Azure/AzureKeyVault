@@ -70,7 +70,7 @@ A certificate can have multiple \emph{versions}, which are automatically generat
 
 For \code{get_policy}, a list of certificate policy details.
 
-For \code{list_versions}, a vector of certificate version IDs.
+For \code{list_versions}, a data frame containing details of each version.
 
 For \code{set_version}, the key object with the updated version.
 }

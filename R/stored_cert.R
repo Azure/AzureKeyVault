@@ -54,7 +54,7 @@
 #' @section Value:
 #' For `get_policy`, a list of certificate policy details.
 #'
-#' For `list_versions`, a vector of certificate version IDs.
+#' For `list_versions`, a data frame containing details of each version.
 #'
 #' For `set_version`, the key object with the updated version.
 #'

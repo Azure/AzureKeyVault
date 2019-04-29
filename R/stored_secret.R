@@ -30,7 +30,7 @@
 #' A secret can have multiple _versions_, which are automatically generated when a secret is created with the same name as an existing secret. By default, the most recent (current) version is used for secret operations; use `list_versions` and `set_version` to change the version.
 #'
 #' @section Value:
-#' For `list_versions`, a vector of secret version IDs.
+#' For `list_versions`, a data frame containing details of each version.
 #'
 #' For `set_version`, the secret object with the updated version.
 #'
