@@ -66,7 +66,7 @@
 #'
 #' vault$keys$create("mynewkey")
 #' # new version of an existing key
-#' vault$keys$create("mynewkey", key_properties(type="RSA", rsa_key_size=4096))
+#' vault$keys$create("mynewkey", type="RSA", rsa_key_size=4096)
 #'
 #' key <- vault$keys$get("mynewkey")
 #' vers <- key$list_versions()

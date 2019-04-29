@@ -60,7 +60,7 @@ secret$value
 
 
 # create a new RSA key with 4096-bit key size
-vault$keys$create("newkey", properties=key_properties(type="RSA", rsa_key_size=4096))
+vault$keys$create("newkey", type="RSA", rsa_key_size=4096)
 
 # encrypting and decrypting
 key <- vault$keys$get("newkey")

@@ -1,7 +1,7 @@
 #' Helper functions for key vault objects
 #'
-#' @param type For key properties, the type of key to create: RSA or elliptic curve (EC). Note that for keys backing a certificate, only RSA is allowed.
-#' @param hardware Whether to use a hardware key or software key. The former requires a premium key vault.
+#' @param type For `cert_key_properties`, the type of key to create: RSA or elliptic curve (EC). Note that for keys backing a certificate, only RSA is allowed.
+#' @param hardware For `cert_key_properties`, whether to use a hardware key or software key. The former requires a premium key vault.
 #' @param ec_curve For an EC key, the type of elliptic curve.
 #' @param rsa_key_size For an RSA key, the key size, either 2048, 3072 or 4096.
 #' @param key_exportable For a key used in a certificate, whether it should be exportable.
@@ -24,7 +24,8 @@
 #'
 #' @rdname helpers
 #' @export
-key_properties <- function(type=c("RSA", "EC"), hardware=FALSE, ec_curve=NULL, rsa_key_size=NULL)
+cert_key_properties <- function(type=c("RSA", "EC"), hardware=FALSE, ec_curve=NULL, rsa_key_size=NULL,
+                                key_exportable=TRUE, reuse_key=FALSE)
 {
     type <- match.arg(type)
     key <- switch(type,
@@ -34,17 +35,7 @@ key_properties <- function(type=c("RSA", "EC"), hardware=FALSE, ec_curve=NULL, r
     if(hardware)
         key$kty <- paste0(key$kty, "-HSM")
 
-    compact(key)
-}
-
-
-#' @rdname helpers
-#' @export
-cert_key_properties <- function(type=c("RSA", "EC"), hardware=FALSE, ec_curve=NULL, rsa_key_size=NULL,
-                                key_exportable=TRUE, reuse_key=FALSE)
-{
-    type <- match.arg(type)
-    props <- c(key_properties(type, hardware, ec_curve, rsa_key_size), reuse_key=reuse_key, exportable=key_exportable)
+    props <- c(compact(key), reuse_key=reuse_key, exportable=key_exportable)
     compact(props)
 }
 

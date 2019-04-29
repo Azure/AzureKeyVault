@@ -34,8 +34,10 @@ test_that("Key interface works",
     rsakey2$set_version(rsalist$version[2])
     expect_true(rsakey2$version == rsalist$version[2])
 
-    eckey <- vault$keys$create("eckey", properties=key_properties(type="EC"))
+    eckey <- vault$keys$create("eckey", type="EC")
     expect_true(inherits(eckey, "stored_key") && eckey$key$kty == "EC")
+
+    expect_error(vault$keys$create("eckey2", type="EC", key_ops=c("sign", "verify", "encrypt", "decrypt")))
 
     extkey <- openssl::rsa_keygen()
     extkeyval <- jsonlite::fromJSON(jose::write_jwk(extkey))

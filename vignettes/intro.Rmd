@@ -82,7 +82,7 @@ The key object contains the public key component in the `key` field, as a parsed
 
 ```r
 # create a new RSA key with 4096-bit key size
-vault$keys$create("newkey", properties=key_properties(type="RSA", rsa_key_size=4096))
+vault$keys$create("newkey", type="RSA", rsa_key_size=4096)
 
 key <- vault$keys$get("newkey")
 
