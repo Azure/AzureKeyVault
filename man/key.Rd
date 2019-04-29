@@ -55,7 +55,7 @@ delete(confirm=TRUE)
 
 \section{Details}{
 
-The operations supported by a key will be those given by the \code{key_ops} argument when the key was created. By default, a new key supports all the operations listed above: encrypt/decrypt, sign/verify, and wrap/unwrap.
+The operations supported by a key will be those given by the \code{key_ops} argument when the key was created. By default, a newly created RSA key supports all the operations listed above: encrypt/decrypt, sign/verify, and wrap/unwrap. An EC key only supports the sign and verify operations.
 
 A key can have multiple \emph{versions}, which are automatically generated when a key is created with the same name as an existing key. By default, the most recent (current) version is used for key operations; use \code{list_versions} and \code{set_version} to change the version.
 }
