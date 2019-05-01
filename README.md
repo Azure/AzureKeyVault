@@ -82,30 +82,12 @@ cert$export("newcert.pem")
 # import a certificate from a PFX file
 vault$certificates$import("importedcert", "mycert.pfx")
 
-## signing a JSON web token (JWT) for authenticating with Azure Active Directory
-app <- "app_id"
-tenant <- "tenant_id"
-claim <- jose::jwt_claim(
-    iss=app,
-    sub=app,
-    aud="https://login.microsoftonline.com/tenant_id/oauth2/token",
-    exp=as.numeric(Sys.time() + 60*60),
-    nbf=as.numeric(Sys.time())
-)
-# header includes cert thumbprint
-header <- list(alg="RS256", typ="JWT", x5t=cert$x5t)
+# OAuth authentication using a cert in Key Vault
+AzureAuth::get_azure_token("resource_url", "mytenant", "app_id", certificate=cert)
 
-token_encode <- function(x)
-{
-    jose::base64url_encode(jsonlite::toJSON(x, auto_unbox=TRUE))
-}
-token_contents <- paste(token_encode(header), token_encode(claim), sep=".")
-
-# get the signature and concatenate it with header and claim to form JWT
-sig <- cert$sign(openssl::sha256(charToRaw(token_contents)))
-cert_creds <- paste(token_contents, sig, sep=".")
-
-AzureAuth::get_azure_token("resource_url", tenant, app, certificate=cert_creds)
+# or export it as a PEM file, and pass that to get_azure_token
+cert$export("newcert.pem")
+AzureAuth::get_azure_token("resource_url", "mytenant", "app_id", certificate="newcert.pem")
 
 
 # add a managed storage account
