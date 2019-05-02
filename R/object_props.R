@@ -9,7 +9,7 @@
 #' @param dns_names,emails,upns For `cert_x509_properties`, the possible subject alternative names (SANs) for a certificate. These should be character vectors.
 #' @param key_usages For `cert_x509_properties`, a character vector of key usages.
 #' @param enhanced_key_usages For `cert_x509_properties`, a character vector of enhanced key usages (EKUs).
-#' @param valid For `cert_x509_properties`, the number of months the certificate should be valid for.
+#' @param validity_months For `cert_x509_properties`, the number of months the certificate should be valid for.
 #' @param issuer For `cert_issuer_properties`, the name of the issuer. Defaults to "self" for a self-signed certificate.
 #' @param cert_type For `cert_issuer_properties`, the type of certificate to issue, eg "OV-SSL", "DV-SSL" or "EV-SSL".
 #' @param transparent For `cert_issuer_properties`, whether the certificate should be transparent.
@@ -43,10 +43,12 @@ cert_key_properties <- function(type=c("RSA", "EC"), hardware=FALSE, ec_curve=NU
 #' @rdname helpers
 #' @export
 cert_x509_properties=function(dns_names=character(), emails=character(), upns=character(),
-                              key_usages=character(), enhanced_key_usages=character(), valid=NULL)
+                              key_usages=c("digitalSignature", "keyEncipherment"),
+                              enhanced_key_usages=c("1.3.6.1.5.5.7.3.1", "1.3.6.1.5.5.7.3.2"),
+                              validity_months=NULL)
 {
     sans <- list(dns_names=I(dns_names), emails=I(emails), upns=I(upns))
-    props <- list(sans=sans, key_usage=I(key_usages), ekus=I(enhanced_key_usages), validity_months=valid)
+    props <- list(sans=sans, key_usage=I(key_usages), ekus=I(enhanced_key_usages), validity_months=validity_months)
     compact(props)
 }
 

@@ -13,8 +13,9 @@ cert_key_properties(type = c("RSA", "EC"), hardware = FALSE,
   reuse_key = FALSE)
 
 cert_x509_properties(dns_names = character(), emails = character(),
-  upns = character(), key_usages = character(),
-  enhanced_key_usages = character(), valid = NULL)
+  upns = character(), key_usages = c("digitalSignature",
+  "keyEncipherment"), enhanced_key_usages = c("1.3.6.1.5.5.7.3.1",
+  "1.3.6.1.5.5.7.3.2"), validity_months = NULL)
 
 cert_issuer_properties(issuer = "self", cert_type = NULL,
   transparent = NULL)
@@ -43,7 +44,7 @@ vault_object_attrs(enabled = TRUE, expiry_date = NULL,
 
 \item{enhanced_key_usages}{For \code{cert_x509_properties}, a character vector of enhanced key usages (EKUs).}
 
-\item{valid}{For \code{cert_x509_properties}, the number of months the certificate should be valid for.}
+\item{validity_months}{For \code{cert_x509_properties}, the number of months the certificate should be valid for.}
 
 \item{issuer}{For \code{cert_issuer_properties}, the name of the issuer. Defaults to "self" for a self-signed certificate.}
 

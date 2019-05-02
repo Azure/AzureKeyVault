@@ -82,7 +82,7 @@ vault$certificates$create("mynewcert", "CN=mydomain.com",
 
 # specifying a validity period of 2 years (24 months)
 vault$certificates$create("mynewcert", "CN=mydomain.com",
-    x509=cert_x509_properties(valid=24))
+    x509=cert_x509_properties(validity_months=24))
 
 # setting management tags
 vault$certificates$create("mynewcert", "CN=mydomain.com", tag1="a value", othertag="another value")

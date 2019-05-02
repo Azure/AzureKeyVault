@@ -85,14 +85,14 @@ cert$cer
 cert$export("mynewcert.pem")
 
 # new version of an existing certificate
-vault$certificates$create("mynewcert", x509=cert_x509_properties(valid=24))
+vault$certificates$create("mynewcert", x509=cert_x509_properties(validity_months=24))
 
 cert <- vault$certificates$get("mynewcert")
 vers <- cert$list_versions()
 cert$set_version(vers[2])
 
 # updating an existing cert version
-cert$set_policy(x509=cert_x509_properties(valid=12))
+cert$set_policy(x509=cert_x509_properties(validity_months=12))
 
 
 ## signing a JSON web token (JWT) for authenticating with Azure Active Directory
