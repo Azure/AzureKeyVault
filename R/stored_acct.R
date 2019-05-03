@@ -157,8 +157,8 @@ public=list(
 
     print=function(...)
     {
-        cat("<managed storage account '", self$name, "'>\n", sep="")
-        cat("  account:", basename(self$resourceId), "\n")
+        cat("Key Vault managed storage account '", self$name, "'\n", sep="")
+        cat("  Account:", basename(self$resourceId), "\n")
         invisible(self)
     }
 ))

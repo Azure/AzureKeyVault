@@ -232,11 +232,11 @@ public=list(
 
     print=function(...)
     {
-        cat("<certificate '", self$name, "'>\n", sep="")
-        cat("  version:", if(is.null(self$version)) "<default>" else self$version, "\n")
-        cat("  subject:", self$policy$x509_props$subject, "\n")
-        cat("  issuer:", self$policy$issuer$name, "\n")
-        cat("  valid for:", self$policy$x509_props$validity_months, "months\n")
+        cat("Key Vault stored certificate '", self$name, "'\n", sep="")
+        cat("  Version:", if(is.null(self$version)) "<default>" else self$version, "\n")
+        cat("  Subject:", self$policy$x509_props$subject, "\n")
+        cat("  Issuer:", self$policy$issuer$name, "\n")
+        cat("  Valid for:", self$policy$x509_props$validity_months, "months\n")
         invisible(self)
     }
 ))
@@ -245,8 +245,20 @@ public=list(
 #' @export
 print.cert_policy <- function(x, ...)
 {
-    out <- lapply(x[-1], data.frame)  # remove ID, use data.frame for printing
-    names(out$x509_props) <- names(unlist(x$x509_props))  # fixup names for x509_props
+    certname <- basename(dirname(x$id))
+    cat("Policy for Key Vault stored certificate '", certname, "'\n\n", sep="")
+
+    out <- lapply(x[-1], function(xx)
+    {
+        unl <- unlist(xx)
+        if(!is.null(unl))
+        {
+            df <- data.frame(matrix(unl, nrow=1))
+            names(df) <- names(unl)
+            df
+        }
+        else xx
+    })
 
     mapply(function(name, value)
     {

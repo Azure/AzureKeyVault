@@ -94,7 +94,8 @@ public=list(
 
     print=function(...)
     {
-        cat("<secret '", self$name, "'>\n", sep="")
+        cat("Key Vault stored secret '", self$name, "'\n", sep="")
+        cat("  Version:", if(is.null(self$version)) "<default>" else self$version, "\n")
         invisible(self)
     }
 ))

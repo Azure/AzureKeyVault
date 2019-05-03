@@ -205,10 +205,16 @@ public=list(
 
     print=function(...)
     {
-        cat("<cryptographic key '", self$name, "'>\n", sep="")
-        cat("  version:", if(is.null(self$version)) "<default>" else self$version, "\n")
-        cat("  type:", self$key$kty, "\n")
-        cat("  operations:", unlist(self$key$key_ops), "\n")
+        cat("Key Vault stored key '", self$name, "'\n", sep="")
+        cat("  Version:", if(is.null(self$version)) "<default>" else self$version, "\n")
+
+        key_props <- if(self$key$kty == "RSA")
+            paste0(length(jose::base64url_decode(self$key$n)) * 8, "-bit")
+        else self$key$crv
+        type <- paste(self$key$kty, key_props, sep="/")
+        cat("  Type:", type, "\n")
+
+        cat("  Allowed operations:", unlist(self$key$key_ops), "\n")
         invisible(self)
     }
 ))
