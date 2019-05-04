@@ -91,7 +91,7 @@ storage_res <- rg$get_resource(type="Microsoft.Storage/storageAccounts", name="m
 stor <- vault$storage$add("mystorage", storage_res, "key1")
 
 # Creating a new SAS definition
-sasdef "sv=2015-04-05&ss=bqtf&srt=sco&sp=r"
+sasdef <- "sv=2015-04-05&ss=bqtf&srt=sco&sp=r"
 stor$create_sas_definition("newsas", sasdef, validity_period="P30D")
 ```
 
