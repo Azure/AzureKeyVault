@@ -13,6 +13,7 @@ vault <- key_vault(vaultname, tenant=tenant, app=app, password=password)
 try({
     vault$certificates$delete("rsacert", confirm=FALSE)
     vault$certificates$delete("pfxcert", confirm=FALSE)
+    vault$certificates$delete("notifycert", confirm=FALSE)
     vault$certificates$set_contacts(NULL)
     vault$certificates$remove_issuer("issuer1")
 }, silent=TRUE)
@@ -30,7 +31,7 @@ test_that("Certificate interface works",
 
     rsacert2 <- vault$certificates$create("rsacert",
         subject="CN=example.com",
-        x509=cert_x509_properties(dns_names="example.com"),
+        x509=cert_x509_properties(dns_names="example.com", validity_months=24),
         attributes=vault_object_attrs(expiry_date="2099-01-01"))
     expect_true(inherits(rsacert2, "stored_cert") && is.character(rsacert2$cer))
 
@@ -47,6 +48,12 @@ test_that("Certificate interface works",
     expect_silent(pfxcert$export(pfxfile))
     expect_true(file.exists(pfxfile) && file.info(pfxfile)$size > 0)
 
+    notifycert <- vault$certificates$create("notifycert",
+        subject="CN=example.com",
+        expiry_action=cert_expiry_action(action="EmailContacts"))
+    expect_true(inherits(notifycert, "stored_cert") && is.character(notifycert$cer) &&
+        notifycert$policy$lifetime_actions[[1]]$action$action_type == "EmailContacts")
+
     # need to wait for version listing to update, even though cert itself is complete
     Sys.sleep(30)
 
@@ -54,7 +61,7 @@ test_that("Certificate interface works",
     expect_true(is.data.frame(rsalist) && nrow(rsalist) == 2)
 
     lst <- vault$certificates$list()
-    expect_true(is.character(lst) && length(lst) == 2)
+    expect_true(is.character(lst) && length(lst) == 3)
 
     backup <- vault$certificates$backup("rsacert")
     expect_type(backup, "character")
@@ -70,3 +77,4 @@ test_that("Certificate interface works",
 
 vault$certificates$delete("rsacert", confirm=FALSE)
 vault$certificates$delete("pfxcert", confirm=FALSE)
+vault$certificates$delete("notifycert", confirm=FALSE)

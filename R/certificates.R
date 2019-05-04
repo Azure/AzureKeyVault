@@ -9,7 +9,7 @@
 #' ```
 #' create(name, subject, x509=cert_x509_properties(), issuer=cert_issuer_properties(),
 #'        key=cert_key_properties(), format=c("pem", "pkcs12"),
-#'        actions=cert_expiry_actions(),
+#'        expiry_action=cert_expiry_action(),
 #'        attributes=vault_object_attrs(),
 #'        ..., wait=TRUE)
 #' import(name, value, pwd=NULL,
@@ -34,7 +34,7 @@
 #' - `issuer`: Issuer properties for the certificate. A convenient way to provide this is via the [cert_issuer_properties] helper function. The default is to specify a self-signed certificate.
 #' - `key`: Key properties for the certificate. A convenient way to provide this is via the [cert_key_properties] helper function.
 #' - `format`: The format to store the certificate in. Can be either PEM or PFX, aka PKCS#12. This also determines the format in which the certificate will be exported (see [certificate]).
-#' - `actions`: The actions to take when the certificate is about to expire. A convenient way to provide this is via the [cert_expiry_actions] helper function.
+#' - `expiry_action`: What Key Vault should do when the certificate is about to expire. A convenient way to provide this is via the [cert_expiry_action] helper function.
 #' - `attributes`: Optional attributes for the secret. A convenient way to provide this is via the [vault_object_attrs] helper function.
 #' - `value`: For `import`, the certificate to import. This can be the name of a PFX file, or a raw vector with the contents of the file.
 #' - `pwd`: For `import`, the password if the imported certificate is password-protected.
@@ -123,7 +123,7 @@ public=list(
     create=function(name, subject, x509=cert_x509_properties(), issuer=cert_issuer_properties(),
                     key=cert_key_properties(),
                     format=c("pem", "pfx"),
-                    actions=cert_expiry_actions(),
+                    expiry_action=cert_expiry_action(),
                     attributes=vault_object_attrs(),
                     ..., wait=TRUE)
     {
@@ -136,7 +136,7 @@ public=list(
             key_props=key,
             secret_props=list(contentType=format),
             x509_props=c(subject=subject, x509),
-            lifetime_actions=actions,
+            lifetime_actions=expiry_action,
             attributes=attributes
         )
 

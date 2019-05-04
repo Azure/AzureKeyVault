@@ -4,7 +4,7 @@
 \alias{cert_key_properties}
 \alias{cert_x509_properties}
 \alias{cert_issuer_properties}
-\alias{cert_expiry_actions}
+\alias{cert_expiry_action}
 \alias{vault_object_attrs}
 \title{Helper functions for key vault objects}
 \usage{
@@ -20,7 +20,8 @@ cert_x509_properties(dns_names = character(), emails = character(),
 cert_issuer_properties(issuer = "self", cert_type = NULL,
   transparent = NULL)
 
-cert_expiry_actions(auto_renew = NULL, email_contacts = NULL)
+cert_expiry_action(remaining = 0.1, action = c("AutoRenew",
+  "EmailContacts"))
 
 vault_object_attrs(enabled = TRUE, expiry_date = NULL,
   activation_date = NULL, recovery_level = NULL)
@@ -52,9 +53,9 @@ vault_object_attrs(enabled = TRUE, expiry_date = NULL,
 
 \item{transparent}{For \code{cert_issuer_properties}, whether the certificate should be transparent.}
 
-\item{auto_renew}{For \code{cert_expiry_actions}, when to automatically renew the certificate. If this is a number between 0 and 1, it is interpreted as the fraction of lifetime remaining; if greater than 1, the number of days remaining.}
+\item{remaining}{For \code{cert_expiry_action}, The remaining certificate lifetime at which to take action. If this is a number between 0 and 1, it is interpreted as the percentage of life remaining; otherwise, the number of days remaining. To disable expiry actions, set this to NULL.}
 
-\item{email_contacts}{For \code{cert_expiry_actions}, when to notify the listed contacts for the key vault that a certificate is about to expire. If this is a number between 0 and 1, it is interpreted as the fraction of lifetime remaining; if greater than 1, the number of days remaining.}
+\item{action}{For \code{cert_expiry_action}, what action to take when a certificate is about to expire. Can be either "AutoRenew" or "EmailContacts". Ignored if \code{remaining == NULL}.}
 
 \item{enabled}{For \code{vault_object_attrs}, whether this stored object (key, secret, certificate, storage account) is enabled.}
 

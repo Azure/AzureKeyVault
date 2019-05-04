@@ -13,8 +13,8 @@
 #' @param issuer For `cert_issuer_properties`, the name of the issuer. Defaults to "self" for a self-signed certificate.
 #' @param cert_type For `cert_issuer_properties`, the type of certificate to issue, eg "OV-SSL", "DV-SSL" or "EV-SSL".
 #' @param transparent For `cert_issuer_properties`, whether the certificate should be transparent.
-#' @param auto_renew For `cert_expiry_actions`, when to automatically renew the certificate. If this is a number between 0 and 1, it is interpreted as the fraction of lifetime remaining; if greater than 1, the number of days remaining.
-#' @param email_contacts For `cert_expiry_actions`, when to notify the listed contacts for the key vault that a certificate is about to expire. If this is a number between 0 and 1, it is interpreted as the fraction of lifetime remaining; if greater than 1, the number of days remaining.
+#' @param remaining For `cert_expiry_action`, The remaining certificate lifetime at which to take action. If this is a number between 0 and 1, it is interpreted as the percentage of life remaining; otherwise, the number of days remaining. To disable expiry actions, set this to NULL.
+#' @param action For `cert_expiry_action`, what action to take when a certificate is about to expire. Can be either "AutoRenew" or "EmailContacts". Ignored if `remaining == NULL`.
 #' @param enabled For `vault_object_attrs`, whether this stored object (key, secret, certificate, storage account) is enabled.
 #' @param expiry_date,activation_date For `vault_object_attrs`, the optional expiry date and activation date of the stored object. Can be any R object that can be coerced to POSIXct format.
 #' @param recovery_level For `vault_object_attrs`, the recovery level for the stored object.
@@ -63,24 +63,21 @@ cert_issuer_properties=function(issuer="self", cert_type=NULL, transparent=NULL)
 
 #' @rdname helpers
 #' @export
-cert_expiry_actions <- function(auto_renew=NULL, email_contacts=NULL)
+cert_expiry_action <- function(remaining=0.1, action=c("AutoRenew", "EmailContacts"))
 {
-    auto_renew <- if(!is.null(auto_renew))
-    {
-        if(auto_renew < 1)
-            list(action="AutoRenew", trigger=list(lifetime_percentage=round(auto_renew*100)))
-        else list(action="AutoRenew", trigger=list(days_before_expiry=auto_renew))
-    }
+    if(is_empty(remaining))
+        return(list())
 
-    email_contacts <- if(!is.null(email_contacts))
+    remaining <- as.numeric(remaining)
+    trigger <- if(0 < remaining && remaining < 1)
     {
-        if(email_contacts < 1)
-            list(action="EmailContacts", trigger=list(lifetime_percentage=round(email_contacts*100)))
-        else list(action="EmailContacts", trigger=list(days_before_expiry=email_contacts))
+        pct <- round((1 - remaining) * 100)
+        list(lifetime_percentage=pct)
     }
+    else list(days_before_expiry=remaining)
 
-    actions <- list(auto_renew, email_contacts)
-    compact(actions)
+    action <- list(action_type=match.arg(action))
+    list(list(trigger=trigger, action=action))
 }
 
 
