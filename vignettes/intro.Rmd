@@ -188,7 +188,9 @@ newcert2 <- vault$certificates$create("newcert2",
 newcert2$export("newcert2.pfx")
 ```
 
-The AzureAuth package is able to make use of certificates stored in Key Vault to authenticate with Azure Active Directory. Here is some example code to do so. Note that the app (client) in question needs to be setup with the certificate public key; we create the app via the AzureGraph package and pass it the key.
+Note that exporting a certificate to a file should not be done unless absolutely necessary, as the point of using Key Vault is to avoid having to save sensitive data on a local machine.
+
+The AzureAuth package is able to make use of certificates stored in Key Vault to authenticate with Azure Active Directory. Here is some example code to do so. The app (client) in question needs to be setup with the certificate public key; we create the app via the AzureGraph package and pass it the key.
 
 ```r
 ## create a registered app in Azure Active Directory with cert credentials
@@ -198,11 +200,6 @@ certapp <- gr$create_app("certapp", password=FALSE, certificate=cert$cer)
 # authenticate using data in Key Vault
 AzureAuth::get_azure_token("resource_url", "mytenant", certapp$properties$appId,
     certificate=cert)
-
-# or export it as a PEM file, and pass that to get_azure_token
-cert$export("newcert.pem")
-AzureAuth::get_azure_token("resource_url", "mytenant", certapp$properties$appId,
-    certificate="newcert.pem")
 ```
 
 

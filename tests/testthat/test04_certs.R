@@ -13,6 +13,7 @@ vault <- key_vault(vaultname, tenant=tenant, app=app, password=password)
 try({
     vault$certificates$delete("rsacert", confirm=FALSE)
     vault$certificates$delete("pfxcert", confirm=FALSE)
+    vault$certificates$delete("pfxcert2", confirm=FALSE)
     vault$certificates$delete("notifycert", confirm=FALSE)
     vault$certificates$set_contacts(NULL)
     vault$certificates$remove_issuer("issuer1")
@@ -48,6 +49,9 @@ test_that("Certificate interface works",
     expect_silent(pfxcert$export(pfxfile))
     expect_true(file.exists(pfxfile) && file.info(pfxfile)$size > 0)
 
+    pfxcert2 <- vault$certificates$import("pfxcert2", pfxfile)
+    expect_true(inherits(pfxcert2, "stored_cert") && is.character(pfxcert2$cer))
+
     notifycert <- vault$certificates$create("notifycert",
         subject="CN=example.com",
         expiry_action=cert_expiry_action(action="EmailContacts"))
@@ -61,7 +65,7 @@ test_that("Certificate interface works",
     expect_true(is.data.frame(rsalist) && nrow(rsalist) == 2)
 
     lst <- vault$certificates$list()
-    expect_true(is.character(lst) && length(lst) == 3)
+    expect_true(is.character(lst) && length(lst) == 4)
 
     backup <- vault$certificates$backup("rsacert")
     expect_type(backup, "character")
@@ -77,4 +81,5 @@ test_that("Certificate interface works",
 
 vault$certificates$delete("rsacert", confirm=FALSE)
 vault$certificates$delete("pfxcert", confirm=FALSE)
+vault$certificates$delete("pfxcert2", confirm=FALSE)
 vault$certificates$delete("notifycert", confirm=FALSE)

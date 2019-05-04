@@ -85,14 +85,14 @@ vault$certificates$import("importedcert", "mycert.pfx")
 # OAuth authentication using a cert in Key Vault
 AzureAuth::get_azure_token("resource_url", "mytenant", "app_id", certificate=cert)
 
-# or export it as a PEM file, and pass that to get_azure_token
-cert$export("newcert.pem")
-AzureAuth::get_azure_token("resource_url", "mytenant", "app_id", certificate="newcert.pem")
-
 
 # add a managed storage account
-stor <- rg$get_resource(type="Microsoft.Storage/storageAccounts", name="mystorage")
-vault$storage$add("mystorage", stor, "key1")
+storage_res <- rg$get_resource(type="Microsoft.Storage/storageAccounts", name="mystorage")
+stor <- vault$storage$add("mystorage", storage_res, "key1")
+
+# Creating a new SAS definition
+sasdef "sv=2015-04-05&ss=bqtf&srt=sco&sp=r"
+stor$create_sas_definition("newsas", sasdef, validity_period="P30D")
 ```
 
 ---

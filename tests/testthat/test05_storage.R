@@ -38,7 +38,7 @@ test_that("Storage account interface works",
     expect_type(backup, "character")
 
     # SAS template (unsigned)
-    sas <- "sv=2015-04-05&ss=bqtf&srt=sco&sp=r&st=2019-01-01T00%3A00%3A00.0000000Z&se=2099-01-01T00%3A00%3A00.0000000Z"
+    sas <- "sv=2015-04-05&ss=bqtf&srt=sco&sp=r"
 
     sasdef <- stor1$create_sas_definition("testsas", sas_template=sas, validity_period="P15D")
     expect_true(is.list(sasdef) && is.character(sasdef$sid))
