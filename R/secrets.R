@@ -10,7 +10,7 @@
 #' create(name, value, content_type=NULL, attributes=vault_object_attrs(), ...)
 #' get(name)
 #' delete(name, confirm=TRUE)
-#' list()
+#' list(include_managed=FALSE)
 #' backup(name)
 #' restore(backup)
 #' ```
@@ -20,6 +20,7 @@
 #' - `content_type`: For `create`, an optional content type of the secret, such as "application/octet-stream".
 #' - `attributes`: Optional attributes for the secret, such as the expiry date and activation date. A convenient way to provide this is via the [vault_object_attrs] helper function.
 #' - `...`: For `create`, other named arguments which will be treated as tags.
+#' - `include_managed`: For `list`, whether to include secrets that were created by Key Vault to support a managed certificate.
 #' - `backup`: For `restore`, a string representing the backup blob for a secret.
 #'
 #' @section Value:
@@ -92,10 +93,12 @@ public=list(
             invisible(self$do_operation(name, http_verb="DELETE"))
     },
 
-    list=function()
+    list=function(include_managed=FALSE)
     {
-        sapply(get_vault_paged_list(self$do_operation(), self$token),
-            function(props) basename(props$id))
+        objs <- get_vault_paged_list(self$do_operation(), self$token) 
+        lst <- lapply(objs, function(props)
+            if(!include_managed && isTRUE(props$managed)) NULL else basename(props$id))
+        unlist(compact(lst))
     },
 
     backup=function(name)

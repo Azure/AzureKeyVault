@@ -12,7 +12,7 @@ This class represents the collection of secrets stored in a vault. It provides m
 This class provides the following methods:\preformatted{create(name, value, content_type=NULL, attributes=vault_object_attrs(), ...)
 get(name)
 delete(name, confirm=TRUE)
-list()
+list(include_managed=FALSE)
 backup(name)
 restore(backup)
 }
@@ -26,6 +26,7 @@ restore(backup)
 \item \code{content_type}: For \code{create}, an optional content type of the secret, such as "application/octet-stream".
 \item \code{attributes}: Optional attributes for the secret, such as the expiry date and activation date. A convenient way to provide this is via the \link{vault_object_attrs} helper function.
 \item \code{...}: For \code{create}, other named arguments which will be treated as tags.
+\item \code{include_managed}: For \code{list}, whether to include secrets that were created by Key Vault to support a managed certificate.
 \item \code{backup}: For \code{restore}, a string representing the backup blob for a secret.
 }
 }
