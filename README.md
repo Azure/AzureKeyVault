@@ -76,14 +76,15 @@ cert <- vault$certificates$create("newcert",
     subject="CN=mydomain.com",
     x509=cert_x509_properties(dns_names="mydomain.com"))
 
-# export the certificate as a PEM file
-cert$export("newcert.pem")
-
 # import a certificate from a PFX file
 vault$certificates$import("importedcert", "mycert.pfx")
 
 # OAuth authentication using a cert in Key Vault
 AzureAuth::get_azure_token("resource_url", "mytenant", "app_id", certificate=cert)
+
+# export the certificate as a PEM file
+# (you should only export a cert if absolutely necessary)
+cert$export("newcert.pem")
 
 
 # add a managed storage account
