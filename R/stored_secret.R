@@ -71,6 +71,14 @@ public=list(
     value=NULL,
     contentType=NULL,
 
+    initialize=function(...)
+    {
+        super$initialize(...)
+
+        # basic obfuscation of value to help mitigate shoulder-surfing
+        class(self$value) <- "secret_value"
+    },
+
     list_versions=function()
     {
         lst <- lapply(get_vault_paged_list(self$do_operation("versions", version=NULL), self$token), function(props)
@@ -99,3 +107,11 @@ public=list(
         invisible(self)
     }
 ))
+
+
+#' @export
+print.secret_value <- function(x, ...)
+{
+    cat("<hidden>\n")
+    invisible(x)
+}
