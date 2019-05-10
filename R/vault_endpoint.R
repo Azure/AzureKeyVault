@@ -62,7 +62,10 @@ AzureKeyVault <- R6::R6Class("AzureKeyVault", public=list(
 
     print=function(...)
     {
-        cat("<key vault '", httr::build_url(self$url), "'>\n", sep="")
+        cat("Azure Key Vault '", httr::build_url(self$url), "'\n", sep="")
+        cat("<Authentication>\n")
+        fmt_token <- gsub("\n  ", "\n    ", AzureAuth::format_auth_header(self$token))
+        cat(" ", fmt_token)
         invisible(self)
     }
 ))
