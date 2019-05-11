@@ -29,6 +29,8 @@
 #' @section Details:
 #' A secret can have multiple _versions_, which are automatically generated when a secret is created with the same name as an existing secret. By default, the most recent (current) version is used for secret operations; use `list_versions` and `set_version` to change the version.
 #'
+#' The value is stored as an object of S3 class "secret_value", which has a print method that hides the value to guard against shoulder-surfing. Note that this will not stop a determined attacker; as a general rule, you should minimise assigning secrets or passing them around your R environment. If you want the raw string value itself, eg when passing it to `jsonlite::toJSON` or other functions which do not accept arbitrary object classes as inputs, use `unclass` to strip the class attribute first.
+#'
 #' @section Value:
 #' For `list_versions`, a data frame containing details of each version.
 #'
@@ -53,7 +55,8 @@
 #' vers <- secret$list_versions()
 #' secret$set_version(vers[2])
 #'
-#' secret$value  # "secret text"
+#' # printing the value will not show the secret
+#' secret$value  # "<hidden>"
 #'
 #' }
 #' @name storage_account

@@ -129,7 +129,7 @@ An individual secret is represented by an object of class `stored_secret`. Unlik
 - `list_versions`: List the available versions for this secret.
 - `set_version`: Set the version of the secret to use. The default is to use the most recently created version.
 
-The secret itself is in the `value` field of the object, of class `secret_value`. This class has a `print` method that hides the value, to help guard against shoulder-surfing.
+The secret itself is in the `value` field of the object, of class `secret_value`. This class has a `print` method that hides the value, to help guard against shoulder-surfing. Note that this will not stop a determined attacker; as a general rule, you should minimise assigning secrets or passing them around your R environment. If you want the raw string value itself, eg when passing it to `jsonlite::toJSON` or other functions which do not accept arbitrary object classes as inputs, use `unclass` to strip the class attribute first.
 
 ```r
 # create a new secret

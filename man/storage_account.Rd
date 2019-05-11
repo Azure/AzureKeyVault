@@ -87,6 +87,8 @@ Unlike the other objects stored in a key vault, storage accounts are not version
 
 
 A secret can have multiple \emph{versions}, which are automatically generated when a secret is created with the same name as an existing secret. By default, the most recent (current) version is used for secret operations; use \code{list_versions} and \code{set_version} to change the version.
+
+The value is stored as an object of S3 class "secret_value", which has a print method that hides the value to guard against shoulder-surfing. Note that this will not stop a determined attacker; as a general rule, you should minimise assigning secrets or passing them around your R environment. If you want the raw string value itself, eg when passing it to \code{jsonlite::toJSON} or other functions which do not accept arbitrary object classes as inputs, use \code{unclass} to strip the class attribute first.
 }
 
 \section{Value}{
@@ -135,7 +137,8 @@ secret <- vault$secrets$get("mynewsecret")
 vers <- secret$list_versions()
 secret$set_version(vers[2])
 
-secret$value  # "secret text"
+# printing the value will not show the secret
+secret$value  # "<hidden>"
 
 }
 }

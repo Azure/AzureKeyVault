@@ -55,8 +55,10 @@ vault <- kv$get_endpoint()
 # create a new secret
 vault$secrets$create("newsecret", "hidden text")
 secret <- vault$secrets$get("newsecret")
+
+# printing the value won't display it; this is to help guard against shoulder-surfing
 secret$value
-#> [1] "hidden text"
+#> <hidden>
 
 
 # create a new RSA key with 4096-bit key size
