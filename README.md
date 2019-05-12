@@ -81,7 +81,7 @@ cert <- vault$certificates$create("newcert",
 # import a certificate from a PFX file
 vault$certificates$import("importedcert", "mycert.pfx")
 
-# OAuth authentication using a cert in Key Vault
+# OAuth authentication using a cert in Key Vault (requires AzureAuth >= 1.0.2)
 AzureAuth::get_azure_token("resource_url", "mytenant", "app_id", certificate=cert)
 
 # export the certificate as a PEM file
