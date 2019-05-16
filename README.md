@@ -1,5 +1,9 @@
 # AzureKeyVault
 
+[![CRAN](https://www.r-pkg.org/badges/version/AzureKeyVault)](https://cran.r-project.org/package=AzureKeyVault)
+![Downloads](https://cranlogs.r-pkg.org/badges/AzureKeyVault)
+[![Travis Build Status](https://travis-ci.org/cloudyr/AzureKeyVault.png?branch=master)](https://travis-ci.org/cloudyr/AzureKeyVault)
+
 [Azure Key Vault](https://azure.microsoft.com/services/key-vault/) enables Microsoft Azure applications and users to store and use several types of secret/key data:
 
 - Cryptographic keys: Supports multiple key types and algorithms, and enables the use of Hardware Security Modules (HSM) for high value keys.
