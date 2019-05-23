@@ -19,7 +19,7 @@ AzureKeyVault is an R package for working with the Key Vault service. It provide
 
 ## Resource Manager interface
 
-AzureKeyVault extends the [AzureRMR](https://github.com/cloudyr/AzureRMR) package to handle key vaults. In addition to creating and deleting vaults, it provides methods to manage access policies for user and service principals.
+AzureKeyVault extends the [AzureRMR](https://github.com/Azure/AzureRMR) package to handle key vaults. In addition to creating and deleting vaults, it provides methods to manage access policies for user and service principals.
 
 ```r
 # create a key vault

@@ -2,7 +2,7 @@
 
 [![CRAN](https://www.r-pkg.org/badges/version/AzureKeyVault)](https://cran.r-project.org/package=AzureKeyVault)
 ![Downloads](https://cranlogs.r-pkg.org/badges/AzureKeyVault)
-[![Travis Build Status](https://travis-ci.org/cloudyr/AzureKeyVault.png?branch=master)](https://travis-ci.org/cloudyr/AzureKeyVault)
+[![Travis Build Status](https://travis-ci.org/Azure/AzureKeyVault.png?branch=master)](https://travis-ci.org/Azure/AzureKeyVault)
 
 [Azure Key Vault](https://azure.microsoft.com/services/key-vault/) enables Microsoft Azure applications and users to store and use several types of secret/key data:
 
@@ -13,15 +13,15 @@
 
 AzureKeyVault is an R package for working with the Key Vault service. It provides both a client interface, to access the contents of the vault, and a Resource Manager interface for administering the Key Vault itself.
 
-You can install the development version of the package from GitHub:
+The primary repo for this package is at https://github.com/Azure/AzureKeyVault; please submit issues and PRs there. It is also mirrored at the Cloudyr org at https://github.com/cloudyr/AzureKeyVault. You can install the development version of the package from GitHub:
 
 ```r
-devtools::install_github("cloudyr/AzureKeyVault")
+devtools::install_github("Azure/AzureKeyVault")
 ```
 
 ## Resource Manager interface
 
-AzureKeyVault extends the [AzureRMR](https://github.com/cloudyr/AzureRMR) package to handle key vaults. In addition to creating and deleting vaults, it provides methods to manage access policies for user and service principals.
+AzureKeyVault extends the [AzureRMR](https://github.com/Azure/AzureRMR) package to handle key vaults. In addition to creating and deleting vaults, it provides methods to manage access policies for user and service principals.
 
 ```r
 # create a key vault
