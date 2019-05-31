@@ -1,13 +1,13 @@
 Package: AzureKeyVault
 Title: Key and Secret Management in 'Azure'
-Version: 1.0.0
+Version: 1.0.0.9000
 Authors@R: c(
     person("Hong", "Ooi", , "hongooi@microsoft.com", role = c("aut", "cre")),
     person("Microsoft", role="cph")
     )
 Description: Manage keys, certificates, secrets, and storage accounts in Microsoft's 'Key Vault' service: <https://azure.microsoft.com/services/key-vault>. Provides facilities to store and retrieve secrets, use keys to encrypt, decrypt, sign and verify data, and manage certificates. Integrates with the 'AzureAuth' package to enable authentication with a certificate, and with the 'openssl' package for importing and exporting.
 License: MIT + file LICENSE
-URL: https://github.com/Azure/AzureKeyVault
+URL: https://github.com/Azure/AzureKeyVault https://github.com/Azure/AzureR
 BugReports: https://github.com/Azure/AzureKeyVault/issues
 VignetteBuilder: knitr
 Depends: 

@@ -19,15 +19,8 @@ call_vault_url <- function(token, url, ...,
 
 process_headers <- function(token, ...)
 {
-    # if token has expired, renew it
-    if(is_azure_token(token) && !token$validate())
-    {
-        message("Access token has expired or is no longer valid; refreshing")
-        token$refresh()
-    }
-
-    creds <- token$credentials
-    headers <- c(Authorization=paste(creds$token_type, creds$access_token))
+    token <- validate_token(token)
+    headers <- c(Authorization=paste("Bearer", token))
 
     # default content-type is json, set this if encoding not specified
     dots <- list(...)
@@ -35,6 +28,24 @@ process_headers <- function(token, ...)
         headers <- c(headers, `Content-type`="application/json")
 
     httr::add_headers(.headers=headers)
+}
+
+
+validate_token <- function(token)
+{
+    # token can be a string or an object of class AzureToken
+    if(AzureRMR::is_azure_token(token))
+    {
+        if(!token$validate()) # refresh if needed
+        {
+            message("Access token has expired or is no longer valid; refreshing")
+            token$refresh()
+        }
+        token <- token$credentials$access_token
+    }
+    else if(!is.character(token))
+        stop("Invalid authentication token", call.=FALSE)
+    token
 }
 
 
