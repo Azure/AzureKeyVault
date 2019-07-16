@@ -93,7 +93,7 @@
 #' # set a contact
 #' vault$certificates$set_contacts("username@mydomain.com")
 #' vault$certificates$get_contacts()
-#' 
+#'
 #' # add an issuer and then obtain a cert
 #' # this can take a long time, so set wait=FALSE to return immediately
 #' vault$certificates$add_issuer("newissuer", provider="OneCert")
@@ -107,7 +107,7 @@
 #' @rdname certificates
 NULL
 
-vault_certificates <- R6::R6Class("vault_certificates", 
+vault_certificates <- R6::R6Class("vault_certificates",
 
 public=list(
 
@@ -182,7 +182,7 @@ public=list(
     restore=function(name, backup)
     {
         stopifnot(is.character(backup))
-        self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
+        self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST")
     },
 
     import=function(name, value, pwd=NULL,

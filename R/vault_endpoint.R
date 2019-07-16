@@ -32,7 +32,7 @@
 #' }
 #' @export
 AzureKeyVault <- R6::R6Class("AzureKeyVault", public=list(
-    
+
     token=NULL,
     url=NULL,
 

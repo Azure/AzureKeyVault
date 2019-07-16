@@ -15,7 +15,7 @@
 #' Initializing a new object of this class can either retrieve an existing key vault, or create a new vault on the host. The recommended way to initialize an object is via the `get_key_vault`, `create_key_vault` or `list_key_vaults` methods of the [az_resource_group] class, which handle the details automatically.
 #'
 #' @section Access policies:
-#' Client access to a key vault is governed by its access policies, which are set on a per-principal basis. Each principal (user or service) can have different permissions granted, for keys, secrets, certificates, and storage accounts. 
+#' Client access to a key vault is governed by its access policies, which are set on a per-principal basis. Each principal (user or service) can have different permissions granted, for keys, secrets, certificates, and storage accounts.
 #'
 #' To grant access, use the `add_principal` method. This has signature
 #'
@@ -95,7 +95,7 @@
 #'
 #' }
 #' @export
-az_key_vault=R6::R6Class("az_key_vault", inherit=AzureRMR::az_resource,
+az_key_vault <- R6::R6Class("az_key_vault", inherit=AzureRMR::az_resource,
 
 public=list(
 
@@ -158,7 +158,7 @@ public=list(
                 pol$permissions$keys, pol$permissions$secrets, pol$permissions$certificates, pol$permissions$storage)
         )
     },
-        
+
     get_endpoint=function(tenant=self$token$tenant, app=self$token$client$client_id,
                           password=self$token$client$client_secret, ...)
     {
@@ -178,7 +178,7 @@ public=list(
 #' @param storage_permissions The permissions to grant for working with storage accounts.
 #'
 #' @details
-#' Client access to a key vault is governed by its access policies, which are set on a per-principal basis. Each principal (user or service) can have different permissions granted, for keys, secrets, certificates, and storage accounts. 
+#' Client access to a key vault is governed by its access policies, which are set on a per-principal basis. Each principal (user or service) can have different permissions granted, for keys, secrets, certificates, and storage accounts.
 #'
 #' Here are the possible permissions. The permission "all" means to grant all permissions.
 #' - Keys: "get", "list", "update", "create", "import", "delete", "recover", "backup", "restore", "decrypt", "encrypt", "unwrapkey", "wrapkey", "verify", "sign", "purge"
@@ -213,7 +213,7 @@ public=list(
 #'     secret_permissions=c("get", "list"),
 #'     certificate_permissions=NULL,
 #'     storage_permissions=NULL)
-#' 
+#'
 #' }
 #' @export
 vault_access_policy <- function(principal, tenant=NULL,
@@ -262,7 +262,7 @@ print.vault_access_policy <- function(x, ...)
 }
 
 
-find_principal=function(principal)
+find_principal <- function(principal)
 {
     if(is_user(principal) || is_service_principal(principal))
         principal$properties$id

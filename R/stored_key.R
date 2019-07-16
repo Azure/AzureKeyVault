@@ -81,7 +81,7 @@
 #' dig <- openssl::sha2(charToRaw(plaintext))
 #' sig <- key$sign(dig)
 #' key$verify(sig, dig)  # TRUE
-#' 
+#'
 #' wraptext <- key$wrap(plaintext)
 #' unwrap_text <- key$unwrap(wraptext, as_raw=FALSE)
 #' plaintext == unwrap_text  # TRUE

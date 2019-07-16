@@ -79,13 +79,13 @@
 #' bak <- vault$keys$backup("mynewkey")
 #' vault$keys$delete("mynewkey", confirm=FALSE)
 #' vault$keys$restore(bak)
-#' 
+#'
 #' }
 #' @name keys
 #' @rdname keys
 NULL
 
-vault_keys <- R6::R6Class("vault_keys", 
+vault_keys <- R6::R6Class("vault_keys",
 
 public=list(
 
@@ -129,7 +129,7 @@ public=list(
 
     list=function(include_managed=FALSE)
     {
-        objs <- get_vault_paged_list(self$do_operation(), self$token) 
+        objs <- get_vault_paged_list(self$do_operation(), self$token)
         lst <- lapply(objs, function(props)
             if(!include_managed && isTRUE(props$managed)) NULL else basename(props$kid))
         unlist(compact(lst))
@@ -145,7 +145,7 @@ public=list(
     {
         stopifnot(is.character(backup))
         op <- construct_path(name, "restore")
-        self$do_operation(op, body=list(value=backup), encode="json", http_verb="POST") 
+        self$do_operation(op, body=list(value=backup), encode="json", http_verb="POST")
     },
 
     import=function(name, key, hardware=FALSE, attributes=vault_object_attrs(), ...)

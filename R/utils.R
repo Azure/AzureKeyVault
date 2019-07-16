@@ -81,7 +81,7 @@ error_message <- function(cont)
             cont$error$message
         else if(is.list(cont$odata.error))
             cont$odata.error$message$value
-    } 
+    }
     else ""
 
     gsub("\r", "", paste0(strwrap(msg), collapse="\n"))
@@ -113,10 +113,10 @@ delete_confirmed <- function(confirm, name, type)
 {
     if(!interactive())
         return(TRUE)
-    
+
     if(!confirm)
         return(TRUE)
-    
+
     msg <- sprintf("Do you really want to delete the %s '%s'? (y/N) ", type, name)
     yn <- readline(msg)
     return(tolower(substr(yn, 1, 1)) == "y")

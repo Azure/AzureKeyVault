@@ -60,7 +60,7 @@
 #' @rdname secrets
 NULL
 
-vault_secrets <- R6::R6Class("vault_secrets", 
+vault_secrets <- R6::R6Class("vault_secrets",
 
 public=list(
 
@@ -95,7 +95,7 @@ public=list(
 
     list=function(include_managed=FALSE)
     {
-        objs <- get_vault_paged_list(self$do_operation(), self$token) 
+        objs <- get_vault_paged_list(self$do_operation(), self$token)
         lst <- lapply(objs, function(props)
             if(!include_managed && isTRUE(props$managed)) NULL else basename(props$id))
         unlist(compact(lst))
@@ -109,7 +109,7 @@ public=list(
     restore=function(name, backup)
     {
         stopifnot(is.character(backup))
-        self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
+        self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST")
     },
 
     do_operation=function(op="", ..., options=list())

@@ -145,7 +145,7 @@ add_methods <- function()
         creds <- AzureAuth::decode_jwt(self$token$credentials$access_token)
         tenant <- creds$payload$tid
 
-        default_access=function()
+        default_access <- function()
         {
             principal <- creds$payload$oid
             list(vault_access_policy(principal, tenant, "all", "all", "all", "all"))
@@ -185,7 +185,7 @@ add_methods <- function()
         self$get_key_vault(name)$delete(confirm=confirm, wait=wait)
     })
 
-    
+
     AzureRMR::az_resource_group$set("public", "list_key_vaults", overwrite=TRUE,
     function()
     {

@@ -42,7 +42,7 @@ cert_key_properties <- function(type=c("RSA", "EC"), hardware=FALSE, ec_curve=NU
 
 #' @rdname helpers
 #' @export
-cert_x509_properties=function(dns_names=character(), emails=character(), upns=character(),
+cert_x509_properties <- function(dns_names=character(), emails=character(), upns=character(),
                               key_usages=c("digitalSignature", "keyEncipherment"),
                               enhanced_key_usages=c("1.3.6.1.5.5.7.3.1", "1.3.6.1.5.5.7.3.2"),
                               validity_months=NULL)
@@ -55,7 +55,7 @@ cert_x509_properties=function(dns_names=character(), emails=character(), upns=ch
 
 #' @rdname helpers
 #' @export
-cert_issuer_properties=function(issuer="self", cert_type=NULL, transparent=NULL)
+cert_issuer_properties <- function(issuer="self", cert_type=NULL, transparent=NULL)
 {
     compact(list(name=issuer, cty=cert_type, cert_transparency=transparent))
 }

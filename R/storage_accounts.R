@@ -66,14 +66,14 @@
 #' bak <- vault$storage$backup("mystor")
 #' vault$storage$delete("mystor", confirm=FALSE)
 #' vault$storage$restore(bak)
-#' 
+#'
 #' }
 #' @name storage_accounts
 #' @aliases storage_accounts storage
 #' @rdname storage_accounts
 NULL
 
-vault_storage_accounts <- R6::R6Class("vault_storage_accounts", 
+vault_storage_accounts <- R6::R6Class("vault_storage_accounts",
 
 public=list(
 
@@ -97,7 +97,7 @@ public=list(
 
         # some attributes not used for storage accounts
         attributes$nbf <- attributes$exp <- NULL
-        
+
         body <- list(resourceId=storage_account, activeKeyName=key_name,
             autoRegenerateKey=regen_key, regenerationPeriod=regen_period,
             attributes=attributes, tags=list(...))
@@ -132,7 +132,7 @@ public=list(
     restore=function(name, backup)
     {
         stopifnot(is.character(backup))
-        self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST") 
+        self$do_operation("restore", body=list(value=backup), encode="json", http_verb="POST")
     },
 
     do_operation=function(op="", ..., options=list(),
