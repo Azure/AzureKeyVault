@@ -3,8 +3,6 @@ call_vault_url <- function(token, url, ..., body=NULL, encode="json",
                            http_verb=c("GET", "DELETE", "PUT", "POST", "HEAD", "PATCH"),
                            http_status_handler=c("stop", "warn", "message", "pass"))
 {
-    headers <- process_headers(token, ...)
-
     if(!inherits(url, "url"))
         url <- httr::parse_url(url)
 
@@ -12,6 +10,7 @@ call_vault_url <- function(token, url, ..., body=NULL, encode="json",
         url$query <- list()
 
     url$query <- utils::modifyList(url$query, list(`api-version`=api_version))
+    headers <- process_headers(token, url)
 
     # if content-type is json, serialize it manually to ensure proper handling of nulls
     if(encode == "json")
@@ -26,9 +25,10 @@ call_vault_url <- function(token, url, ..., body=NULL, encode="json",
 }
 
 
-process_headers <- function(token, ...)
+process_headers <- function(token, url)
 {
     headers <- c(
+        Host=url$hostname,
         Authorization=paste("Bearer", validate_token(token)),
         `Content-type`="application/json"
     )
