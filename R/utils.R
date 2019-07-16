@@ -1,4 +1,4 @@
-call_vault_url <- function(token, url, ...,
+call_vault_url <- function(token, url, ..., body=NULL, encode="json",
                            api_version=getOption("azure_keyvault_api_version"),
                            http_verb=c("GET", "DELETE", "PUT", "POST", "HEAD", "PATCH"),
                            http_status_handler=c("stop", "warn", "message", "pass"))
@@ -12,21 +12,26 @@ call_vault_url <- function(token, url, ...,
         url$query <- list()
 
     url$query <- utils::modifyList(url$query, list(`api-version`=api_version))
-    res <- httr::VERB(match.arg(http_verb), url, headers, ...)
+
+    # if content-type is json, serialize it manually to ensure proper handling of nulls
+    if(encode == "json")
+    {
+        empty <- vapply(body, is_empty, logical(1))
+        body <- jsonlite::toJSON(body[!empty], auto_unbox=TRUE, digits=22, null="null")
+        encode <- "raw"
+    }
+
+    res <- httr::VERB(match.arg(http_verb), url, headers, body=body, encode=encode, ...)
     process_response(res, match.arg(http_status_handler))
 }
 
 
 process_headers <- function(token, ...)
 {
-    token <- validate_token(token)
-    headers <- c(Authorization=paste("Bearer", token))
-
-    # default content-type is json, set this if encoding not specified
-    dots <- list(...)
-    if(is_empty(dots) || !("encode" %in% names(dots)) || dots$encode == "raw")
-        headers <- c(headers, `Content-type`="application/json")
-
+    headers <- c(
+        Authorization=paste("Bearer", validate_token(token)),
+        `Content-type`="application/json"
+    )
     httr::add_headers(.headers=headers)
 }
 
