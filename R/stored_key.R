@@ -208,7 +208,7 @@ public=list(
         cat("Key Vault stored key '", self$name, "'\n", sep="")
         cat("  Version:", if(is.null(self$version)) "<default>" else self$version, "\n")
 
-        key_props <- if(self$key$kty == "RSA")
+        key_props <- if(self$key$kty %in% c("RSA", "RSA-HSM"))
             paste0(length(jose::base64url_decode(self$key$n)) * 8, "-bit")
         else self$key$crv
         type <- paste(self$key$kty, key_props, sep="/")
