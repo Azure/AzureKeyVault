@@ -1,8 +1,8 @@
-# AzureKeyVault
+# AzureKeyVault <img src="man/figures/logo.png" align="right" width=150 />
 
 [![CRAN](https://www.r-pkg.org/badges/version/AzureKeyVault)](https://cran.r-project.org/package=AzureKeyVault)
 ![Downloads](https://cranlogs.r-pkg.org/badges/AzureKeyVault)
-[![Travis Build Status](https://travis-ci.org/Azure/AzureKeyVault.png?branch=master)](https://travis-ci.org/Azure/AzureKeyVault)
+[![Travis Build Status](https://travis-ci.org/Azure/AzureKeyVault.svg?branch=master)](https://travis-ci.org/Azure/AzureKeyVault)
 
 [Azure Key Vault](https://azure.microsoft.com/services/key-vault/) enables Microsoft Azure applications and users to store and use several types of secret/key data:
 
@@ -103,4 +103,4 @@ stor$create_sas_definition("newsas", sasdef, validity_period="P30D")
 ```
 
 ---
-[![cloudyr project logo](https://i.imgur.com/JHS98Y7.png)](https://github.com/cloudyr)
+<p align="center"><a href="https://github.com/Azure/AzureR"><img src="https://github.com/Azure/AzureR/raw/master/images/logo2.png" width=800 /></a></p>
