@@ -116,14 +116,19 @@ get_vault_paged_list <- function(lst, token, next_link_name="nextLink", value_na
 # TRUE if delete confirmed, FALSE otherwise
 delete_confirmed <- function(confirm, name, type)
 {
-    if(!interactive())
+    if(!interactive() || !confirm)
         return(TRUE)
 
-    if(!confirm)
-        return(TRUE)
-
-    msg <- sprintf("Do you really want to delete the %s '%s'? (y/N) ", type, name)
-    yn <- readline(msg)
-    return(tolower(substr(yn, 1, 1)) == "y")
+    msg <- sprintf("Do you really want to delete the %s '%s'?", type, name)
+    ok <- if(getRversion() < numeric_version("3.5.0"))
+    {
+        msg <- paste(msg, "(yes/No/cancel) ")
+        yn <- readline(msg)
+        if(nchar(yn) == 0)
+            FALSE
+        else tolower(substr(yn, 1, 1)) == "y"
+    }
+    else utils::askYesNo(msg, FALSE)
+    isTRUE(ok)
 }
 
