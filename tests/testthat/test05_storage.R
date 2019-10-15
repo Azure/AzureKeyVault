@@ -14,7 +14,7 @@ if(tenant == "" || app == "" || password == "" || vaultname == "" ||
 
 # currently storage acct management requires a user principal, not svc principal
 #vault <- key_vault(vaultname, tenant=tenant, app=app, password=password)
-vault <- key_vault(vaultname)
+vault <- key_vault(vaultname, tenant=tenant)
 
 try({
     vault$storage$remove("stor1", confirm=FALSE)

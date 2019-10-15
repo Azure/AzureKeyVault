@@ -46,7 +46,7 @@ test_that("Access policy function works",
         I(c("backup", "delete", "deletesas", "get", "getsas", "list", "listsas",
             "purge", "recover", "regeneratekey", "restore", "set", "setsas", "update")))
 
-    expect_error(vault_access_policy(username)) # must supply GUID or Graph object as principal
+    expect_error(vault_access_policy("user@example.com")) # must supply GUID or Graph object as principal
     expect_error(vault_access_policy(usr, NULL, key_permissions="none"))
     expect_error(vault_access_policy(usr, NULL, secret_permissions="none"))
     expect_error(vault_access_policy(usr, NULL, certificate_permissions="none"))
