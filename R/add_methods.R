@@ -39,7 +39,7 @@
 #' Soft-deleted vaults can be purged (permanently removed) by calling the `purge_key_vault` method for the resource group or subscription classes. The purge protection optional feature provides an additional layer of protection by forbidding manual purges; when this is on, a vault or an object in deleted state cannot be purged until the retention period of 90 days has passed.
 #'
 #' To see what soft-deleted key vaults exist, call the `list_deleted_key_vaults` method. To recover a soft-deleted key vault, call the `create_key_vault` method from the vault's original resource group, with the vault name. To purge (permanently delete) it, call the `purge_key_vault` method.
-#' 
+#'
 #' @section Value:
 #' An object of class `az_key_vault` representing the created key vault.
 #'
@@ -222,7 +222,7 @@ NULL
 #' - `location`: The location (region) of the vault.
 #' - `deletion_date`: When the vault was soft-deleted.
 #' - `purge_date`: When the vault is scheduled to be purged (permanently deleted).
-#' - `protected`: Whether the vault has purge protection enabled. If TRUE, manual attempts to purge it will fail. 
+#' - `protected`: Whether the vault has purge protection enabled. If TRUE, manual attempts to purge it will fail.
 #'
 #' @seealso
 #' [create_key_vault], [get_key_vault], [delete_key_vault], [purge_key_vault], [az_key_vault],
