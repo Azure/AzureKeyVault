@@ -71,3 +71,7 @@ test_that("Resource hard delete works",
     # purge should be a no-op with hard delete
     expect_message(rg2$delete_key_vault(kvhardname, confirm=FALSE, purge=TRUE))
 })
+
+
+rg$delete(confirm=FALSE)
+rg2$delete(confirm=FALSE)
