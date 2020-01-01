@@ -19,6 +19,11 @@ Method for the \link[AzureRMR:az_resource_group]{AzureRMR::az_resource_group} cl
 \item \code{location}: The location/region in which to create the account. Defaults to the resource group location.
 \item \code{initial_access}: The user or service principals that will have access to the vault. This should be a list of objects of type \code{[vault_access_policy]}, created by the function of the same name. The default is to grant access to the logged-in user or service principal of the current Resource Manager client.
 \item \code{sku}: The sku for the vault. Set this to "Premium" to enable the use of hardware security modules (HSMs).
+\item \code{allow_vm_access}: Whether to allow Azure virtual machines to retrieve certificates from the vault.
+\item \code{allow_arm_access}: Whether to allow Azure Resource Manager to retrieve secrets from the vault for template deployment purposes.
+\item \code{allow_disk_encryption_access}: Whether to allow Azure Disk Encryption to retrieve secrets and keys from the vault.
+\item \code{soft_delete}: Whether soft-deletion should be enabled for this vault. Soft-deletion is a feature which protects both the vault itself and its contents from accidental/malicious deletion; see below.
+\item \code{purge_protection}: Whether purge protection is enabled. If this is TRUE and soft-deletion is enabled for the vault, manual purges are not allowed. Has no effect if \code{soft_delete=FALSE}.
 \item \code{...}: Other named arguments to pass to the \link{az_key_vault} initialization function.
 \item \code{wait}: Whether to wait for the resource creation to complete before returning.
 }
@@ -29,6 +34,18 @@ Method for the \link[AzureRMR:az_resource_group]{AzureRMR::az_resource_group} cl
 This method deploys a new key vault resource, with parameters given by the arguments. A key vault is a secure facility for storing and managing encryption keys, certificates, storage account keys, and generic secrets.
 
 A new key vault will have access granted to the user or service principal used to sign in to the Azure Resource Manager client. To manage access policies after creation, use the \code{add_principal}, \code{list_principals} and \code{remove_principal} methods of the key vault object.
+
+Key Vault's soft delete feature allows recovery of the deleted vaults and vault objects, known as soft-delete. Specifically, it addresses the following scenarios:
+\itemize{
+\item Support for recoverable deletion of a key vault
+\item Support for recoverable deletion of key vault objects (keys, secrets, certificates)
+}
+
+With this feature, the delete operation on a key vault or key vault object is a soft-delete, effectively holding the resources for a given retention period (90 days), while giving the appearance that the object is deleted. The service further provides a mechanism for recovering the deleted object, essentially undoing the deletion.
+
+Soft-deleted vaults can be purged (permanently removed) by calling the \code{purge_key_vault} method for the resource group or subscription classes. The purge protection optional feature provides an additional layer of protection by forbidding manual purges; when this is on, a vault or an object in deleted state cannot be purged until the retention period of 90 days has passed.
+
+To see what soft-deleted key vaults exist, call the \code{list_deleted_key_vaults} method. To recover a soft-deleted key vault, call the \code{create_key_vault} method from the vault's original resource group, with the vault name. To purge (permanently delete) it, call the \code{purge_key_vault} method.
 }
 
 \section{Value}{
@@ -55,7 +72,7 @@ rg$create_key_vault("mykeyvault",
 }
 }
 \seealso{
-\link{get_key_vault}, \link{delete_key_vault}, \link{az_key_vault}, \link{vault_access_policy}
+\link{get_key_vault}, \link{delete_key_vault}, \link{purge_key_vault}, \link{az_key_vault}, \link{vault_access_policy}
 
 \href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
 \href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}

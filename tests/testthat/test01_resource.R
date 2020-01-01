@@ -89,6 +89,7 @@ test_that("Access policy management works",
 test_that("Resource deletion works",
 {
     expect_message(rg$delete_key_vault(kvname, confirm=FALSE))
+    expect_silent(rg$purge_key_vault(kvname, rg$location, confirm=FALSE))
 })
 
 

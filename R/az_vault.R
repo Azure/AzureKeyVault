@@ -164,6 +164,19 @@ public=list(
     {
         url <- self$properties$vaultUri
         key_vault(url=url, tenant=tenant, app=app, password=password, ...)
+    },
+
+    delete=function(confirm=TRUE, wait=FALSE, purge=FALSE)
+    {
+        if(purge) wait <- TRUE
+
+        super$delete(confirm, wait)
+        if(purge && isTRUE(self$properties$enableSoftDelete))
+        {
+            sub <- az_subscription$new(self$token, self$subscription)
+            sub$purge_key_vault(self$name, self$location, confirm)
+        }
+        invisible(NULL)
     }
 ))
 
