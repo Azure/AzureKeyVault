@@ -4,7 +4,7 @@
 \name{az_key_vault}
 \alias{az_key_vault}
 \title{Key vault resource class}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
+\format{An object of class \code{R6ClassGenerator} of length 25.}
 \usage{
 az_key_vault
 }
