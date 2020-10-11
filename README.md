@@ -2,7 +2,7 @@
 
 [![CRAN](https://www.r-pkg.org/badges/version/AzureKeyVault)](https://cran.r-project.org/package=AzureKeyVault)
 ![Downloads](https://cranlogs.r-pkg.org/badges/AzureKeyVault)
-[![Build Status](https://asiadatascience.visualstudio.com/AzureR/_apis/build/status/Azure.AzureKeyVault?branchName=master)](https://asiadatascience.visualstudio.com/AzureR/_build/latest?definitionId=9&branchName=master)
+![R-CMD-check](https://github.com/Azure/AzureKeyVault/workflows/R-CMD-check/badge.svg)
 
 [Azure Key Vault](https://azure.microsoft.com/services/key-vault/) enables Microsoft Azure applications and users to store and use several types of secret/key data:
 
