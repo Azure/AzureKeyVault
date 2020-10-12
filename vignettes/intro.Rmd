@@ -205,7 +205,7 @@ AzureAuth::get_azure_token("resource_url", "mytenant", certapp$properties$appId,
 
 ### Storage accounts
 
-Key Vault can be configured to manage access to an [Azure Storage Account](https://azure.microsoft.com/Services/Storage), by automatically regenerating access keys and saving commonly-used access patterns as shared access signature (SAS) templates. The `storage` component of the client object provides methods for working with managed accounts:
+Key Vault can be configured to manage access to an [Azure Storage Account](https://azure.microsoft.com/services/storage/), by automatically regenerating access keys and saving commonly-used access patterns as shared access signature (SAS) templates. The `storage` component of the client object provides methods for working with managed accounts:
 
 - `add`: Add a new storage account.
 - `get`: Retrieve an existing account.
