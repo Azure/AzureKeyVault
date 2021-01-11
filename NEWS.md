@@ -1,7 +1,3 @@
-# AzureKeyVault 1.0.4.9000
-
-- Transfer to AzureRSDK org on GitHub.
-
 # AzureKeyVault 1.0.4
 
 - Change maintainer email address.
