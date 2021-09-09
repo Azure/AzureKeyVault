@@ -19,13 +19,13 @@ key_vault(
 
 \item{tenant, app, }{Authentication arguments that will be passed to \code{\link[AzureAuth:get_azure_token]{AzureAuth::get_azure_token}}. The default is to authenticate interactively.}
 
-\item{...}{Further arguments that will be passed to either \verb{get_azure_token or [}AzureAuth::get_managed_token\verb{], depending on whether }as_managed_identity` is TRUE.}
+\item{...}{Further arguments that will be passed to either \code{get_azure_token} or \code{\link[AzureAuth:get_azure_token]{AzureAuth::get_managed_token}}, depending on whether \code{as_managed_identity} is TRUE.}
 
 \item{domain}{The domain of the vault; for the public Azure cloud, this is \code{vault.azure.net}. Also the resource for OAuth authentication.}
 
 \item{as_managed_identity}{Whether to authenticate as a managed identity. Use this if your R session is taking place inside an Azure VM or container that has a system- or user-assigned managed identity assigned to it.}
 
-\item{token}{An OAuth token obtained via \code{\link[AzureAuth:get_azure_token]{AzureAuth::get_azure_token}}. If provided, this overrides the other authentication arguments.}
+\item{token}{An OAuth token obtained via \code{get_azure_token} or \code{get_managed_token}. If provided, this overrides the other authentication arguments.}
 }
 \description{
 Azure Key Vault client

@@ -81,8 +81,8 @@ AzureKeyVault <- R6::R6Class("AzureKeyVault", public=list(
 #' @param tenant,app, Authentication arguments that will be passed to [`AzureAuth::get_azure_token`]. The default is to authenticate interactively.
 #' @param domain The domain of the vault; for the public Azure cloud, this is `vault.azure.net`. Also the resource for OAuth authentication.
 #' @param as_managed_identity Whether to authenticate as a managed identity. Use this if your R session is taking place inside an Azure VM or container that has a system- or user-assigned managed identity assigned to it.
-#' @param token An OAuth token obtained via [`AzureAuth::get_azure_token`]. If provided, this overrides the other authentication arguments.
-#' @param ... Further arguments that will be passed to either `get_azure_token or [`AzureAuth::get_managed_token`], depending on whether `as_managed_identity` is TRUE.
+#' @param ... Further arguments that will be passed to either `get_azure_token` or [`AzureAuth::get_managed_token`], depending on whether `as_managed_identity` is TRUE.
+#' @param token An OAuth token obtained via `get_azure_token` or `get_managed_token`. If provided, this overrides the other authentication arguments.
 #'
 #' @details
 #' This function creates a new Key Vault client object. It includes the following component objects for working with data in the vault:
