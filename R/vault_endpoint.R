@@ -132,8 +132,8 @@ key_vault <- function(url, tenant="common", app=.az_cli_app_id, ..., domain="vau
     if(is.null(token))
     {
         token <- if(as_managed_identity)
-            get_managed_token(sprintf("https://%s", domain), ...)
-        else get_azure_token(sprintf("https://%s", domain), tenant=tenant, app=app, ...)
+            AzureAuth::get_managed_token(sprintf("https://%s", domain), ...)
+        else AzureAuth::get_azure_token(sprintf("https://%s", domain), tenant=tenant, app=app, ...)
     }
 
     AzureKeyVault$new(token, httr::parse_url(url))
