@@ -4,10 +4,6 @@
 \name{az_key_vault}
 \alias{az_key_vault}
 \title{Key vault resource class}
-\format{An object of class \code{R6ClassGenerator} of length 25.}
-\usage{
-az_key_vault
-}
 \description{
 Class representing a key vault, exposing methods for working with it.
 }
@@ -56,7 +52,7 @@ To revoke access, use the \code{remove_principal} method. To view the current ac
 
 \section{Endpoint}{
 
-The client-side interaction with a key vault is via its \emph{endpoint}, which is usually at the URL \code{https://[vaultname].vault.azure.net}. The \code{get_endpoint} method returns an R6 object of class \code{key_vault}, which represents the endpoint. Authenticating with the endpoint is done via an OAuth token; the necessary credentials are taken from the current Resource Manager client in use, or you can supply your own.\preformatted{get_endpoint(tenant = self$token$tenant,
+The client-side interaction with a key vault is via its \emph{endpoint}, which is usually at the URL \verb{https://[vaultname].vault.azure.net}. The \code{get_endpoint} method returns an R6 object of class \code{key_vault}, which represents the endpoint. Authenticating with the endpoint is done via an OAuth token; the necessary credentials are taken from the current Resource Manager client in use, or you can supply your own.\preformatted{get_endpoint(tenant = self$token$tenant,
              app = self$token$client$client_id,
              password = self$token$client$client_secret, ...)
 }
@@ -105,9 +101,8 @@ vault <- kv$get_endpoint()
 \seealso{
 \link{vault_access_policy}, \link{key_vault}
 \link{create_key_vault}, \link{get_key_vault}, \link{delete_key_vault},
-\link[AzureGraph:get_graph_login]{AzureGraph::get_graph_login}, \link[AzureGraph:az_user]{AzureGraph::az_user}, \link[AzureGraph:az_app]{AzureGraph::az_app}, \link[AzureGraph:az_service_principal]{AzureGraph::az_service_principal}
+\link[AzureGraph:graph_login]{AzureGraph::get_graph_login}, \link[AzureGraph:az_user]{AzureGraph::az_user}, \link[AzureGraph:az_app]{AzureGraph::az_app}, \link[AzureGraph:az_service_principal]{AzureGraph::az_service_principal}
 
 \href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
 \href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }
-\keyword{datasets}

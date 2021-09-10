@@ -8,23 +8,34 @@
 \alias{vault_object_attrs}
 \title{Helper functions for key vault objects}
 \usage{
-cert_key_properties(type = c("RSA", "EC"), hardware = FALSE,
-  ec_curve = NULL, rsa_key_size = NULL, key_exportable = TRUE,
-  reuse_key = FALSE)
+cert_key_properties(
+  type = c("RSA", "EC"),
+  hardware = FALSE,
+  ec_curve = NULL,
+  rsa_key_size = NULL,
+  key_exportable = TRUE,
+  reuse_key = FALSE
+)
 
-cert_x509_properties(dns_names = character(), emails = character(),
-  upns = character(), key_usages = c("digitalSignature",
-  "keyEncipherment"), enhanced_key_usages = c("1.3.6.1.5.5.7.3.1",
-  "1.3.6.1.5.5.7.3.2"), validity_months = NULL)
+cert_x509_properties(
+  dns_names = character(),
+  emails = character(),
+  upns = character(),
+  key_usages = c("digitalSignature", "keyEncipherment"),
+  enhanced_key_usages = c("1.3.6.1.5.5.7.3.1", "1.3.6.1.5.5.7.3.2"),
+  validity_months = NULL
+)
 
-cert_issuer_properties(issuer = "self", cert_type = NULL,
-  transparent = NULL)
+cert_issuer_properties(issuer = "self", cert_type = NULL, transparent = NULL)
 
-cert_expiry_action(remaining = 0.1, action = c("AutoRenew",
-  "EmailContacts"))
+cert_expiry_action(remaining = 0.1, action = c("AutoRenew", "EmailContacts"))
 
-vault_object_attrs(enabled = TRUE, expiry_date = NULL,
-  activation_date = NULL, recovery_level = NULL)
+vault_object_attrs(
+  enabled = TRUE,
+  expiry_date = NULL,
+  activation_date = NULL,
+  recovery_level = NULL
+)
 }
 \arguments{
 \item{type}{For \code{cert_key_properties}, the type of key to create: RSA or elliptic curve (EC). Note that for keys backing a certificate, only RSA is allowed.}

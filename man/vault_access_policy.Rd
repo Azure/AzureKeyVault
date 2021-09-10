@@ -4,9 +4,14 @@
 \alias{vault_access_policy}
 \title{Specify a key vault access policy}
 \usage{
-vault_access_policy(principal, tenant = NULL, key_permissions = "all",
-  secret_permissions = "all", certificate_permissions = "all",
-  storage_permissions = "all")
+vault_access_policy(
+  principal,
+  tenant = NULL,
+  key_permissions = "all",
+  secret_permissions = "all",
+  certificate_permissions = "all",
+  storage_permissions = "all"
+)
 }
 \arguments{
 \item{principal}{The user or service principal for this access policy. Can be a GUID, or a user, app or service principal object from the AzureGraph package.}

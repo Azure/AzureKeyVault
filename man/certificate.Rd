@@ -47,7 +47,7 @@ delete(confirm=TRUE)
 \item \code{file}: For \code{export} and \code{export_cer}, a connection object or a character string naming a file to export to.
 \item \code{digest}: For \code{sign}, a hash digest string to sign. For \code{verify}, a digest to compare to a signature.
 \item \code{signature}: For \code{verify}, a signature string.
-\item \code{subject,x509,issuer,key,secret_type,actions,wait}: These are the same arguments as used when creating a new certificate. See \link{certificates} for more information.
+\item \verb{subject,x509,issuer,key,secret_type,actions,wait}: These are the same arguments as used when creating a new certificate. See \link{certificates} for more information.
 \item \code{attributes}: For \code{update_attributes}, the new attributes for the object, such as the expiry date and activation date. A convenient way to provide this is via the \link{vault_object_attrs} helper function.
 \item \code{...}: For \code{update_attributes}, additional key-specific properties to update. For \code{sign} and \code{verify}, additional arguments for the corresponding key object methods. See \link{keys} and \link{key}.
 \item \code{version}: For \code{set_version}, the version ID or NULL for the current version.
