@@ -4,17 +4,28 @@
 \alias{key_vault}
 \title{Azure Key Vault client}
 \usage{
-key_vault(url, tenant = "common", app = .az_cli_app_id, ...,
-  domain = "vault.azure.net", token = NULL)
+key_vault(
+  url,
+  tenant = "common",
+  app = .az_cli_app_id,
+  ...,
+  domain = "vault.azure.net",
+  as_managed_identity = FALSE,
+  token = NULL
+)
 }
 \arguments{
 \item{url}{The location of the vault. This can be a full URL, or the vault name alone; in the latter case, the \code{domain} argument is appended to obtain the URL.}
 
-\item{tenant, app, ...}{Authentication arguments that will be passed to \link[AzureAuth:get_azure_token]{AzureAuth::get_azure_token}. The default is to authenticate interactively.}
+\item{tenant, app, }{Authentication arguments that will be passed to \code{\link[AzureAuth:get_azure_token]{AzureAuth::get_azure_token}}. The default is to authenticate interactively.}
+
+\item{...}{Further arguments that will be passed to either \code{get_azure_token} or \code{\link[AzureAuth:get_azure_token]{AzureAuth::get_managed_token}}, depending on whether \code{as_managed_identity} is TRUE.}
 
 \item{domain}{The domain of the vault; for the public Azure cloud, this is \code{vault.azure.net}. Also the resource for OAuth authentication.}
 
-\item{token}{An OAuth token obtained via \link[AzureAuth:get_azure_token]{AzureAuth::get_azure_token}. If provided, this overrides the other authentication arguments.}
+\item{as_managed_identity}{Whether to authenticate as a managed identity. Use this if your R session is taking place inside an Azure VM or container that has a system- or user-assigned managed identity assigned to it.}
+
+\item{token}{An OAuth token obtained via \code{get_azure_token} or \code{get_managed_token}. If provided, this overrides the other authentication arguments.}
 }
 \description{
 Azure Key Vault client
@@ -42,10 +53,18 @@ token <- AzureAuth::get_azure_token("https://vault.azure.net", "myaadtenant",
                                     app="app_id", password="password")
 key_vault("mykeyvault", token=token)
 
+# authenticating with a system-assigned managed identity
+key_vault("mykeyvault", as_managed_identity=TRUE)
+
+# authenticating with a user-assigned managed identity:
+# - supply one of the identity's object ID, client ID or resource ID
+key_vault("mykeyvault", as_managed_identity=TRUE,
+    token_args=list(mi_res_id="/subscriptions/xxxx/resourceGroups/resgrpname/..."))
+
 }
 }
 \seealso{
-\link{keys}, \link{secrets}, \link{certificates}, \link{storage}
+\code{\link{keys}}, \code{\link{secrets}}, \code{\link{certificates}}, \code{\link{storage}}
 
 \href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
 \href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}

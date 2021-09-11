@@ -4,12 +4,8 @@
 \name{AzureKeyVault}
 \alias{AzureKeyVault}
 \title{Azure Key Vault endpoint class}
-\format{An object of class \code{R6ClassGenerator} of length 25.}
-\usage{
-AzureKeyVault
-}
 \description{
-Class representing the client endpoint for a key vault, exposing methods for working with it. Use the \code{[key_vault]} function to instantiate new objects of this class.
+Class representing the client endpoint for a key vault, exposing methods for working with it. Use the \verb{[key_vault]} function to instantiate new objects of this class.
 }
 \section{Fields}{
 
@@ -43,4 +39,3 @@ key_vault("mykeyvault", token=token)
 \href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
 \href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }
-\keyword{datasets}

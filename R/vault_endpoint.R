@@ -78,9 +78,11 @@ AzureKeyVault <- R6::R6Class("AzureKeyVault", public=list(
 #' Azure Key Vault client
 #'
 #' @param url The location of the vault. This can be a full URL, or the vault name alone; in the latter case, the `domain` argument is appended to obtain the URL.
-#' @param tenant,app,... Authentication arguments that will be passed to [AzureAuth::get_azure_token]. The default is to authenticate interactively.
+#' @param tenant,app, Authentication arguments that will be passed to [`AzureAuth::get_azure_token`]. The default is to authenticate interactively.
 #' @param domain The domain of the vault; for the public Azure cloud, this is `vault.azure.net`. Also the resource for OAuth authentication.
-#' @param token An OAuth token obtained via [AzureAuth::get_azure_token]. If provided, this overrides the other authentication arguments.
+#' @param as_managed_identity Whether to authenticate as a managed identity. Use this if your R session is taking place inside an Azure VM or container that has a system- or user-assigned managed identity assigned to it.
+#' @param ... Further arguments that will be passed to either `get_azure_token` or [`AzureAuth::get_managed_token`], depending on whether `as_managed_identity` is TRUE.
+#' @param token An OAuth token obtained via `get_azure_token` or `get_managed_token`. If provided, this overrides the other authentication arguments.
 #'
 #' @details
 #' This function creates a new Key Vault client object. It includes the following component objects for working with data in the vault:
@@ -91,7 +93,7 @@ AzureKeyVault <- R6::R6Class("AzureKeyVault", public=list(
 #' - `storage`: A sub-object for working with storage accounts managed by the vault. See [storage].
 #'
 #' @seealso
-#' [keys], [secrets], [certificates], [storage]
+#' [`keys`], [`secrets`], [`certificates`], [`storage`]
 #'
 #' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
 #' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
@@ -110,16 +112,29 @@ AzureKeyVault <- R6::R6Class("AzureKeyVault", public=list(
 #'                                     app="app_id", password="password")
 #' key_vault("mykeyvault", token=token)
 #'
+#' # authenticating with a system-assigned managed identity
+#' key_vault("mykeyvault", as_managed_identity=TRUE)
+#'
+#' # authenticating with a user-assigned managed identity:
+#' # - supply one of the identity's object ID, client ID or resource ID
+#' key_vault("mykeyvault", as_managed_identity=TRUE,
+#'     token_args=list(mi_res_id="/subscriptions/xxxx/resourceGroups/resgrpname/..."))
+#'
 #' }
 #' @export
-key_vault <- function(url, tenant="common", app=.az_cli_app_id, ..., domain="vault.azure.net", token=NULL)
+key_vault <- function(url, tenant="common", app=.az_cli_app_id, ..., domain="vault.azure.net",
+                      as_managed_identity=FALSE, token=NULL)
 {
     if(!is_url(url))
         url <- sprintf("https://%s.%s", url, domain)
 
     # "https://vault.azure.net/" (with trailing slash) will fail
     if(is.null(token))
-        token <- get_azure_token(sprintf("https://%s", domain), tenant=tenant, app=app, ...)
+    {
+        token <- if(as_managed_identity)
+            AzureAuth::get_managed_token(sprintf("https://%s", domain), ...)
+        else AzureAuth::get_azure_token(sprintf("https://%s", domain), tenant=tenant, app=app, ...)
+    }
 
     AzureKeyVault$new(token, httr::parse_url(url))
 }
