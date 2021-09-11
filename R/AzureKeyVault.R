@@ -8,6 +8,6 @@ utils::globalVariables(c("self", "private", "super", "get_paged_list"))
 
 .onLoad <- function(libname, pkgname)
 {
-    options(azure_keyvault_api_version="7.0")
+    options(azure_keyvault_api_version="7.2")
     add_methods()
 }
