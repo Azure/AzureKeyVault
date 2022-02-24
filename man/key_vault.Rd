@@ -25,7 +25,7 @@ key_vault(
 
 \item{as_managed_identity}{Whether to authenticate as a managed identity. Use this if your R session is taking place inside an Azure VM or container that has a system- or user-assigned managed identity assigned to it.}
 
-\item{token}{An OAuth token obtained via \code{get_azure_token} or \code{get_managed_token}. If provided, this overrides the other authentication arguments.}
+\item{token}{An OAuth token obtained via \code{\link[AzureAuth:get_azure_token]{AzureAuth::get_azure_token}} or \code{\link[AzureAuth:get_azure_token]{AzureAuth::get_managed_token}}. If provided, this overrides the other authentication arguments.}
 }
 \description{
 Azure Key Vault client
