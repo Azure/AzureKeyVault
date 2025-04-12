@@ -21,19 +21,21 @@ The following methods are available, in addition to those provided by the \link[
 
 \section{Initialization}{
 
-Initializing a new object of this class can either retrieve an existing key vault, or create a new vault on the host. The recommended way to initialize an object is via the \code{get_key_vault}, \code{create_key_vault} or \code{list_key_vaults} methods of the \link{az_resource_group} class, which handle the details automatically.
+Initializing a new object of this class can either retrieve an existing key vault, or create a new vault on the host. The recommended way to initialize an object is via the \code{get_key_vault}, \code{create_key_vault} or \code{list_key_vaults} methods of the \link[AzureRMR:az_resource_group]{AzureRMR::az_resource_group} class, which handle the details automatically.
 }
 
 \section{Access policies}{
 
 Client access to a key vault is governed by its access policies, which are set on a per-principal basis. Each principal (user or service) can have different permissions granted, for keys, secrets, certificates, and storage accounts.
 
-To grant access, use the \code{add_principal} method. This has signature\preformatted{add_principal(principal, tenant = NULL,
+To grant access, use the \code{add_principal} method. This has signature
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{add_principal(principal, tenant = NULL,
               key_permissions = "all",
               secret_permissions = "all",
               certificate_permissions = "all",
               storage_permissions = "all")
-}
+}\if{html}{\out{</div>}}
 
 The \code{principal} can be a GUID, an object of class \code{vault_access_policy}, or a user, app or service principal object from the AzureGraph package. Note that the app ID of a registered app is not the same as the ID of its service principal.
 
@@ -52,10 +54,12 @@ To revoke access, use the \code{remove_principal} method. To view the current ac
 
 \section{Endpoint}{
 
-The client-side interaction with a key vault is via its \emph{endpoint}, which is usually at the URL \verb{https://[vaultname].vault.azure.net}. The \code{get_endpoint} method returns an R6 object of class \code{key_vault}, which represents the endpoint. Authenticating with the endpoint is done via an OAuth token; the necessary credentials are taken from the current Resource Manager client in use, or you can supply your own.\preformatted{get_endpoint(tenant = self$token$tenant,
+The client-side interaction with a key vault is via its \emph{endpoint}, which is usually at the URL \verb{https://[vaultname].vault.azure.net}. The \code{get_endpoint} method returns an R6 object of class \code{key_vault}, which represents the endpoint. Authenticating with the endpoint is done via an OAuth token; the necessary credentials are taken from the current Resource Manager client in use, or you can supply your own.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{get_endpoint(tenant = self$token$tenant,
              app = self$token$client$client_id,
              password = self$token$client$client_secret, ...)
-}
+}\if{html}{\out{</div>}}
 
 To access the key vault independently of Resource Manager (for example if you are a user without admin or owner access to the vault resource), use the \link{key_vault} function.
 }
@@ -103,6 +107,6 @@ vault <- kv$get_endpoint()
 \link{create_key_vault}, \link{get_key_vault}, \link{delete_key_vault},
 \link[AzureGraph:graph_login]{AzureGraph::get_graph_login}, \link[AzureGraph:az_user]{AzureGraph::az_user}, \link[AzureGraph:az_app]{AzureGraph::az_app}, \link[AzureGraph:az_service_principal]{AzureGraph::az_service_principal}
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

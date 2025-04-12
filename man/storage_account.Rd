@@ -33,7 +33,9 @@ This class provides the following fields:
 
 \section{Methods}{
 
-This class provides the following methods:\preformatted{regenerate_key(key_name)
+This class provides the following methods:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{regenerate_key(key_name)
 create_sas_definition(sas_name, sas_template, validity_period, sas_type="account",
                       enabled=TRUE, recovery_level=NULL, ...)
 delete_sas_definition(sas_name, confirm=TRUE)
@@ -43,14 +45,16 @@ show_sas(sas_name)
 
 update_attributes(attributes=vault_object_attrs(), ...)
 remove(confirm=TRUE)
-}
+}\if{html}{\out{</div>}}
 
 
-This class provides the following methods:\preformatted{update_attributes(attributes=vault_object_attrs(), ...)
+This class provides the following methods:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{update_attributes(attributes=vault_object_attrs(), ...)
 list_versions()
 set_version(version=NULL)
 delete(confirm=TRUE)
-}
+}\if{html}{\out{</div>}}
 }
 
 \section{Arguments}{
@@ -145,11 +149,11 @@ secret$value  # "<hidden>"
 \seealso{
 \link{storage_accounts}
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 
 \link{secrets}
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

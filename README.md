@@ -4,7 +4,7 @@
 ![Downloads](https://cranlogs.r-pkg.org/badges/AzureKeyVault)
 ![R-CMD-check](https://github.com/Azure/AzureKeyVault/workflows/R-CMD-check/badge.svg)
 
-[Azure Key Vault](https://azure.microsoft.com/services/key-vault/) enables Microsoft Azure applications and users to store and use several types of secret/key data:
+[Azure Key Vault](https://azure.microsoft.com/products/key-vault/) enables Microsoft Azure applications and users to store and use several types of secret/key data:
 
 - Cryptographic keys: Supports multiple key types and algorithms, and enables the use of Hardware Security Modules (HSM) for high value keys.
 - Secrets: Provides secure storage of secrets, such as passwords and database connection strings.

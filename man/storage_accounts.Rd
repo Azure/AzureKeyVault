@@ -10,14 +10,16 @@ This class represents the collection of storage accounts managed by a vault. It 
 }
 \section{Methods}{
 
-This class provides the following methods:\preformatted{add(name, storage_account, key_name, regen_key=TRUE, regen_period=30,
+This class provides the following methods:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{add(name, storage_account, key_name, regen_key=TRUE, regen_period=30,
     attributes=vault_object_attrs(), ...)
 get(name)
 remove(name, confirm=TRUE)
 list()
 backup(name)
 restore(backup)
-}
+}\if{html}{\out{</div>}}
 }
 
 \section{Arguments}{
@@ -77,6 +79,6 @@ vault$storage$restore(bak)
 \seealso{
 \link{storage_account}, \link{vault_object_attrs}
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

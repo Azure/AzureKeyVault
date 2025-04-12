@@ -8,7 +8,7 @@ vignette: >
   %\VignetteEncoding{utf8}
 ---
 
-[Azure Key Vault](https://azure.microsoft.com/services/key-vault/) enables Microsoft Azure applications and users to store and use several types of secret/key data:
+[Azure Key Vault](https://azure.microsoft.com/products/key-vault/) enables Microsoft Azure applications and users to store and use several types of secret/key data:
 
 - Cryptographic keys: Supports multiple key types and algorithms, and enables the use of Hardware Security Modules (HSM) for high value keys.
 - Secrets: Provides secure storage of secrets, such as passwords and database connection strings.
@@ -205,7 +205,7 @@ AzureAuth::get_azure_token("resource_url", "mytenant", certapp$properties$appId,
 
 ### Storage accounts
 
-Key Vault can be configured to manage access to an [Azure Storage Account](https://azure.microsoft.com/services/storage/), by automatically regenerating access keys and saving commonly-used access patterns as shared access signature (SAS) templates. The `storage` component of the client object provides methods for working with managed accounts:
+Key Vault can be configured to manage access to an [Azure Storage Account](https://azure.microsoft.com/products/category/storage/), by automatically regenerating access keys and saving commonly-used access patterns as shared access signature (SAS) templates. The `storage` component of the client object provides methods for working with managed accounts:
 
 - `add`: Add a new storage account.
 - `get`: Retrieve an existing account.
@@ -246,6 +246,6 @@ stor$show_sas("newsas")
 
 ## See also
 
-For more information, see the official [Key Vault documentation](https://docs.microsoft.com/en-au/azure/key-vault/).
+For more information, see the official [Key Vault documentation](https://learn.microsoft.com/en-au/azure/key-vault/).
 
 

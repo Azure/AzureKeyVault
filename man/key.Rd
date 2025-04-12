@@ -18,7 +18,9 @@ This class provides the following fields:
 
 \section{Methods}{
 
-This class provides the following methods:\preformatted{encrypt(plaintext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"))
+This class provides the following methods:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{encrypt(plaintext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"))
 decrypt(ciphertext, algorithm=c("RSA-OAEP", "RSA-OAEP-256", "RSA1_5"), as_raw=TRUE)
 sign(digest,
      algorithm=c("RS256", "RS384", "RS512", "PS256", "PS384", "PS512",
@@ -33,7 +35,7 @@ update_attributes(attributes=vault_object_attrs(), ...)
 list_versions()
 set_version(version=NULL)
 delete(confirm=TRUE)
-}
+}\if{html}{\out{</div>}}
 }
 
 \section{Arguments}{
@@ -101,6 +103,6 @@ plaintext == unwrap_text  # TRUE
 \seealso{
 \link{keys}
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

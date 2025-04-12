@@ -1,3 +1,7 @@
+# AzureKeyVault 1.0.6
+
+- Updated web links for CRAN
+
 # AzureKeyVault 1.0.5
 
 - Add `as_managed_identity` argument to `key_vault`, to allow authenticating with a managed identity from inside an Azure VM or container.

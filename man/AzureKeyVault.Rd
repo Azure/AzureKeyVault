@@ -36,6 +36,6 @@ key_vault("mykeyvault", token=token)
 \seealso{
 \link{key_vault}, \link{keys}, \link{secrets}, \link{certificates}, \link{storage}
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

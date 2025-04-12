@@ -7,8 +7,10 @@
 Method for the \link[AzureRMR:az_subscription]{AzureRMR::az_subscription} class.
 }
 \section{Usage}{
-\preformatted{list_deleted_key_vaults()
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{list_deleted_key_vaults()
+}\if{html}{\out{</div>}}
 }
 
 \section{Value}{
@@ -26,6 +28,6 @@ This method returns a data frame with the following columns:
 \seealso{
 \link{create_key_vault}, \link{get_key_vault}, \link{delete_key_vault}, \link{purge_key_vault}, \link{az_key_vault},
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

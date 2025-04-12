@@ -10,7 +10,9 @@ This class represents the collection of certificates stored in a vault. It provi
 }
 \section{Methods}{
 
-This class provides the following methods:\preformatted{create(name, subject, x509=cert_x509_properties(), issuer=cert_issuer_properties(),
+This class provides the following methods:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{create(name, subject, x509=cert_x509_properties(), issuer=cert_issuer_properties(),
        key=cert_key_properties(), format=c("pem", "pkcs12"),
        expiry_action=cert_expiry_action(),
        attributes=vault_object_attrs(),
@@ -29,7 +31,7 @@ add_issuer(issuer, provider, credentials=NULL, details=NULL)
 remove_issuer(issuer)
 get_issuer(issuer)
 list_issuers()
-}
+}\if{html}{\out{</div>}}
 }
 
 \section{Arguments}{
@@ -52,7 +54,7 @@ list_issuers()
 \item \code{issuer}: For the issuer methods, the name by which to refer to an issuer.
 \item \code{provider}: For \code{add_issuer}, the provider name as a string.
 \item \code{credentials}: For \code{add_issuer}, the credentials for the issuer, if required. Should be a list containing the components \code{account_id} and \code{password}.
-\item \code{details}: For \code{add_issuer}, the organisation details, if required. See the \href{https://docs.microsoft.com/en-us/rest/api/keyvault/setcertificateissuer/setcertificateissuer#administratordetails}{Azure docs} for more information.
+\item \code{details}: For \code{add_issuer}, the organisation details, if required. See the \href{https://learn.microsoft.com/en-us/rest/api/keyvault/setcertificateissuer/setcertificateissuer#administratordetails}{Azure docs} for more information.
 }
 }
 
@@ -111,6 +113,6 @@ vault$certificates$create("issuedcert", "CN=mydomain.com",
 \seealso{
 \link{certificate}, \link{cert_key_properties}, \link{cert_x509_properties}, \link{cert_issuer_properties}, \link{vault_object_attrs}
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

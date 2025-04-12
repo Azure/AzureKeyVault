@@ -45,7 +45,7 @@
 #' - `issuer`: For the issuer methods, the name by which to refer to an issuer.
 #' - `provider`: For `add_issuer`, the provider name as a string.
 #' - `credentials`: For `add_issuer`, the credentials for the issuer, if required. Should be a list containing the components `account_id` and `password`.
-#' - `details`: For `add_issuer`, the organisation details, if required. See the [Azure docs](https://docs.microsoft.com/en-us/rest/api/keyvault/setcertificateissuer/setcertificateissuer#administratordetails) for more information.
+#' - `details`: For `add_issuer`, the organisation details, if required. See the [Azure docs](https://learn.microsoft.com/en-us/rest/api/keyvault/setcertificateissuer/setcertificateissuer#administratordetails) for more information.
 #'
 #' @section Value:
 #' For `get`, `create` and `import`, an object of class `stored_certificate`, representing the certificate itself.
@@ -59,8 +59,8 @@
 #' @seealso
 #' [certificate], [cert_key_properties], [cert_x509_properties], [cert_issuer_properties], [vault_object_attrs]
 #'
-#' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
-#' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
+#' [Azure Key Vault documentation](https://learn.microsoft.com/en-us/azure/key-vault/),
+#' [Azure Key Vault API reference](https://learn.microsoft.com/en-us/rest/api/keyvault)
 #'
 #' @examples
 #' \dontrun{

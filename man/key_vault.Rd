@@ -66,6 +66,6 @@ key_vault("mykeyvault", as_managed_identity=TRUE,
 \seealso{
 \code{\link{keys}}, \code{\link{secrets}}, \code{\link{certificates}}, \code{\link{storage}}
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

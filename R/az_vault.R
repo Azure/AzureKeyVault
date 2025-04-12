@@ -12,7 +12,7 @@
 #' - `get_endpoint()`: Return the vault endpoint. See 'Endpoint' below.
 #'
 #' @section Initialization:
-#' Initializing a new object of this class can either retrieve an existing key vault, or create a new vault on the host. The recommended way to initialize an object is via the `get_key_vault`, `create_key_vault` or `list_key_vaults` methods of the [az_resource_group] class, which handle the details automatically.
+#' Initializing a new object of this class can either retrieve an existing key vault, or create a new vault on the host. The recommended way to initialize an object is via the `get_key_vault`, `create_key_vault` or `list_key_vaults` methods of the [AzureRMR::az_resource_group] class, which handle the details automatically.
 #'
 #' @section Access policies:
 #' Client access to a key vault is governed by its access policies, which are set on a per-principal basis. Each principal (user or service) can have different permissions granted, for keys, secrets, certificates, and storage accounts.
@@ -53,8 +53,8 @@
 #' [create_key_vault], [get_key_vault], [delete_key_vault],
 #' [AzureGraph::get_graph_login], [AzureGraph::az_user], [AzureGraph::az_app], [AzureGraph::az_service_principal]
 #'
-#' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
-#' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
+#' [Azure Key Vault documentation](https://learn.microsoft.com/en-us/azure/key-vault/),
+#' [Azure Key Vault API reference](https://learn.microsoft.com/en-us/rest/api/keyvault)
 #'
 #' @examples
 #' \dontrun{
@@ -205,8 +205,8 @@ public=list(
 #' @seealso
 #' [create_key_vault], [az_key_vault]
 #'
-#' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
-#' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
+#' [Azure Key Vault documentation](https://learn.microsoft.com/en-us/azure/key-vault/),
+#' [Azure Key Vault API reference](https://learn.microsoft.com/en-us/rest/api/keyvault)
 #'
 #' @examples
 #' \dontrun{

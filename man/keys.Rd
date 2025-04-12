@@ -9,7 +9,9 @@ This class represents the collection of encryption keys stored in a vault. It pr
 }
 \section{Methods}{
 
-This class provides the following methods:\preformatted{create(name, type=c("RSA", "EC"), hardware=FALSE,
+This class provides the following methods:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{create(name, type=c("RSA", "EC"), hardware=FALSE,
        ec_curve=NULL, rsa_key_size=NULL, key_ops=NULL,
        attributes=vault_object_attrs(), ...)
 import(name, key, hardware=FALSE,
@@ -19,7 +21,7 @@ delete(name, confirm=TRUE)
 list(include_managed=FALSE)
 backup(name)
 restore(backup)
-}
+}\if{html}{\out{</div>}}
 }
 
 \section{Arguments}{
@@ -89,6 +91,6 @@ vault$keys$restore(bak)
 \seealso{
 \link{key}, \link{vault_object_attrs}
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

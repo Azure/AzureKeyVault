@@ -8,9 +8,11 @@
 Methods for the \link[AzureRMR:az_resource_group]{AzureRMR::az_resource_group} class.
 }
 \section{Usage}{
-\preformatted{get_key_vault(name)
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{get_key_vault(name)
 list_key_vaults()
-}
+}\if{html}{\out{</div>}}
 }
 
 \section{Arguments}{
@@ -43,6 +45,6 @@ rg$get_key_vault("mykeyvault")
 \seealso{
 \link{create_key_vault}, \link{delete_key_vault}, \link{az_key_vault}
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

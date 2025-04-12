@@ -9,13 +9,15 @@ This class represents the collection of secrets stored in a vault. It provides m
 }
 \section{Methods}{
 
-This class provides the following methods:\preformatted{create(name, value, content_type=NULL, attributes=vault_object_attrs(), ...)
+This class provides the following methods:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{create(name, value, content_type=NULL, attributes=vault_object_attrs(), ...)
 get(name)
 delete(name, confirm=TRUE)
 list(include_managed=FALSE)
 backup(name)
 restore(backup)
-}
+}\if{html}{\out{</div>}}
 }
 
 \section{Arguments}{
@@ -64,6 +66,6 @@ vault$secrets$create("mysecret", tag1="a value", othertag="another value")
 \seealso{
 \link{vault_object_attrs}
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

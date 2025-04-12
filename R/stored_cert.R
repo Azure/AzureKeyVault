@@ -61,8 +61,8 @@
 #' @seealso
 #' [certificates]
 #'
-#' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
-#' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
+#' [Azure Key Vault documentation](https://learn.microsoft.com/en-us/azure/key-vault/),
+#' [Azure Key Vault API reference](https://learn.microsoft.com/en-us/rest/api/keyvault)
 #'
 #' @examples
 #' \dontrun{

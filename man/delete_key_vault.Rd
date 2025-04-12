@@ -12,8 +12,10 @@ Deleting a key vault that has soft-deletion enabled does not permanently remove 
 To see what soft-deleted key vaults exist, call the \code{list_deleted_key_vaults} method. To recover a soft-deleted key vault, call the \code{create_key_vault} method from the vault's original resource group, with the vault name. To purge (permanently delete) it, call the \code{purge_key_vault} method.
 }
 \section{Usage}{
-\preformatted{delete_key_vault(name, confirm=TRUE, wait=FALSE, purge=FALSE)
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{delete_key_vault(name, confirm=TRUE, wait=FALSE, purge=FALSE)
+}\if{html}{\out{</div>}}
 }
 
 \section{Arguments}{
@@ -52,6 +54,6 @@ rg$delete_key_vault("mykeyvault", purge=FALSE)
 \seealso{
 \link{create_key_vault}, \link{get_key_vault}, \link{purge_key_vault}, \link{list_deleted_key_vaults}, \link{az_key_vault},
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

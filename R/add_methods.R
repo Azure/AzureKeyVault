@@ -46,8 +46,8 @@
 #' @seealso
 #' [get_key_vault], [delete_key_vault], [purge_key_vault], [az_key_vault], [vault_access_policy]
 #'
-#' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
-#' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
+#' [Azure Key Vault documentation](https://learn.microsoft.com/en-us/azure/key-vault/),
+#' [Azure Key Vault API reference](https://learn.microsoft.com/en-us/rest/api/keyvault)
 #'
 #' @examples
 #' \dontrun{
@@ -93,8 +93,8 @@ NULL
 #' @seealso
 #' [create_key_vault], [delete_key_vault], [az_key_vault]
 #'
-#' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
-#' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
+#' [Azure Key Vault documentation](https://learn.microsoft.com/en-us/azure/key-vault/),
+#' [Azure Key Vault API reference](https://learn.microsoft.com/en-us/rest/api/keyvault)
 #'
 #' @examples
 #' \dontrun{
@@ -139,8 +139,8 @@ NULL
 #' @seealso
 #' [create_key_vault], [get_key_vault], [purge_key_vault], [list_deleted_key_vaults], [az_key_vault],
 #'
-#' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
-#' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
+#' [Azure Key Vault documentation](https://learn.microsoft.com/en-us/azure/key-vault/),
+#' [Azure Key Vault API reference](https://learn.microsoft.com/en-us/rest/api/keyvault)
 #'
 #' @examples
 #' \dontrun{
@@ -186,8 +186,8 @@ NULL
 #' @seealso
 #' [create_key_vault], [get_key_vault], [delete_key_vault], [list_deleted_key_vaults], [az_key_vault],
 #'
-#' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
-#' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
+#' [Azure Key Vault documentation](https://learn.microsoft.com/en-us/azure/key-vault/),
+#' [Azure Key Vault API reference](https://learn.microsoft.com/en-us/rest/api/keyvault)
 #'
 #' @examples
 #' \dontrun{
@@ -227,8 +227,8 @@ NULL
 #' @seealso
 #' [create_key_vault], [get_key_vault], [delete_key_vault], [purge_key_vault], [az_key_vault],
 #'
-#' [Azure Key Vault documentation](https://docs.microsoft.com/en-us/azure/key-vault/),
-#' [Azure Key Vault API reference](https://docs.microsoft.com/en-us/rest/api/keyvault)
+#' [Azure Key Vault documentation](https://learn.microsoft.com/en-us/azure/key-vault/),
+#' [Azure Key Vault API reference](https://learn.microsoft.com/en-us/rest/api/keyvault)
 NULL
 
 

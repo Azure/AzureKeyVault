@@ -10,8 +10,10 @@ Method for the \link[AzureRMR:az_subscription]{AzureRMR::az_subscription} and \l
 This method permanently deletes a soft-deleted key vault. Note that it will fail if the vault has purge protection enabled.
 }
 \section{Usage}{
-\preformatted{purge_key_vault(name, location, confirm=TRUE)
-}
+
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{purge_key_vault(name, location, confirm=TRUE)
+}\if{html}{\out{</div>}}
 }
 
 \section{Arguments}{
@@ -43,6 +45,6 @@ rg$purge_key_vault("mykeyvault", rg$location)
 \seealso{
 \link{create_key_vault}, \link{get_key_vault}, \link{delete_key_vault}, \link{list_deleted_key_vaults}, \link{az_key_vault},
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

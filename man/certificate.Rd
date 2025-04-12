@@ -24,7 +24,9 @@ This class provides the following fields:
 
 \section{Methods}{
 
-This class provides the following methods:\preformatted{export(file)
+This class provides the following methods:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{export(file)
 export_cer(file)
 sign(digest, ...)
 verify(signature, digest, ...)
@@ -38,7 +40,7 @@ update_attributes(attributes=vault_object_attrs(), ...)
 list_versions()
 set_version(version=NULL)
 delete(confirm=TRUE)
-}
+}\if{html}{\out{</div>}}
 }
 
 \section{Arguments}{
@@ -125,6 +127,6 @@ AzureAuth::get_azure_token("resource_url", tenant, app, certificate=cert_creds)
 \seealso{
 \link{certificates}
 
-\href{https://docs.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
-\href{https://docs.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
+\href{https://learn.microsoft.com/en-us/azure/key-vault/}{Azure Key Vault documentation},
+\href{https://learn.microsoft.com/en-us/rest/api/keyvault}{Azure Key Vault API reference}
 }

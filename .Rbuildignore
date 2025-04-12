@@ -5,6 +5,7 @@
 \.Rxproj$
 ^\.Rproj\.user$
 CONTRIBUTING.md
+SECURITY.md
 drat.sh
 .travis.yml
 ^LICENSE\.md$
